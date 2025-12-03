@@ -1,58 +1,65 @@
-#define SDL_MAIN_USE_CALLBACKS 1  // use the callbacks instead of main()
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
-#include <iostream>
+#include "raylib.h"
 
-// We will use this renderer to draw into this window every frame
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
+int main(void)
+{
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 800;
+    const int screenHeight = 450;
 
-// This function runs once at startup.
-SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
-	std::cout << "program started" << '\n';
-	SDL_SetAppMetadata("Example Renderer Clear", "1.0", "com.example.renderer-clear");
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - 3d camera mode");
 
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
-		SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
-		return SDL_APP_FAILURE;
-	}
+    // Define the camera to look into our 3d world
+    Camera3D camera = { 0 };
+    camera.position = Vector3 { 0.0f, 10.0f, 10.0f };  // Camera position
+    camera.target = Vector3 { 0.0f, 0.0f, 0.0f };      // Camera looking at point
+    camera.up = Vector3 { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera mode type
 
-	if (!SDL_CreateWindowAndRenderer("examples/renderer/clear", 640, 480, SDL_WINDOW_RESIZABLE, &window, &renderer)) {
-		SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
-		return SDL_APP_FAILURE;
-	}
-	SDL_SetRenderLogicalPresentation(renderer, 640, 480, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
 
-	return SDL_APP_CONTINUE;  // carry on with the program!
-}
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
 
-// This function runs when a new event (mouse input, keypresses, etc) occurs.
-SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-	if (event->type == SDL_EVENT_QUIT) {
-		return SDL_APP_SUCCESS;  // end the program, reporting success to the OS.
-	}
-	return SDL_APP_CONTINUE;  // carry on with the program!
-}
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        // Update
+        //----------------------------------------------------------------------------------
+        // TODO: Update your variables here
+        //----------------------------------------------------------------------------------
 
-// This function runs once per frame, and is the heart of the program.
-SDL_AppResult SDL_AppIterate(void *appstate) {
-	const double now = ((double)SDL_GetTicks()) / 1000.0;  // convert from milliseconds to seconds.
-	// choose the color for the frame we will draw. The sine wave trick makes it fade between colors smoothly.
-	const float red = (float) (0.5 + 0.5 * SDL_sin(now));
-	const float green = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 2 / 3));
-	const float blue = (float) (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 4 / 3));
-	SDL_SetRenderDrawColorFloat(renderer, red, green, blue, SDL_ALPHA_OPAQUE_FLOAT);  // new color, full alpha.
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
 
-	// clear the window to the draw color.
-	SDL_RenderClear(renderer);
+            ClearBackground(RAYWHITE);
 
-	// put the newly-cleared rendering on the screen.
-	SDL_RenderPresent(renderer);
+            BeginMode3D(camera);
 
-	return SDL_APP_CONTINUE;  // carry on with the program!
-}
+                DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
+                DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
 
-// This function runs once at shutdown.
-void SDL_AppQuit(void *appstate, SDL_AppResult result) {
-	// SDL will clean up the window/renderer for us.
+                DrawGrid(10, 1.0f);
+
+            EndMode3D();
+
+            DrawText("Welcome to the third dimension!", 10, 40, 20, DARKGRAY);
+
+            DrawFPS(10, 10);
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+    }
+
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
+
+    return 0;
 }
