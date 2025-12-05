@@ -1,8 +1,8 @@
 #include <heat_seeker.hh>
 
 void HSE::render_models() {
-	// Use the active camera
-	// Loop through all entities with position, rotation, and model
-	// Render the model
-	// End camera mode
+	DrawCube({0.0,0.0,0.0}, 2.0f, 2.0f, 2.0f, RED);
+	DrawCubeWires({0.0,0.0,0.0}, 2.0f, 2.0f, 2.0f, MAROON);
+
+	DrawGrid(10, 1.0f);
 }

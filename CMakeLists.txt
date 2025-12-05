@@ -11,6 +11,7 @@ include_directories(engine/include)
 
 add_executable(heat_seeker
 	engine/src/main.cc
+	engine/src/render/render.cc
 	engine/src/render/models.cc
 )
 
