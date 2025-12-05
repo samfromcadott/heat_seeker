@@ -24,6 +24,12 @@ int main() {
 	auto& p = e1.get_mut<Position>();
 	p = glm::vec3(1.0,0.0,3.0);
 
+	// Set e1's model
+	::Model sphere = LoadModelFromMesh( GenMeshSphere(1.0, 4, 8) );
+	ModelData md;
+	md.model = sphere;
+	e1.get_mut<HSE::Model>().data = &md;
+
 	// Main game loop
 	while ( !WindowShouldClose() ) {
 		Game.progress();
