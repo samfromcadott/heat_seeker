@@ -1,6 +1,6 @@
 #pragma once
 
-namespace HS {
+namespace HSE {
 
 void render_models(); ///< Renders non-BVH models
 void render_bvh_models(); ///< Renders BVH models

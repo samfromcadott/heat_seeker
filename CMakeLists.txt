@@ -5,9 +5,13 @@ project(heat_seeker)
 
 set(USE_STATIC_MSVC_RUNTIME_LIBRARY OFF)
 add_subdirectory(3rdparty/raylib)
+add_subdirectory(3rdparty/flecs)
+
+include_directories(engine/include)
 
 add_executable(heat_seeker
-	engine/main.cc
+	engine/src/main.cc
+	engine/src/render/models.cc
 )
 
-target_link_libraries(heat_seeker raylib)
+target_link_libraries(heat_seeker raylib flecs_static)
