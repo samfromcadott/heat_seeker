@@ -15,12 +15,21 @@ struct Position {
 		x = v.x;
 		y = v.y;
 		z = v.z;
-		// return *this;
 	}
 
 	operator glm::vec3() const {
 		return glm::vec3(x,y,z);
 	}
+
+	Position(const Vector3&& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+	}
+
+	operator Vector3() const {
+		return Vector3{x,y,z};
+	}
 };
 
-};
+}
