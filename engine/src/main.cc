@@ -14,9 +14,15 @@ int main() {
 
 	Game.system().each(start_render);
 	Game.system().each(start_3D);
-	Game.system().each(render_models);
+	Game.system<HSE::Model, HSE::Position>().each(render_models);
 	Game.system().each(end_3D);
 	Game.system().each(end_render);
+
+	flecs::entity e1 = Game.entity();
+	e1.add<HSE::Model>();
+	e1.add<Position>();
+	auto& p = e1.get_mut<Position>();
+	p = glm::vec3(1.0,0.0,3.0);
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {

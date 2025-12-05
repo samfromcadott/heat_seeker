@@ -7,6 +7,7 @@ set(USE_STATIC_MSVC_RUNTIME_LIBRARY OFF)
 add_subdirectory(3rdparty/raylib)
 add_subdirectory(3rdparty/flecs)
 
+include_directories(3rdparty/glm)
 include_directories(engine/include)
 
 add_executable(heat_seeker
