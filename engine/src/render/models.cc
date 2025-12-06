@@ -1,6 +1,6 @@
 #include <heat_seeker.hh>
 
-void HSE::render_models(HSE::Model m, HSE::Position p, HSE::Rotation r) {
+void HSE::render_models(HSE::Model& m, HSE::Position& p, HSE::Rotation& r) {
 	// DrawCube(p, 2.0f, 2.0f, 2.0f, RED);
 	// DrawCubeWires(p, 2.0f, 2.0f, 2.0f, MAROON);
 	// DrawModelWires(m.data->model, p, 1.0, BLACK);

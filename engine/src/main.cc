@@ -14,7 +14,7 @@ int main() {
 
 	Game.system().each(start_render);
 	Game.system().each(start_3D);
-	Game.system<HSE::Model, HSE::Position, HSE::Rotation>().each(render_models);
+	Game.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().each(render_models);
 	Game.system().each(end_3D);
 	Game.system().each(end_render);
 
