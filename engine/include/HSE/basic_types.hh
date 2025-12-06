@@ -32,4 +32,26 @@ struct Position {
 	}
 };
 
+struct Rotation {
+	float w,x,y,z;
+
+	Rotation() {
+		w = 1.0;
+		x = 0.0;
+		y = 0.0;
+		z = 0.0;
+	}
+
+	Rotation(const glm::quat&& q) {
+		w = q.w;
+		x = q.x;
+		y = q.y;
+		z = q.z;
+	}
+
+	operator glm::quat() const {
+		return glm::quat(w,x,y,z);
+	}
+};
+
 }
