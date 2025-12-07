@@ -83,8 +83,8 @@ private:
 	JPH::TempAllocatorImpl* temp_allocator;
 	JPH::JobSystemThreadPool job_system;
 	BroadPhaseLayerInterface broad_phase_layer_interface;
-	ObjectLayerPairFilter object_vs_broadphase_layer_filter;
-	ObjectVsBroadPhaseLayerFilter object_vs_object_layer_filter;
+	ObjectVsBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
+	ObjectLayerPairFilter object_vs_object_layer_filter;
 	BodyActivationListener body_activation_listener;
 	ContactListener contact_listener;
 
@@ -126,5 +126,13 @@ public:
 
 	flecs::entity get_owner();
 };
+
+inline JPH::Vec3 glm_to_jolt(glm::vec3 v) {
+	return JPH::Vec3(v.x,v.y,v.z);
+}
+
+inline glm::vec3 jolt_to_glm(JPH::Vec3 v) {
+	return glm::vec3( v.GetX(), v.GetY(), v.GetZ() );
+}
 
 }
