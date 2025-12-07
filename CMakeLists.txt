@@ -24,6 +24,7 @@ add_executable(heat_seeker
 	engine/src/physics/filter.cc
 	engine/src/physics/interface.cc
 	engine/src/physics/listener.cc
+	engine/src/physics/systems.cc
 )
 
 target_link_libraries(heat_seeker raylib flecs_static Jolt)

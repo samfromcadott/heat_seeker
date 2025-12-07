@@ -12,6 +12,13 @@ int main() {
 
 	SetTargetFPS(60);
 
+	// Register systems
+	Game.system<Body&, Position&>().each(pos_to_body);
+	Game.system<Body&, Rotation&>().each(rot_to_body);
+	Game.system<PhysicsEngine&>().each(physics_update);
+	Game.system<Body&, Position&>().each(body_to_pos);
+	Game.system<Body&, Rotation&>().each(body_to_rot);
+
 	Game.system().each(start_render);
 	Game.system().each(start_3D);
 	Game.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().each(render_models);
