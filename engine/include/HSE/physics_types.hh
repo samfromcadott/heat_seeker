@@ -79,6 +79,8 @@ public:
 
 class PhysicsEngine {
 private:
+	flecs::world world;
+
 	JPH::PhysicsSystem physics_system;
 	JPH::TempAllocatorImpl* temp_allocator;
 	JPH::JobSystemThreadPool job_system;
@@ -94,7 +96,8 @@ private:
 	const JPH::uint max_contact_constraints = 1024;
 
 public:
-	PhysicsEngine();
+	// PhysicsEngine();
+	PhysicsEngine(flecs::world world);
 	~PhysicsEngine();
 
 	void update();
@@ -126,13 +129,21 @@ public:
 
 	flecs::entity get_owner();
 };
-
+// Type converters
 inline JPH::Vec3 glm_to_jolt(glm::vec3 v) {
 	return JPH::Vec3(v.x,v.y,v.z);
 }
 
 inline glm::vec3 jolt_to_glm(JPH::Vec3 v) {
 	return glm::vec3( v.GetX(), v.GetY(), v.GetZ() );
+}
+
+inline JPH::Quat glm_to_jolt(glm::quat q) {
+	return JPH::Quat(q.x,q.y,q.z,q.w);
+}
+
+inline glm::quat jolt_to_glm(JPH::Quat q) {
+	return glm::quat( q.GetW(), q.GetX(), q.GetY(), q.GetZ() );
 }
 
 }

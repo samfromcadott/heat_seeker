@@ -28,7 +28,9 @@ static bool AssertFailedImpl(const char *inExpression, const char *inMessage, co
 
 #endif // JPH_ENABLE_ASSERTS
 
-PhysicsEngine::PhysicsEngine() {
+PhysicsEngine::PhysicsEngine(flecs::world world) {
+	this->world = world;
+
 	// Physics system setup
 	JPH::RegisterDefaultAllocator();
 
