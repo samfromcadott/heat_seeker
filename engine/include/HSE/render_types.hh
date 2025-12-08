@@ -6,8 +6,13 @@ namespace HSE {
 
 struct ModelData {
 	::Model model;
-	ModelAnimation* animations;
-	int animation_count;
+	ModelAnimation* animations = nullptr;
+	int animation_count = 0;
+
+	~ModelData() {
+		UnloadModel(model);
+		UnloadModelAnimations(animations, animation_count);
+	}
 };
 
 struct Model {
