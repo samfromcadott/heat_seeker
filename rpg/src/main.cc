@@ -21,9 +21,11 @@ int main() {
 	// Register systems
 	Game.system<Body&, Position&>().each(pos_to_body);
 	Game.system<Body&, Rotation&>().each(rot_to_body);
+	Game.system<Body&, Velocity&>().each(vel_to_body);
 	Game.system<PhysicsEngine&>().each(physics_update);
 	Game.system<Body&, Position&>().each(body_to_pos);
 	Game.system<Body&, Rotation&>().each(body_to_rot);
+	Game.system<Body&, Velocity&>().each(body_to_vel);
 
 	Game.system().each(start_render);
 	Game.system().each(start_3D);
@@ -45,6 +47,8 @@ int main() {
 		JPH::EMotionType::Dynamic,
 		Layers::MOVING
 	)));
+	e1.add<Velocity>();
+	e1.get_mut<Velocity>() = glm::vec3(-2.0,0.0,1.0);
 
 	flecs::entity e2 = Game.entity();
 	e2.add<HSE::Model>();
