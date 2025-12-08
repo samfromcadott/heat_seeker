@@ -36,7 +36,14 @@ int main() {
 	e1.add<Position>();
 	e1.add<Rotation>();
 	e1.get_mut<Position>() = glm::vec3(1.0,0.0,3.0);
-	// e1.add<Body>();
+	e1.add<Body>();
+	e1.set<Body>( Body(Game.get_mut<PhysicsEngine>(), e1, JPH::BodyCreationSettings(
+		new JPH::SphereShape(1.0),
+		JPH::RVec3::sZero(),
+		JPH::Quat::sIdentity(),
+		JPH::EMotionType::Dynamic,
+		Layers::MOVING
+	)));
 
 	flecs::entity e2 = Game.entity();
 	e2.add<HSE::Model>();
