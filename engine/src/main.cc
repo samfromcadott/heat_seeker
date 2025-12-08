@@ -12,6 +12,11 @@ int main() {
 
 	SetTargetFPS(60);
 
+	// Add physics engine
+	Game.component<PhysicsEngine>().add(flecs::Singleton);
+	Game.set<PhysicsEngine>( PhysicsEngine() );
+	Game.get_mut<PhysicsEngine>().set_world(Game);
+
 	// Register systems
 	Game.system<Body&, Position&>().each(pos_to_body);
 	Game.system<Body&, Rotation&>().each(rot_to_body);
@@ -31,6 +36,7 @@ int main() {
 	e1.add<Position>();
 	e1.add<Rotation>();
 	e1.get_mut<Position>() = glm::vec3(1.0,0.0,3.0);
+	// e1.add<Body>();
 
 	flecs::entity e2 = Game.entity();
 	e2.add<HSE::Model>();

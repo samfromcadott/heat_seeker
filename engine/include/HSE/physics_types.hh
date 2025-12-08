@@ -96,11 +96,13 @@ private:
 	const JPH::uint max_contact_constraints = 1024;
 
 public:
-	// PhysicsEngine();
-	PhysicsEngine(flecs::world world);
+	PhysicsEngine();
 	~PhysicsEngine();
 
+	PhysicsEngine& operator=(const PhysicsEngine& other);
+
 	void update();
+	void set_world(flecs::world w);
 
 	void set_gravity(const glm::vec3 g);
 	glm::vec3 get_gravity() const;

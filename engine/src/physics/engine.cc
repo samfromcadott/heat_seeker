@@ -28,9 +28,7 @@ static bool AssertFailedImpl(const char *inExpression, const char *inMessage, co
 
 #endif // JPH_ENABLE_ASSERTS
 
-PhysicsEngine::PhysicsEngine(flecs::world world) {
-	this->world = world;
-
+PhysicsEngine::PhysicsEngine() {
 	// Physics system setup
 	JPH::RegisterDefaultAllocator();
 
@@ -63,8 +61,16 @@ PhysicsEngine::~PhysicsEngine() {
 	delete temp_allocator;
 }
 
+PhysicsEngine& PhysicsEngine::operator=(const PhysicsEngine& other) {
+	return *this;
+}
+
 void PhysicsEngine::update() {
 	physics_system.Update(GetFrameTime(), 1, temp_allocator, &job_system);
+}
+
+void PhysicsEngine::set_world(flecs::world w) {
+	world = w;
 }
 
 void PhysicsEngine::set_gravity(const glm::vec3 g) {
