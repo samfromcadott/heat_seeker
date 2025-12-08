@@ -11,9 +11,7 @@ add_subdirectory(3rdparty/Jolt/Build)
 include_directories(3rdparty/glm)
 include_directories(engine/include)
 
-add_executable(heat_seeker
-	engine/src/main.cc
-
+add_library(heat_seeker
 	# Render
 	engine/src/render/render.cc
 	engine/src/render/models.cc
@@ -28,3 +26,9 @@ add_executable(heat_seeker
 )
 
 target_link_libraries(heat_seeker raylib flecs_static Jolt)
+
+add_executable(rpg
+	rpg/src/main.cc
+)
+
+target_link_libraries(rpg heat_seeker)
