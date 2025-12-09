@@ -1,6 +1,16 @@
 #include <heat_seeker.hh>
 
+#include "components.hh"
+#include "systems.hh"
+
 flecs::world HSE::Game;
+Camera3D HSE::camera = {
+	.position = Vector3 { 0.0f, 10.0f, 10.0f },
+	.target = Vector3 { 0.0f, 0.0f, 0.0f },
+	.up = Vector3 { 0.0f, 0.0f, 1.0f },
+	.fovy = 90.0f,
+	.projection = CAMERA_PERSPECTIVE,
+};
 
 using namespace HSE;
 
@@ -11,12 +21,12 @@ int main() {
 	InitWindow(screenWidth, screenHeight, "HEAT SEEKER");
 
 	SetTargetFPS(60);
+	DisableCursor();
 
 	// Add physics engine
 	Game.component<PhysicsEngine>().add(flecs::Singleton);
 	Game.set<PhysicsEngine>( PhysicsEngine() );
 	Game.get_mut<PhysicsEngine>().set_world(Game);
-	Game.get_mut<PhysicsEngine>().set_gravity( glm::vec3(0.0, -9.8, 0.0) );
 
 	// Register systems
 	Game.system<Body&, Position&>().each(pos_to_body);
@@ -26,6 +36,8 @@ int main() {
 	Game.system<Body&, Position&>().each(body_to_pos);
 	Game.system<Body&, Rotation&>().each(body_to_rot);
 	Game.system<Body&, Velocity&>().each(body_to_vel);
+
+	Game.system<Player, Position&, Rotation&>().each(mouse_look);
 
 	Game.system().each(start_render);
 	Game.system().each(start_3D);
@@ -38,7 +50,7 @@ int main() {
 	e1.add<HSE::Model>();
 	e1.add<Position>();
 	e1.add<Rotation>();
-	e1.get_mut<Position>() = glm::vec3(0.5,5.0,0.0);
+	e1.get_mut<Position>() = glm::vec3(0.5,0.0,5.0);
 	e1.add<Body>();
 	e1.set<Body>( Body(Game.get_mut<PhysicsEngine>(), e1, JPH::BodyCreationSettings(
 		new JPH::SphereShape(1.0),
@@ -64,6 +76,13 @@ int main() {
 		JPH::EMotionType::Static,
 		Layers::NON_MOVING
 	)));
+
+	// Make the player
+	flecs::entity player = Game.entity();
+	player.add<Player>();
+	player.add<Position>();
+	player.add<Rotation>();
+	player.get_mut<Position>() = glm::vec3(-3,3,3);
 
 	// Set their models
 	::Model sphere = LoadModelFromMesh( GenMeshSphere(1.0, 4, 8) );
