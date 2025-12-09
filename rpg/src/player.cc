@@ -26,3 +26,26 @@ void mouse_look(Player player, Position& position, Rotation& rotation) {
 	camera.target = {camera_target.x,camera_target.y,camera_target.z};
 	camera.position = {position.x,position.y,position.z};
 }
+
+void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {
+	if ( !IsMouseButtonPressed(0) ) return;
+
+	flecs::entity ball = Game.entity();
+
+	ball.add<HSE::Model>();
+	ball.add<Position>();
+	ball.add<Rotation>();
+	ball.add<Velocity>();
+	ball.add<Body>();
+
+	ball.set<Position>( glm::vec3(camera.target.x, camera.target.y, camera.target.z) );
+	ball.set<Velocity>(  ( glm::vec3(camera.target.x, camera.target.y, camera.target.z) - glm::vec3(position) ) * 10.0f );
+	ball.set<HSE::Model>( {&model_files["little_sphere"], 0, 0} );
+	ball.set<Body>( Body(Game.get_mut<PhysicsEngine>(), ball, JPH::BodyCreationSettings(
+		new JPH::SphereShape(0.1),
+		JPH::RVec3::sZero(),
+		JPH::Quat::sIdentity(),
+		JPH::EMotionType::Dynamic,
+		Layers::MOVING
+	)));
+}

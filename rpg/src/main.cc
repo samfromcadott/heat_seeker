@@ -39,6 +39,7 @@ int main() {
 	Game.system<Body&, Velocity&>().each(body_to_vel);
 
 	Game.system<Player, Position&, Rotation&>().each(mouse_look);
+	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
 	Game.system().each(start_render);
 	Game.system().each(start_3D);
@@ -89,6 +90,8 @@ int main() {
 	model_files["big_sphere"].model = LoadModelFromMesh( GenMeshSphere(1.0, 4, 8) );
 	e1.get_mut<HSE::Model>().data = &model_files["big_sphere"];
 	e2.get_mut<HSE::Model>().data = &model_files["big_sphere"];
+
+	model_files["little_sphere"].model = LoadModelFromMesh( GenMeshSphere(0.1, 4, 8) );
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
