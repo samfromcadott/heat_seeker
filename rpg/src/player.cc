@@ -30,6 +30,10 @@ void mouse_look(Player player, Position& position, Rotation& rotation) {
 void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {
 	if ( !IsMouseButtonPressed(0) ) return;
 
+	glm::vec3 launch_point = ( glm::vec3(camera.target.x, camera.target.y, camera.target.z) - glm::vec3(position) ) * 0.5f;
+	launch_point += position;
+	glm::vec3 vel = ( glm::vec3(camera.target.x, camera.target.y, camera.target.z) - glm::vec3(position) ) * 5.0f;
+
 	flecs::entity ball = Game.entity();
 
 	ball.add<HSE::Model>();
@@ -38,11 +42,11 @@ void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation)
 	ball.add<Velocity>();
 	ball.add<Body>();
 
-	ball.set<Position>( glm::vec3(camera.target.x, camera.target.y, camera.target.z) );
-	ball.set<Velocity>(  ( glm::vec3(camera.target.x, camera.target.y, camera.target.z) - glm::vec3(position) ) * 10.0f );
-	ball.set<HSE::Model>( {&model_files["little_sphere"], 0, 0} );
+	ball.set<Position>( glm::vec3(launch_point) );
+	ball.set<Velocity>( glm::vec3(vel) );
+	ball.set<HSE::Model>( {&model_files["ball"], 0, 0} );
 	ball.set<Body>( Body(Game.get_mut<PhysicsEngine>(), ball, JPH::BodyCreationSettings(
-		new JPH::SphereShape(0.1),
+		new JPH::SphereShape(0.05),
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
 		JPH::EMotionType::Dynamic,
