@@ -2,6 +2,7 @@
 
 // STD Libraries
 #include <iostream>
+#include <map>
 
 #include <raylib.h>
 #include <raymath.h>
@@ -25,5 +26,6 @@ namespace HSE {
 
 extern flecs::world Game;
 extern Camera3D camera;
+extern std::map<std::string, ModelData> model_files;
 
 }

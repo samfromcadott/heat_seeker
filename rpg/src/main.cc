@@ -4,6 +4,7 @@
 #include "systems.hh"
 
 flecs::world HSE::Game;
+std::map<std::string, HSE::ModelData> HSE::model_files;
 Camera3D HSE::camera = {
 	.position = Vector3 { 0.0f, 10.0f, 10.0f },
 	.target = Vector3 { 0.0f, 0.0f, 0.0f },
@@ -85,11 +86,9 @@ int main() {
 	player.get_mut<Position>() = glm::vec3(-3,3,3);
 
 	// Set their models
-	::Model sphere = LoadModelFromMesh( GenMeshSphere(1.0, 4, 8) );
-	ModelData md;
-	md.model = sphere;
-	e1.get_mut<HSE::Model>().data = &md;
-	e2.get_mut<HSE::Model>().data = &md;
+	model_files["big_sphere"].model = LoadModelFromMesh( GenMeshSphere(1.0, 4, 8) );
+	e1.get_mut<HSE::Model>().data = &model_files["big_sphere"];
+	e2.get_mut<HSE::Model>().data = &model_files["big_sphere"];
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
