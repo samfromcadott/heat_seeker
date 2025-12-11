@@ -48,7 +48,6 @@ int main() {
 	Game.system().each(end_render);
 
 	// Load models
-	model_files["big_sphere"].model = LoadModelFromMesh( GenMeshSphere(1.0, 4, 8) );
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
 	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
 	model_files["can"].model = LoadModel("rpg/base/models/can.obj");

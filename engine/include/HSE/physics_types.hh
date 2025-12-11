@@ -17,6 +17,10 @@
 #include <Jolt/Physics/Collision/Shape/MeshShape.h>
 #include <Jolt/Physics/Collision/RayCast.h>
 #include <Jolt/Physics/Collision/CastResult.h>
+#include <Jolt/Physics/Collision/Shape/CapsuleShape.h>
+#include <Jolt/Physics/Character/CharacterBase.h>
+#include <Jolt/Physics/Character/CharacterID.h>
+#include <Jolt/Physics/Character/CharacterVirtual.h>
 
 JPH_SUPPRESS_WARNINGS;
 
@@ -79,6 +83,21 @@ public:
 	virtual void OnBodyDeactivated(const JPH::BodyID &inBodyID, JPH::uint64 inBodyUserData) override;
 };
 
+class CharacterListener : public JPH::CharacterContactListener {
+public:
+	virtual void OnAdjustBodyVelocity(const JPH::CharacterVirtual *inCharacter, const JPH::Body &inBody2, JPH::Vec3 &ioLinearVelocity, JPH::Vec3 &ioAngularVelocity);
+	virtual bool OnContactValidate(const JPH::CharacterVirtual *inCharacter, const JPH::BodyID &inBodyID2, const JPH::SubShapeID &inSubShapeID2);
+	virtual bool OnCharacterContactValidate(const JPH::CharacterVirtual *inCharacter, const JPH::CharacterVirtual *inOtherCharacter, const JPH::SubShapeID &inSubShapeID2);
+	virtual void OnContactAdded(const JPH::CharacterVirtual *inCharacter, const JPH::BodyID &inBodyID2, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings &ioSettings);
+	virtual void OnContactPersisted(const JPH::CharacterVirtual *inCharacter, const JPH::BodyID &inBodyID2, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings &ioSettings);
+	virtual void OnContactRemoved(const JPH::CharacterVirtual *inCharacter, const JPH::BodyID &inBodyID2, const JPH::SubShapeID &inSubShapeID2);
+	virtual void OnCharacterContactAdded(const JPH::CharacterVirtual *inCharacter, const JPH::CharacterVirtual *inOtherCharacter, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings &ioSettings);
+	virtual void OnCharacterContactPersisted(const JPH::CharacterVirtual *inCharacter, const JPH::CharacterVirtual *inOtherCharacter, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings &ioSettings);
+	virtual void OnCharacterContactRemoved(const JPH::CharacterVirtual *inCharacter, const JPH::CharacterID &inOtherCharacterID, const JPH::SubShapeID &inSubShapeID2);
+	virtual void OnContactSolve(const JPH::CharacterVirtual *inCharacter, const JPH::BodyID &inBodyID2, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::Vec3Arg inContactVelocity, const JPH::PhysicsMaterial *inContactMaterial, JPH::Vec3Arg inCharacterVelocity, JPH::Vec3 &ioNewCharacterVelocity);
+	virtual void OnCharacterContactSolve(const JPH::CharacterVirtual *inCharacter, const JPH::CharacterVirtual *inOtherCharacter, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::Vec3Arg inContactVelocity, const JPH::PhysicsMaterial *inContactMaterial, JPH::Vec3Arg inCharacterVelocity, JPH::Vec3 &ioNewCharacterVelocity);
+};
+
 class PhysicsEngine {
 private:
 	flecs::world world;
@@ -110,6 +129,7 @@ public:
 	glm::vec3 get_gravity() const;
 
 	friend class Body;
+	friend class CharacterBody;
 };
 
 class Body {
@@ -133,6 +153,29 @@ public:
 
 	flecs::entity get_owner();
 };
+
+class CharacterBody {
+private:
+	JPH::CharacterVirtual* body = nullptr;
+	PhysicsEngine* engine = nullptr;
+
+public:
+	CharacterBody();
+	CharacterBody(PhysicsEngine& engine, flecs::entity owner, const JPH::CharacterVirtualSettings& settings);
+	~CharacterBody();
+
+	void set_position(const glm::vec3& position);
+	glm::vec3 get_position();
+
+	void set_rotation(const glm::quat& rotation);
+	glm::quat get_rotation();
+
+	void set_velocity(const glm::vec3& velocity);
+	glm::vec3 get_velocity();
+
+	flecs::entity get_owner();
+};
+
 // Type converters
 inline JPH::Vec3 glm_to_jolt(glm::vec3 v) {
 	return JPH::Vec3(v.x,v.y,v.z);
