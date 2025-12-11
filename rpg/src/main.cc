@@ -24,19 +24,7 @@ int main() {
 	SetTargetFPS(60);
 	DisableCursor();
 
-	// Add physics engine
-	Game.component<PhysicsEngine>().add(flecs::Singleton);
-	Game.set<PhysicsEngine>( PhysicsEngine() );
-	Game.get_mut<PhysicsEngine>().set_world(Game);
-
-	// Register systems
-	Game.system<Body&, Position&>().each(pos_to_body);
-	Game.system<Body&, Rotation&>().each(rot_to_body);
-	Game.system<Body&, Velocity&>().each(vel_to_body);
-	Game.system<PhysicsEngine&>().each(physics_update);
-	Game.system<Body&, Position&>().each(body_to_pos);
-	Game.system<Body&, Rotation&>().each(body_to_rot);
-	Game.system<Body&, Velocity&>().each(body_to_vel);
+	Game.import<PhysicsModule>();
 
 	Game.system<Player, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
