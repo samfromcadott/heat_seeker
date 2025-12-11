@@ -29,11 +29,7 @@ int main() {
 	Game.system<Player, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
-	Game.system().each(start_render);
-	Game.system().each(start_3D);
-	Game.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().each(render_models);
-	Game.system().each(end_3D);
-	Game.system().each(end_render);
+	Game.import<RenderModule>();
 
 	// Load models
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );

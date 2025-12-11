@@ -23,7 +23,11 @@ struct PhysicsModule {
 
 struct RenderModule {
 	RenderModule(flecs::world& world) {
-
+		world.system().each(start_render);
+		world.system().each(start_3D);
+		world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().each(render_models);
+		world.system().each(end_3D);
+		world.system().each(end_render);
 	}
 };
 
