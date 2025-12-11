@@ -6,12 +6,11 @@ CharacterBody::CharacterBody() {
 
 }
 
-CharacterBody::CharacterBody(PhysicsEngine& engine, flecs::entity owner, const JPH::CharacterVirtualSettings& settings) {
+CharacterBody::CharacterBody(PhysicsEngine& engine, const JPH::CharacterVirtualSettings& settings) {
 	body = new JPH::CharacterVirtual(
 		&settings,
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
-		owner.id(),
 		&(engine.physics_system)
 	);
 	this->engine = &engine;
@@ -44,6 +43,11 @@ void CharacterBody::set_velocity(const glm::vec3& velocity) {
 
 glm::vec3 CharacterBody::get_velocity() {
 	return jolt_to_glm( body->GetLinearVelocity() );
+}
+
+void CharacterBody::set_owner(flecs::entity owner) {
+	if (!body) return;
+	body->SetUserData( owner.id() );
 }
 
 flecs::entity CharacterBody::get_owner() {

@@ -139,7 +139,7 @@ private:
 
 public:
 	Body();
-	Body(PhysicsEngine& engine, flecs::entity owner, const JPH::BodyCreationSettings& settings);
+	Body(PhysicsEngine& engine, const JPH::BodyCreationSettings& settings);
 	~Body();
 
 	void set_position(const glm::vec3& position);
@@ -151,6 +151,7 @@ public:
 	void set_velocity(const glm::vec3& velocity);
 	glm::vec3 get_velocity();
 
+	void set_owner(flecs::entity owner);
 	flecs::entity get_owner();
 };
 
@@ -161,7 +162,7 @@ private:
 
 public:
 	CharacterBody();
-	CharacterBody(PhysicsEngine& engine, flecs::entity owner, const JPH::CharacterVirtualSettings& settings);
+	CharacterBody(PhysicsEngine& engine, const JPH::CharacterVirtualSettings& settings);
 	~CharacterBody();
 
 	void set_position(const glm::vec3& position);
@@ -173,6 +174,7 @@ public:
 	void set_velocity(const glm::vec3& velocity);
 	glm::vec3 get_velocity();
 
+	void set_owner(flecs::entity owner);
 	flecs::entity get_owner();
 };
 

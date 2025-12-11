@@ -6,10 +6,9 @@ Body::Body() {
 
 }
 
-Body::Body(PhysicsEngine& engine, flecs::entity owner, const JPH::BodyCreationSettings& settings) {
+Body::Body(PhysicsEngine& engine, const JPH::BodyCreationSettings& settings) {
 	this->engine = &engine;
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
-	this->engine->physics_system.GetBodyInterface().SetUserData( id, owner.id() ); // Sets the user data so owner can be found in listeners
 }
 
 Body::~Body() {
@@ -38,6 +37,11 @@ void Body::set_velocity(const glm::vec3& velocity) {
 
 glm::vec3 Body::get_velocity() {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetLinearVelocity(id) );
+}
+
+void Body::set_owner(flecs::entity owner) {
+	if ( id.IsInvalid() ) return;
+	engine->physics_system.GetBodyInterface().SetUserData( id, owner.id() );
 }
 
 flecs::entity Body::get_owner() {

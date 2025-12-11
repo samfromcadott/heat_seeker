@@ -18,6 +18,15 @@ struct PhysicsModule {
 		world.system<Body&, Position&>().each(body_to_pos);
 		world.system<Body&, Rotation&>().each(body_to_rot);
 		world.system<Body&, Velocity&>().each(body_to_vel);
+
+		// Set body observer
+		world.observer<Body>().event(flecs::OnSet).each([](flecs::entity e, Body& b) {
+			b.set_owner(e);
+		});
+
+		world.observer<CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, CharacterBody& b) {
+			b.set_owner(e);
+		});
 	}
 };
 

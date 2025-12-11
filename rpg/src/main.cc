@@ -61,7 +61,7 @@ int main() {
 	floor.add<Rotation>();
 	floor.get_mut<Position>() = glm::vec3(0.0,0.0,0.0);
 	floor.add<Body>();
-	floor.set<Body>( Body(Game.get_mut<PhysicsEngine>(), floor, JPH::BodyCreationSettings(
+	floor.set<Body>( Body(Game.get_mut<PhysicsEngine>(), JPH::BodyCreationSettings(
 		new JPH::BoxShape( JPH::Vec3Arg(0.05, 1.0, 0.05) ),
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
@@ -80,27 +80,27 @@ int main() {
 	// Make the cans
 	flecs::entity c1 = Game.entity().is_a(can);
 	c1.set<Position>( glm::vec3(0,0,0.125) );
-	c1.set<Body>( Body(Game.get_mut<PhysicsEngine>(), c1, can_body_settings) );
+	c1.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
 	flecs::entity c2 = Game.entity().is_a(can);
 	c2.set<Position>( glm::vec3(0,0.1,0.125) );
-	c2.set<Body>( Body(Game.get_mut<PhysicsEngine>(), c2, can_body_settings) );
+	c2.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
 	flecs::entity c3 = Game.entity().is_a(can);
 	c3.set<Position>( glm::vec3(0,-0.1,0.125) );
-	c3.set<Body>( Body(Game.get_mut<PhysicsEngine>(), c3, can_body_settings) );
+	c3.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
 	flecs::entity c4 = Game.entity().is_a(can);
 	c4.set<Position>( glm::vec3(0,0.05,0.275) );
-	c4.set<Body>( Body(Game.get_mut<PhysicsEngine>(), c4, can_body_settings) );
+	c4.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
 	flecs::entity c5 = Game.entity().is_a(can);
 	c5.set<Position>( glm::vec3(0,-0.05,0.275) );
-	c5.set<Body>( Body(Game.get_mut<PhysicsEngine>(), c5, can_body_settings) );
+	c5.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
 	flecs::entity c6 = Game.entity().is_a(can);
 	c6.set<Position>( glm::vec3(0,0,0.425) );
-	c6.set<Body>( Body(Game.get_mut<PhysicsEngine>(), c6, can_body_settings) );
+	c6.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
