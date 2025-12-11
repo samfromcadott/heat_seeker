@@ -102,6 +102,17 @@ int main() {
 	c6.set<Position>( glm::vec3(0,0,0.425) );
 	c6.set<Body>( Body(Game.get_mut<PhysicsEngine>(), can_body_settings) );
 
+	Game.observer<ContactAdded>()
+		.event(flecs::OnSet)
+		.each([](flecs::entity e, ContactAdded& c) {
+			if ( e.get<HSE::Model>().data != &model_files["ball"] ) return;
+
+			std::cout << "ball collided with ";
+
+			if ( c.other.get<HSE::Model>().data == &model_files["floor"] ) std::cout << "floor" << '\n';
+			else if ( c.other.get<HSE::Model>().data == &model_files["can"] ) std::cout << "can" << '\n';
+	});
+
 	// Main game loop
 	while ( !WindowShouldClose() ) {
 		Game.progress();

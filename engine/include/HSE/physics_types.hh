@@ -178,6 +178,10 @@ public:
 	flecs::entity get_owner();
 };
 
+struct ContactAdded {
+	flecs::entity other;
+};
+
 // Type converters
 inline JPH::Vec3 glm_to_jolt(glm::vec3 v) {
 	return JPH::Vec3(v.x,v.y,v.z);
