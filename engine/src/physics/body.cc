@@ -6,8 +6,8 @@ Body::Body() {
 
 }
 
-Body::Body(PhysicsEngine& engine, const JPH::BodyCreationSettings& settings) {
-	this->engine = &engine;
+Body::Body(flecs::world world, const JPH::BodyCreationSettings& settings) {
+	this->engine = &world.get_mut<PhysicsEngine>();
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
 }
 

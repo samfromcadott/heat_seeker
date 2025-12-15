@@ -139,7 +139,7 @@ private:
 
 public:
 	Body();
-	Body(PhysicsEngine& engine, const JPH::BodyCreationSettings& settings);
+	Body(flecs::world world, const JPH::BodyCreationSettings& settings);
 	~Body();
 
 	void set_position(const glm::vec3& position);

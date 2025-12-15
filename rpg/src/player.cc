@@ -46,7 +46,7 @@ void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation)
 	ball.set<Velocity>( glm::vec3(vel) );
 	ball.set<Rotation>(rotation);
 	ball.set<HSE::Model>( {&model_files["ball"], 0, 0} );
-	ball.set<Body>( Body(Game.get_mut<PhysicsEngine>(), JPH::BodyCreationSettings(
+	ball.set<Body>( Body(Game, JPH::BodyCreationSettings(
 		new JPH::SphereShape(0.05),
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
