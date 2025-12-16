@@ -36,6 +36,10 @@ void HSE::physics_update(PhysicsEngine& pe) {
 	pe.update();
 }
 
+void HSE::character_update(CharacterBody& b) {
+	b.update();
+}
+
 void HSE::body_to_pos(Body& b, Position& p) {
 	p = b.get_position();
 }

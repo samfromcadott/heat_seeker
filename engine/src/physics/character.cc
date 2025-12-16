@@ -6,18 +6,32 @@ CharacterBody::CharacterBody() {
 
 }
 
-CharacterBody::CharacterBody(PhysicsEngine& engine, const JPH::CharacterVirtualSettings& settings) {
+CharacterBody::CharacterBody(flecs::world world, const JPH::CharacterVirtualSettings& settings) {
+	this->engine = &world.get_mut<PhysicsEngine>();
 	body = new JPH::CharacterVirtual(
 		&settings,
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
-		&(engine.physics_system)
+		&(engine->physics_system)
 	);
-	this->engine = &engine;
 }
 
 CharacterBody::~CharacterBody() {
 
+}
+
+void CharacterBody::update() {
+	JPH::CharacterVirtual::ExtendedUpdateSettings update_settings;
+	body->ExtendedUpdate(
+		1.0/60.0,
+		-body->GetUp() * engine->physics_system.GetGravity().Length(),
+		update_settings,
+		engine->physics_system.GetDefaultBroadPhaseLayerFilter(Layers::MOVING),
+		engine->physics_system.GetDefaultLayerFilter(Layers::MOVING),
+		{ },
+		{ },
+		*(engine->temp_allocator)
+	);
 }
 
 void CharacterBody::set_position(const glm::vec3& position) {

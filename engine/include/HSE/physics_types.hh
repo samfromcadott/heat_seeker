@@ -162,8 +162,10 @@ private:
 
 public:
 	CharacterBody();
-	CharacterBody(PhysicsEngine& engine, const JPH::CharacterVirtualSettings& settings);
+	CharacterBody(flecs::world world, const JPH::CharacterVirtualSettings& settings);
 	~CharacterBody();
+
+	void update();
 
 	void set_position(const glm::vec3& position);
 	glm::vec3 get_position();

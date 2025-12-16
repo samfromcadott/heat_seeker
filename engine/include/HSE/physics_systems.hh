@@ -11,6 +11,7 @@ void rot_to_character(CharacterBody& b, Rotation& r);
 void vel_to_character(CharacterBody& b, Velocity& v);
 
 void physics_update(PhysicsEngine& pe);
+void character_update(CharacterBody& b);
 
 void body_to_pos(Body& b, Position& p);
 void body_to_rot(Body& b, Rotation& r);

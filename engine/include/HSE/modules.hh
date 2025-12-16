@@ -14,10 +14,18 @@ struct PhysicsModule {
 		world.system<Body&, Position&>().each(pos_to_body);
 		world.system<Body&, Rotation&>().each(rot_to_body);
 		world.system<Body&, Velocity&>().each(vel_to_body);
+		world.system<CharacterBody&, Position&>().each(pos_to_character);
+		world.system<CharacterBody&, Rotation&>().each(rot_to_character);
+		world.system<CharacterBody&, Velocity&>().each(vel_to_character);
 		world.system<PhysicsEngine&>().each(physics_update);
+		world.system<CharacterBody&>().each(character_update);
 		world.system<Body&, Position&>().each(body_to_pos);
 		world.system<Body&, Rotation&>().each(body_to_rot);
 		world.system<Body&, Velocity&>().each(body_to_vel);
+		world.system<CharacterBody&, Position&>().each(character_to_pos);
+		world.system<CharacterBody&, Rotation&>().each(character_to_rot);
+		world.system<CharacterBody&, Velocity&>().each(character_to_vel);
+
 
 		// Set body observer
 		world.observer<Body>().event(flecs::OnSet).each([](flecs::entity e, Body& b) {

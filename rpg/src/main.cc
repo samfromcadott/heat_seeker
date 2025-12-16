@@ -69,6 +69,7 @@ int main() {
 		JPH::EMotionType::Static,
 		Layers::NON_MOVING
 	)));
+	plank.get_mut<HSE::Model>().data = &model_files["plank"];
 
 	flecs::entity floor = Game.entity();
 	floor.add<HSE::Model>();
@@ -90,8 +91,19 @@ int main() {
 	player.add<Player>();
 	player.add<Position>();
 	player.add<Rotation>();
-	player.get_mut<Position>() = glm::vec3(-2.0,0,0.5);
-	plank.get_mut<HSE::Model>().data = &model_files["plank"];
+	player.get_mut<Position>() = glm::vec3(-2.0,0,2.5);
+	JPH::CharacterVirtualSettings player_body_settings;
+	player_body_settings.mShape = new JPH::RotatedTranslatedShape(
+		JPH::RVec3::sZero(), JPH::Quat(0.7071068, 0, 0, 0.7071068),
+		new JPH::CapsuleShape(0.75, 0.25)
+	);
+	player_body_settings.mUp = JPH::Vec3::sAxisZ();
+	player_body_settings.mSupportingVolume = { JPH::Vec3::sAxisZ(), -1.0e10f };
+	player.add<CharacterBody>();
+	player.set<CharacterBody>( CharacterBody(Game, player_body_settings) );
+	player.set<Velocity>( glm::vec3(0,0,-5) );
+	player.add<HSE::Model>();
+	player.get_mut<HSE::Model>().data = &model_files["ball"];
 
 	// Make the cans
 	flecs::entity c1 = Game.entity().is_a(can);
