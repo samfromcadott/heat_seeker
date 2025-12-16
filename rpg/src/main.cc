@@ -33,8 +33,9 @@ int main() {
 
 	// Load models
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
-	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
+	model_files["plank"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
 	model_files["can"].model = LoadModel("rpg/base/models/can.obj");
+	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(10.0, 10.0, 0.1) );
 
 	// Create a couple entities
 	flecs::entity can = Game.prefab();
@@ -55,13 +56,13 @@ int main() {
 	can.add<Velocity>();
 	can.get_mut<HSE::Model>().data = &model_files["can"];
 
-	flecs::entity floor = Game.entity();
-	floor.add<HSE::Model>();
-	floor.add<Position>();
-	floor.add<Rotation>();
-	floor.get_mut<Position>() = glm::vec3(0.0,0.0,0.0);
-	floor.add<Body>();
-	floor.set<Body>( Body(Game, JPH::BodyCreationSettings(
+	flecs::entity plank = Game.entity();
+	plank.add<HSE::Model>();
+	plank.add<Position>();
+	plank.add<Rotation>();
+	plank.get_mut<Position>() = glm::vec3(0.0,0.0,0.0);
+	plank.add<Body>();
+	plank.set<Body>( Body(Game, JPH::BodyCreationSettings(
 		new JPH::BoxShape( JPH::Vec3Arg(0.05, 1.0, 0.05) ),
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
@@ -69,13 +70,28 @@ int main() {
 		Layers::NON_MOVING
 	)));
 
+	flecs::entity floor = Game.entity();
+	floor.add<HSE::Model>();
+	floor.add<Position>();
+	floor.add<Rotation>();
+	floor.get_mut<Position>() = glm::vec3(0.0,0.0,-1.0);
+	floor.add<Body>();
+	floor.set<Body>( Body(Game, JPH::BodyCreationSettings(
+		new JPH::BoxShape( JPH::Vec3Arg(5.0, 5.0, 0.05) ),
+		JPH::RVec3::sZero(),
+		JPH::Quat::sIdentity(),
+		JPH::EMotionType::Static,
+		Layers::NON_MOVING
+	)));
+	floor.get_mut<HSE::Model>().data = &model_files["floor"];
+
 	// Make the player
 	flecs::entity player = Game.entity();
 	player.add<Player>();
 	player.add<Position>();
 	player.add<Rotation>();
 	player.get_mut<Position>() = glm::vec3(-2.0,0,0.5);
-	floor.get_mut<HSE::Model>().data = &model_files["floor"];
+	plank.get_mut<HSE::Model>().data = &model_files["plank"];
 
 	// Make the cans
 	flecs::entity c1 = Game.entity().is_a(can);
@@ -101,17 +117,6 @@ int main() {
 	flecs::entity c6 = Game.entity().is_a(can);
 	c6.set<Position>( glm::vec3(0,0,0.425) );
 	c6.set<Body>( Body(Game, can_body_settings) );
-
-	Game.observer<ContactAdded>()
-		.event(flecs::OnSet)
-		.each([](flecs::entity e, ContactAdded& c) {
-			if ( e.get<HSE::Model>().data != &model_files["ball"] ) return;
-
-			std::cout << "ball collided with ";
-
-			if ( c.other.get<HSE::Model>().data == &model_files["floor"] ) std::cout << "floor" << '\n';
-			else if ( c.other.get<HSE::Model>().data == &model_files["can"] ) std::cout << "can" << '\n';
-	});
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
