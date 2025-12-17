@@ -27,6 +27,21 @@ void mouse_look(Player player, Position& position, Rotation& rotation) {
 	camera.position = {position.x,position.y,position.z};
 }
 
+void player_movement(Player player, Position& position, Rotation& rotation, Velocity& velocity) {
+	glm::vec3 input_dir = glm::vec3(0,0,0);
+	if ( IsKeyDown(KEY_W) ) input_dir.x += 1.0;
+	if ( IsKeyDown(KEY_S) ) input_dir.x -= 1.0;
+	if ( IsKeyDown(KEY_A) ) input_dir.y += 1.0;
+	if ( IsKeyDown(KEY_D) ) input_dir.y -= 1.0;
+
+	input_dir = glm::quat(rotation) * input_dir;
+	input_dir.z = 0.0;
+
+	if ( glm::length(input_dir) != 0 ) input_dir = glm::normalize(input_dir);
+
+	velocity = glm::vec3(input_dir) * 4.0f;
+}
+
 void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {
 	if ( !IsMouseButtonPressed(0) ) return;
 

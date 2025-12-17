@@ -27,6 +27,7 @@ int main() {
 	Game.import<PhysicsModule>();
 
 	Game.system<Player, Position&, Rotation&>().each(mouse_look);
+	Game.system<Player, Position&, Rotation&, Velocity&>().each(player_movement);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
 	Game.import<RenderModule>();
@@ -91,7 +92,7 @@ int main() {
 	player.add<Player>();
 	player.add<Position>();
 	player.add<Rotation>();
-	player.get_mut<Position>() = glm::vec3(-2.0,0,2.5);
+	player.get_mut<Position>() = glm::vec3(-2.0,0,0.0);
 	JPH::CharacterVirtualSettings player_body_settings;
 	player_body_settings.mShape = new JPH::RotatedTranslatedShape(
 		JPH::RVec3::sZero(), JPH::Quat(0.7071068, 0, 0, 0.7071068),
@@ -101,7 +102,7 @@ int main() {
 	player_body_settings.mSupportingVolume = { JPH::Vec3::sAxisZ(), -1.0e10f };
 	player.add<CharacterBody>();
 	player.set<CharacterBody>( CharacterBody(Game, player_body_settings) );
-	player.set<Velocity>( glm::vec3(0,0,-5) );
+	player.set<Velocity>( glm::vec3(0,0,0) );
 	player.add<HSE::Model>();
 	player.get_mut<HSE::Model>().data = &model_files["ball"];
 
