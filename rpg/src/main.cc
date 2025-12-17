@@ -27,7 +27,7 @@ int main() {
 	Game.import<PhysicsModule>();
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
-	Game.system<Player, Position&, Rotation&, Velocity&>().each(player_movement);
+	Game.system<Player, Position&, Rotation&, Velocity&, CharacterBody&, GroundMovement&>().each(player_movement);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
@@ -102,6 +102,8 @@ int main() {
 	player_body_settings.mUp = JPH::Vec3::sAxisZ();
 	player_body_settings.mSupportingVolume = { JPH::Vec3::sAxisZ(), -1.0e10f };
 	player.add<CharacterBody>();
+	player.add<GroundMovement>();
+
 	player.set<CharacterBody>( CharacterBody(Game, player_body_settings) );
 	player.set<Velocity>( glm::vec3(0,0,0) );
 	player.set<PlayerCamera>( {

@@ -30,7 +30,7 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 	camera.position = glm_to_raylib(camera_position);
 }
 
-void player_movement(Player player, Position& position, Rotation& rotation, Velocity& velocity) {
+void player_movement(Player player, Position& position, Rotation& rotation, Velocity& velocity, CharacterBody& body, GroundMovement& movement) {
 	glm::vec3 input_dir = glm::vec3(0,0,0);
 	if ( IsKeyDown(KEY_W) ) input_dir.x += 1.0;
 	if ( IsKeyDown(KEY_S) ) input_dir.x -= 1.0;
@@ -39,10 +39,22 @@ void player_movement(Player player, Position& position, Rotation& rotation, Velo
 
 	input_dir = glm::quat(rotation) * input_dir;
 	input_dir.z = 0.0;
+	float input_mag = glm::length(input_dir);
 
-	if ( glm::length(input_dir) != 0 ) input_dir = glm::normalize(input_dir);
+	if (input_mag != 0) input_dir = glm::normalize(input_dir);
 
-	auto v = glm::vec3(input_dir) * 4.0f;
+	// auto v = glm::vec3(input_dir) * 4.0f;
+	// velocity.x = v.x;
+	// velocity.y = v.y;
+
+	float a;
+	if (input_mag != 0)
+		a = body.on_floor()? movement.acceleration : movement.acceleration_air;
+	else
+		a = body.on_floor()? movement.decceleration : movement.decceleration_air;
+
+	glm::vec3 v = glm::mix(glm::vec3(velocity), input_dir * movement.max_speed, GetFrameTime() * a);
+
 	velocity.x = v.x;
 	velocity.y = v.y;
 }
