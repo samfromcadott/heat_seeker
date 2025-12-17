@@ -104,8 +104,6 @@ int main() {
 	player.add<CharacterBody>();
 	player.set<CharacterBody>( CharacterBody(Game, player_body_settings) );
 	player.set<Velocity>( glm::vec3(0,0,0) );
-	player.add<HSE::Model>();
-	player.get_mut<HSE::Model>().data = &model_files["ball"];
 	player.set<PlayerCamera>( {
 		glm::eulerAngles( glm::quat( player.get<Rotation>() ) ),
 		glm::vec3(0.0,0.0,0.75)
