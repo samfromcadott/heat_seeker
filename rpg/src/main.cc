@@ -28,6 +28,7 @@ int main() {
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Position&, Rotation&, Velocity&>().each(player_movement);
+	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
 	Game.import<RenderModule>();

@@ -47,6 +47,12 @@ void player_movement(Player player, Position& position, Rotation& rotation, Velo
 	velocity.y = v.y;
 }
 
+void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity) {
+	if ( !IsKeyPressed(KEY_SPACE) or !body.on_floor() ) return;
+
+	velocity.z = 5.0;
+}
+
 void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {
 	if ( !IsMouseButtonPressed(0) ) return;
 
