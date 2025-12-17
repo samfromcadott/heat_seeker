@@ -26,7 +26,7 @@ int main() {
 
 	Game.import<PhysicsModule>();
 
-	Game.system<Player, Position&, Rotation&>().each(mouse_look);
+	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Position&, Rotation&, Velocity&>().each(player_movement);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
@@ -105,6 +105,10 @@ int main() {
 	player.set<Velocity>( glm::vec3(0,0,0) );
 	player.add<HSE::Model>();
 	player.get_mut<HSE::Model>().data = &model_files["ball"];
+	player.set<PlayerCamera>( {
+		glm::eulerAngles( glm::quat( player.get<Rotation>() ) ),
+		glm::vec3(0.0,0.0,0.75)
+	} );
 
 	// Make the cans
 	flecs::entity c1 = Game.entity().is_a(can);
