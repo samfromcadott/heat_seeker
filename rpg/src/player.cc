@@ -42,7 +42,9 @@ void player_movement(Player player, Position& position, Rotation& rotation, Velo
 
 	if ( glm::length(input_dir) != 0 ) input_dir = glm::normalize(input_dir);
 
-	velocity = glm::vec3(input_dir) * 4.0f;
+	auto v = glm::vec3(input_dir) * 4.0f;
+	velocity.x = v.x;
+	velocity.y = v.y;
 }
 
 void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {

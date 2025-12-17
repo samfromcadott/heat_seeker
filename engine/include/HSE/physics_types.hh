@@ -167,6 +167,8 @@ public:
 
 	void update();
 
+	bool on_floor();
+
 	void set_position(const glm::vec3& position);
 	glm::vec3 get_position();
 

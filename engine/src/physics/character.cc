@@ -21,6 +21,13 @@ CharacterBody::~CharacterBody() {
 }
 
 void CharacterBody::update() {
+	// Gravity update
+	if ( !on_floor() ) {
+		auto v = body->GetLinearVelocity();
+		v += body->GetUp() * engine->physics_system.GetGravity() * 1.0/60.0;
+		body->SetLinearVelocity(v);
+	}
+
 	JPH::CharacterVirtual::ExtendedUpdateSettings update_settings;
 	body->ExtendedUpdate(
 		1.0/60.0,
@@ -32,6 +39,10 @@ void CharacterBody::update() {
 		{ },
 		*(engine->temp_allocator)
 	);
+}
+
+bool CharacterBody::on_floor() {
+	return body->IsSupported();
 }
 
 void CharacterBody::set_position(const glm::vec3& position) {
