@@ -10,28 +10,24 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 	// Get mouse movement
 	Vector2 delta = GetMouseDelta();
 
-	// Calculate the horizontal and vertical rotation
-	// glm::vec3 euler = glm::eulerAngles( glm::quat(rotation) );
-	// euler.z -= delta.x * GetFrameTime() * 0.1;
-	// euler.y -= delta.y * GetFrameTime() * 0.1;
-	// euler.y = std::clamp(euler.y, -1.5f, 1.5f);
-	// // rotation = glm::quat(euler);
-	// rotation = glm::quat( glm::vec3(0.0,0.0,euler.z) );
+	// Update camera rotation
 	player_camera.rotation.z -= delta.x * GetFrameTime() * 0.1;
 	player_camera.rotation.y -= delta.y * GetFrameTime() * 0.1;
 	player_camera.rotation.y = std::clamp(player_camera.rotation.y, -1.5f, 1.5f);
-	// rotation = glm::quat(euler);
-	rotation = glm::quat( glm::vec3(0.0,0.0,player_camera.rotation.z) );
+
+	rotation = glm::quat( glm::vec3(0.0,0.0,player_camera.rotation.z) ); // Update player rotation
 
 	// Update view
 	glm::vec3 vector_h( cos(player_camera.rotation.z), sin(player_camera.rotation.z), 0.0f );
 	glm::vec3 vector_v( cos(player_camera.rotation.y), 0.0f, sin(player_camera.rotation.y) );
+
 	glm::vec3 camera_target( vector_h.x*vector_v.x, vector_h.y*vector_v.x, vector_v.z );
 	camera_target += glm::vec3(position) + player_camera.offset;
+
 	auto camera_position = glm::vec3(position) + player_camera.offset;
 
-	camera.target = {camera_target.x,camera_target.y,camera_target.z};
-	camera.position = {camera_position.x,camera_position.y,camera_position.z};
+	camera.target = glm_to_raylib(camera_target);
+	camera.position = glm_to_raylib(camera_position);
 }
 
 void player_movement(Player player, Position& position, Rotation& rotation, Velocity& velocity) {
@@ -52,9 +48,9 @@ void player_movement(Player player, Position& position, Rotation& rotation, Velo
 void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {
 	if ( !IsMouseButtonPressed(0) ) return;
 
-	glm::vec3 offset = glm::vec3(camera.target.x, camera.target.y, camera.target.z) - glm::vec3(camera.position.x, camera.position.y, camera.position.z);
+	glm::vec3 offset = raylib_to_glm(camera.target) - raylib_to_glm(camera.position);
 	glm::vec3 launch_point = offset * 0.5f;
-	launch_point += glm::vec3(camera.position.x, camera.position.y, camera.position.z);
+	launch_point += raylib_to_glm(camera.position);
 	glm::vec3 vel = offset * 10.0f;
 
 	flecs::entity ball = Game.entity();

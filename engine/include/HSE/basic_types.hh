@@ -84,4 +84,12 @@ struct Velocity {
 	}
 };
 
+inline glm::vec3 raylib_to_glm(Vector3 v) {
+	return glm::vec3(v.x,v.y,v.z);
+}
+
+inline Vector3 glm_to_raylib(glm::vec3 v) {
+	return Vector3 {v.x,v.y,v.z};
+}
+
 }
