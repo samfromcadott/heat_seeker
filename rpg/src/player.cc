@@ -43,10 +43,6 @@ void player_movement(Player player, Position& position, Rotation& rotation, Velo
 
 	if (input_mag != 0) input_dir = glm::normalize(input_dir);
 
-	// auto v = glm::vec3(input_dir) * 4.0f;
-	// velocity.x = v.x;
-	// velocity.y = v.y;
-
 	float a;
 	if (input_mag != 0)
 		a = body.on_floor()? movement.acceleration : movement.acceleration_air;

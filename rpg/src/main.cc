@@ -25,19 +25,18 @@ int main() {
 	DisableCursor();
 
 	Game.import<PhysicsModule>();
+	Game.import<RenderModule>();
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Position&, Rotation&, Velocity&, CharacterBody&, GroundMovement&>().each(player_movement);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
-	Game.import<RenderModule>();
-
 	// Load models
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
 	model_files["plank"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
 	model_files["can"].model = LoadModel("rpg/base/models/can.obj");
-	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(10.0, 10.0, 0.1) );
+	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(50.0, 50.0, 0.1) );
 
 	// Create a couple entities
 	flecs::entity can = Game.prefab();
@@ -80,7 +79,7 @@ int main() {
 	floor.get_mut<Position>() = glm::vec3(0.0,0.0,-1.0);
 	floor.add<Body>();
 	floor.set<Body>( Body(Game, JPH::BodyCreationSettings(
-		new JPH::BoxShape( JPH::Vec3Arg(5.0, 5.0, 0.05) ),
+		new JPH::BoxShape( JPH::Vec3Arg(25.0, 25.0, 0.05) ),
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
 		JPH::EMotionType::Static,

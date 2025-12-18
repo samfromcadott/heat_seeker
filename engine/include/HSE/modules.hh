@@ -11,20 +11,20 @@ struct PhysicsModule {
 		world.component<Body>();
 
 		// Register systems
-		world.system<Body&, Position&>().each(pos_to_body);
-		world.system<Body&, Rotation&>().each(rot_to_body);
-		world.system<Body&, Velocity&>().each(vel_to_body);
-		world.system<CharacterBody&, Position&>().each(pos_to_character);
-		world.system<CharacterBody&, Rotation&>().each(rot_to_character);
-		world.system<CharacterBody&, Velocity&>().each(vel_to_character);
-		world.system<PhysicsEngine&>().each(physics_update);
-		world.system<CharacterBody&>().each(character_update);
-		world.system<Body&, Position&>().each(body_to_pos);
-		world.system<Body&, Rotation&>().each(body_to_rot);
-		world.system<Body&, Velocity&>().each(body_to_vel);
-		world.system<CharacterBody&, Position&>().each(character_to_pos);
-		world.system<CharacterBody&, Rotation&>().each(character_to_rot);
-		world.system<CharacterBody&, Velocity&>().each(character_to_vel);
+		world.system<Body&, Position&>().kind(flecs::PreUpdate).each(pos_to_body);
+		world.system<Body&, Rotation&>().kind(flecs::PreUpdate).each(rot_to_body);
+		world.system<Body&, Velocity&>().kind(flecs::PreUpdate).each(vel_to_body);
+		world.system<CharacterBody&, Position&>().kind(flecs::PreUpdate).each(pos_to_character);
+		world.system<CharacterBody&, Rotation&>().kind(flecs::PreUpdate).each(rot_to_character);
+		world.system<CharacterBody&, Velocity&>().kind(flecs::PreUpdate).each(vel_to_character);
+		world.system<PhysicsEngine&>().kind(flecs::PreUpdate).each(physics_update);
+		world.system<CharacterBody&>().kind(flecs::PreUpdate).each(character_update);
+		world.system<Body&, Position&>().kind(flecs::PreUpdate).each(body_to_pos);
+		world.system<Body&, Rotation&>().kind(flecs::PreUpdate).each(body_to_rot);
+		world.system<Body&, Velocity&>().kind(flecs::PreUpdate).each(body_to_vel);
+		world.system<CharacterBody&, Position&>().kind(flecs::PreUpdate).each(character_to_pos);
+		world.system<CharacterBody&, Rotation&>().kind(flecs::PreUpdate).each(character_to_rot);
+		world.system<CharacterBody&, Velocity&>().kind(flecs::PreUpdate).each(character_to_vel);
 
 
 		// Set body observer
@@ -40,11 +40,11 @@ struct PhysicsModule {
 
 struct RenderModule {
 	RenderModule(flecs::world& world) {
-		world.system().each(start_render);
-		world.system().each(start_3D);
-		world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().each(render_models);
-		world.system().each(end_3D);
-		world.system().each(end_render);
+		world.system().kind(flecs::PostUpdate).each(start_render);
+		world.system().kind(flecs::PostUpdate).each(start_3D);
+		world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().kind(flecs::PostUpdate).each(render_models);
+		world.system().kind(flecs::PostUpdate).each(end_3D);
+		world.system().kind(flecs::PostUpdate).each(end_render);
 	}
 };
 

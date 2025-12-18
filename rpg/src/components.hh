@@ -10,9 +10,10 @@ struct PlayerCamera {
 };
 
 struct GroundMovement {
-	float max_speed = 4.0;
-	float acceleration = 3.0;
-	float decceleration = 3.0;
+	glm::vec2 direction;
+	float max_speed = 10.0;
+	float acceleration = 3.125;
+	float decceleration = 3.125;
 	float acceleration_air = 0.5;
 	float decceleration_air = 0.0;
 };
