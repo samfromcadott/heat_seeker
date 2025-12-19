@@ -50,7 +50,25 @@ struct RenderModule {
 
 struct CoreModule {
 	CoreModule(flecs::world& world) {
+		// Register basic types
+		world.component<Position>()
+			.member("x", &Position::x)
+			.member("y", &Position::y)
+			.member("z", &Position::z);
 
+		world.component<Rotation>()
+			.member("w", &Rotation::w)
+			.member("x", &Rotation::x)
+			.member("y", &Rotation::y)
+			.member("z", &Rotation::z);
+
+		world.component<Velocity>()
+			.member("x", &Velocity::x)
+			.member("y", &Velocity::y)
+			.member("z", &Velocity::z);
+
+		world.import<PhysicsModule>();
+		world.import<RenderModule>();
 	}
 };
 

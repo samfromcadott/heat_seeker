@@ -24,8 +24,7 @@ int main() {
 	SetTargetFPS(60);
 	DisableCursor();
 
-	Game.import<PhysicsModule>();
-	Game.import<RenderModule>();
+	Game.import<CoreModule>();
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Position&, Rotation&, Velocity&, CharacterBody&, GroundMovement&>().each(player_movement);
