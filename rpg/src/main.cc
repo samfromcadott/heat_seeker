@@ -34,7 +34,7 @@ int main() {
 	// Load models
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
 	model_files["plank"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
-	model_files["can"].model = LoadModel("rpg/base/models/can.obj");
+	model_files["can"].model = LoadModel("base/models/can.obj");
 	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(50.0, 50.0, 0.1) );
 
 	// Create a couple entities
