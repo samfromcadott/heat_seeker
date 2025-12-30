@@ -31,6 +31,20 @@ int main() {
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
+	Game.component<Player>();
+
+	Game.component<GroundMovement>()
+		.member("direction", &GroundMovement::direction)
+		.member("max_speed", &GroundMovement::max_speed)
+		.member("acceleration", &GroundMovement::acceleration)
+		.member("decceleration", &GroundMovement::decceleration)
+		.member("acceleration_air", &GroundMovement::acceleration_air)
+		.member("decceleration_air", &GroundMovement::decceleration_air);
+
+	Game.component<PlayerCamera>()
+		.member("rotation", &PlayerCamera::rotation)
+		.member("offset", &PlayerCamera::offset);
+
 	// Load models
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
 	model_files["plank"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
