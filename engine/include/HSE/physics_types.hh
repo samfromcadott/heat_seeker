@@ -7,6 +7,7 @@
 #include <Jolt/Core/JobSystemThreadPool.h>
 #include <Jolt/Physics/PhysicsSettings.h>
 #include <Jolt/Physics/PhysicsSystem.h>
+#include <Jolt/Physics/Collision/Shape/EmptyShape.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 #include <Jolt/Physics/Collision/Shape/SphereShape.h>
 #include <Jolt/Physics/Collision/Shape/CylinderShape.h>
@@ -98,6 +99,40 @@ public:
 	virtual void OnCharacterContactSolve(const JPH::CharacterVirtual *inCharacter, const JPH::CharacterVirtual *inOtherCharacter, const JPH::SubShapeID &inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::Vec3Arg inContactVelocity, const JPH::PhysicsMaterial *inContactMaterial, JPH::Vec3Arg inCharacterVelocity, JPH::Vec3 &ioNewCharacterVelocity);
 };
 
+enum ShapeType {
+	NONE,
+	SPHERE,
+	BOX,
+	CYLINDER,
+	CAPSULE,
+};
+
+struct ShapeOptions {
+	ShapeType type = ShapeType::NONE;
+	glm::vec3 translation = glm::vec3(0,0,0);
+	glm::quat rotation = glm::quat(1,0,0,0);
+
+	float height = 0.0;
+	float radius = 0.0;
+	glm::vec3 size = glm::vec3(0.0, 0.0, 0.0);
+};
+
+JPH::Ref<JPH::Shape> convert_shape(const ShapeOptions& options);
+
+struct BodyOptions {
+	ShapeOptions shape;
+	JPH::EMotionType motion_type = JPH::EMotionType::Dynamic;
+	JPH::ObjectLayer object_layer = 0;
+};
+
+struct CharacterBodyOptions {
+	ShapeOptions shape;
+	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	float max_slope = JPH::DegreesToRadians(50.0f);
+	float mass = 70.0f;
+	float max_strength = 100.0f;
+};
+
 class PhysicsEngine {
 private:
 	flecs::world world;
@@ -140,6 +175,7 @@ private:
 public:
 	Body();
 	Body(flecs::world world, const JPH::BodyCreationSettings& settings);
+	Body(flecs::world world, const BodyOptions& options);
 	~Body();
 
 	void set_position(const glm::vec3& position);
@@ -163,6 +199,7 @@ private:
 public:
 	CharacterBody();
 	CharacterBody(flecs::world world, const JPH::CharacterVirtualSettings& settings);
+	CharacterBody(flecs::world world, const CharacterBodyOptions& options);
 	~CharacterBody();
 
 	void update();

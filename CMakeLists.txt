@@ -25,6 +25,7 @@ add_library(heat_seeker
 	engine/src/physics/systems.cc
 	engine/src/physics/character.cc
 	engine/src/physics/character_listener.cc
+	engine/src/physics/shape.cc
 )
 
 target_link_libraries(heat_seeker raylib flecs_static Jolt)
