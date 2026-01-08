@@ -1,0 +1,14 @@
+using flecs.*
+
+template Can {
+	prop position = Position: {0,0,0}
+	prop rotation = Rotation: {1,0,0,0}
+
+	$position
+	$rotation
+	Velocity
+
+	Model: load_model("models/can.obj")
+}
+
+Can can()

@@ -1,38 +1,37 @@
 #pragma once
-namespace HSE {
 
 struct PhysicsModule {
 	PhysicsModule(flecs::world& world) {
 		// Add physics engine
-		world.component<PhysicsEngine>().add(flecs::Singleton);
-		world.set<PhysicsEngine>( PhysicsEngine() );
-		world.get_mut<PhysicsEngine>().set_world(world);
+		world.component<HSE::PhysicsEngine>().add(flecs::Singleton);
+		world.set<HSE::PhysicsEngine>( HSE::PhysicsEngine() );
+		world.get_mut<HSE::PhysicsEngine>().set_world(world);
 
-		world.component<Body>();
+		world.component<HSE::Body>();
 
 		// Register systems
-		world.system<Body&, Position&>().kind(flecs::PreUpdate).each(pos_to_body);
-		world.system<Body&, Rotation&>().kind(flecs::PreUpdate).each(rot_to_body);
-		world.system<Body&, Velocity&>().kind(flecs::PreUpdate).each(vel_to_body);
-		world.system<CharacterBody&, Position&>().kind(flecs::PreUpdate).each(pos_to_character);
-		world.system<CharacterBody&, Rotation&>().kind(flecs::PreUpdate).each(rot_to_character);
-		world.system<CharacterBody&, Velocity&>().kind(flecs::PreUpdate).each(vel_to_character);
-		world.system<PhysicsEngine&>().kind(flecs::PreUpdate).each(physics_update);
-		world.system<CharacterBody&>().kind(flecs::PreUpdate).each(character_update);
-		world.system<Body&, Position&>().kind(flecs::PreUpdate).each(body_to_pos);
-		world.system<Body&, Rotation&>().kind(flecs::PreUpdate).each(body_to_rot);
-		world.system<Body&, Velocity&>().kind(flecs::PreUpdate).each(body_to_vel);
-		world.system<CharacterBody&, Position&>().kind(flecs::PreUpdate).each(character_to_pos);
-		world.system<CharacterBody&, Rotation&>().kind(flecs::PreUpdate).each(character_to_rot);
-		world.system<CharacterBody&, Velocity&>().kind(flecs::PreUpdate).each(character_to_vel);
+		world.system<HSE::Body&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::pos_to_body);
+		world.system<HSE::Body&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::rot_to_body);
+		world.system<HSE::Body&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::vel_to_body);
+		world.system<HSE::CharacterBody&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::pos_to_character);
+		world.system<HSE::CharacterBody&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::rot_to_character);
+		world.system<HSE::CharacterBody&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::vel_to_character);
+		world.system<HSE::PhysicsEngine&>().kind(flecs::PreUpdate).each(HSE::physics_update);
+		world.system<HSE::CharacterBody&>().kind(flecs::PreUpdate).each(HSE::character_update);
+		world.system<HSE::Body&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::body_to_pos);
+		world.system<HSE::Body&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::body_to_rot);
+		world.system<HSE::Body&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::body_to_vel);
+		world.system<HSE::CharacterBody&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::character_to_pos);
+		world.system<HSE::CharacterBody&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::character_to_rot);
+		world.system<HSE::CharacterBody&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::character_to_vel);
 
 
 		// Set body observer
-		world.observer<Body>().event(flecs::OnSet).each([](flecs::entity e, Body& b) {
+		world.observer<HSE::Body>().event(flecs::OnSet).each([](flecs::entity e, HSE::Body& b) {
 			b.set_owner(e);
 		});
 
-		world.observer<CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, CharacterBody& b) {
+		world.observer<HSE::CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, HSE::CharacterBody& b) {
 			b.set_owner(e);
 		});
 	}
@@ -40,36 +39,44 @@ struct PhysicsModule {
 
 struct RenderModule {
 	RenderModule(flecs::world& world) {
-		world.system().kind(flecs::PostUpdate).each(start_render);
-		world.system().kind(flecs::PostUpdate).each(start_3D);
-		world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().kind(flecs::PostUpdate).each(render_models);
-		world.system().kind(flecs::PostUpdate).each(end_3D);
-		world.system().kind(flecs::PostUpdate).each(end_render);
+		world.system().kind(flecs::PostUpdate).each(HSE::start_render);
+		world.system().kind(flecs::PostUpdate).each(HSE::start_3D);
+		world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().kind(flecs::PostUpdate).each(HSE::render_models);
+		world.system().kind(flecs::PostUpdate).each(HSE::end_3D);
+		world.system().kind(flecs::PostUpdate).each(HSE::end_render);
 	}
 };
 
 struct CoreModule {
 	CoreModule(flecs::world& world) {
 		// Register basic types
-		world.component<Position>()
-			.member("x", &Position::x)
-			.member("y", &Position::y)
-			.member("z", &Position::z);
+		world.component<glm::vec2>("vec2")
+		.member("x", &glm::vec2::x)
+		.member("y", &glm::vec2::y);
 
-		world.component<Rotation>()
-			.member("w", &Rotation::w)
-			.member("x", &Rotation::x)
-			.member("y", &Rotation::y)
-			.member("z", &Rotation::z);
+		world.component<glm::vec3>("vec3")
+		.member("x", &glm::vec3::x)
+		.member("y", &glm::vec3::y)
+		.member("z", &glm::vec3::z);
 
-		world.component<Velocity>()
-			.member("x", &Velocity::x)
-			.member("y", &Velocity::y)
-			.member("z", &Velocity::z);
+		// world.component<HSE::Position>()
+		// .member("x", &HSE::Position::x)
+		// .member("y", &HSE::Position::y)
+		// .member("z", &HSE::Position::z);
+  //
+		// world.component<HSE::Rotation>()
+		// .member("w", &HSE::Rotation::w)
+		// .member("x", &HSE::Rotation::x)
+		// .member("y", &HSE::Rotation::y)
+		// .member("z", &HSE::Rotation::z);
+
+		world.component<HSE::Velocity>("Velocity")
+		.member("x", &HSE::Velocity::x)
+		.member("y", &HSE::Velocity::y)
+		.member("z", &HSE::Velocity::z);
 
 		world.import<PhysicsModule>();
 		world.import<RenderModule>();
 	}
 };
 
-}

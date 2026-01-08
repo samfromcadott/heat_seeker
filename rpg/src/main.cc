@@ -26,6 +26,17 @@ int main() {
 
 	Game.import<CoreModule>();
 
+	Game.component<HSE::Position>()
+		.member("x", &HSE::Position::x)
+		.member("y", &HSE::Position::y)
+		.member("z", &HSE::Position::z);
+
+	Game.component<HSE::Rotation>()
+		.member("w", &HSE::Rotation::w)
+		.member("x", &HSE::Rotation::x)
+		.member("y", &HSE::Rotation::y)
+		.member("z", &HSE::Rotation::z);
+
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Position&, Rotation&, Velocity&, CharacterBody&, GroundMovement&>().each(player_movement);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
@@ -101,27 +112,27 @@ int main() {
 	floor.get_mut<HSE::Model>().data = &model_files["floor"];
 
 	// Make the player
-	flecs::entity player = Game.entity();
-	player.add<Player>();
-	player.add<Position>();
-	player.add<Rotation>();
-	player.get_mut<Position>() = glm::vec3(-2.0,0,0.0);
-	JPH::CharacterVirtualSettings player_body_settings;
-	player_body_settings.mShape = new JPH::RotatedTranslatedShape(
-		JPH::RVec3::sZero(), JPH::Quat(0.7071068, 0, 0, 0.7071068),
-		new JPH::CapsuleShape(0.75, 0.25)
-	);
-	player_body_settings.mUp = JPH::Vec3::sAxisZ();
-	player_body_settings.mSupportingVolume = { JPH::Vec3::sAxisZ(), -1.0e10f };
-	player.add<CharacterBody>();
-	player.add<GroundMovement>();
-
-	player.set<CharacterBody>( CharacterBody(Game, player_body_settings) );
-	player.set<Velocity>( glm::vec3(0,0,0) );
-	player.set<PlayerCamera>( {
-		glm::eulerAngles( glm::quat( player.get<Rotation>() ) ),
-		glm::vec3(0.0,0.0,0.75)
-	} );
+	// flecs::entity player = Game.entity();
+	// player.add<Player>();
+	// player.add<Position>();
+	// player.add<Rotation>();
+	// player.get_mut<Position>() = glm::vec3(-2.0,0,0.0);
+	// JPH::CharacterVirtualSettings player_body_settings;
+	// player_body_settings.mShape = new JPH::RotatedTranslatedShape(
+	// 	JPH::RVec3::sZero(), JPH::Quat(0.7071068, 0, 0, 0.7071068),
+	// 	new JPH::CapsuleShape(0.75, 0.25)
+	// );
+	// player_body_settings.mUp = JPH::Vec3::sAxisZ();
+	// player_body_settings.mSupportingVolume = { JPH::Vec3::sAxisZ(), -1.0e10f };
+	// player.add<CharacterBody>();
+	// player.add<GroundMovement>();
+ //
+	// player.set<CharacterBody>( CharacterBody(Game, player_body_settings) );
+	// player.set<Velocity>( glm::vec3(0,0,0) );
+	// player.set<PlayerCamera>( {
+	// 	glm::eulerAngles( glm::quat( player.get<Rotation>() ) ),
+	// 	glm::vec3(0.0,0.0,0.75)
+	// } );
 
 	// Make the cans
 	flecs::entity c1 = Game.entity().is_a(can);
@@ -147,6 +158,18 @@ int main() {
 	flecs::entity c6 = Game.entity().is_a(can);
 	c6.set<Position>( glm::vec3(0,0,0.425) );
 	c6.set<Body>( Body(Game, can_body_settings) );
+
+	// Game.script().filename("base/script/player.flecs").run();
+	// Game.script().filename("base/script/can.flecs").run();
+	Game.script().filename("base/script/test.flecs").run();
+
+	// Check to see if a player was added
+	auto q = Game.query<Player>();
+
+	std::cout << "Checking if a player was created...\n";
+	q.each([](Player p) {
+		std::cout << "This is a player.\n";
+	});
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {

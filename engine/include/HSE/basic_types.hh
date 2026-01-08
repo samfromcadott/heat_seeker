@@ -11,6 +11,12 @@ struct Position {
 		z = 0.0;
 	}
 
+	Position(float x, float y, float z) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+
 	Position(const glm::vec3&& v) {
 		x = v.x;
 		y = v.y;
@@ -40,6 +46,13 @@ struct Rotation {
 		x = 0.0;
 		y = 0.0;
 		z = 0.0;
+	}
+
+	Rotation(float w, float x, float y, float z) {
+		this->w = w;
+		this->x = x;
+		this->y = y;
+		this->z = z;
 	}
 
 	Rotation(const glm::quat&& q) {
