@@ -11,13 +11,13 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 			shape = new JPH::SphereShape(options.radius);
 			break;
 		case ShapeType::BOX:
-			shape = new JPH::BoxShape( glm_to_jolt(options.size * 2.0f) );
+			shape = new JPH::BoxShape( glm_to_jolt(options.size / 2.0f) );
 			break;
 		case ShapeType::CYLINDER:
-			shape = new JPH::CylinderShape(options.height * 2.0, options.radius);
+			shape = new JPH::CylinderShape(options.height / 2.0, options.radius);
 			break;
 		case ShapeType::CAPSULE:
-			shape = new JPH::CapsuleShape(options.height * 2.0, options.radius);
+			shape = new JPH::CapsuleShape(options.height / 2.0, options.radius);
 			break;
 	}
 

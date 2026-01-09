@@ -1,8 +1,10 @@
+using HseCore
+
 player {
 	Player
 
-	HSE.Position: {-2, 0, 0}
-	HSE.Rotation: {1, 0, 0, 0}
+	Position: {-2, 0, 0}
+	Rotation: {1, 0, 0, 0}
 
 	PlayerCamera: {
 		rotation: {0.0, 0.0, 0.0},
