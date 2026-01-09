@@ -15,6 +15,20 @@ Body::~Body() {
 
 }
 
+Body::Body(flecs::world world, const BodyOptions& options) {
+	this->engine = &world.get_mut<PhysicsEngine>();
+
+	JPH::BodyCreationSettings settings(
+		convert_shape(options.shape),
+		JPH::RVec3::sZero(),
+		JPH::Quat::sIdentity(),
+		options.motion_type,
+		options.object_layer
+	);
+
+	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
+}
+
 void Body::set_position(const glm::vec3& position) {
 	engine->physics_system.GetBodyInterface().SetPosition(id, glm_to_jolt(position), JPH::EActivation::Activate);
 }

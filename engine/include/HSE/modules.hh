@@ -68,6 +68,12 @@ struct HsePhysics {
 			b.set_owner(e);
 		});
 
+		world.observer<HSE::BodyOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::BodyOptions& o) {
+			// Add a new body using the options
+			e.set<HSE::Body>( HSE::Body(world, o) );
+			e.remove<HSE::BodyOptions>();
+		});
+
 		world.observer<HSE::CharacterBodyOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::CharacterBodyOptions& o) {
 			// Add a new character body using the options
 			e.set<HSE::CharacterBody>( HSE::CharacterBody(world, o) );
