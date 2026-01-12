@@ -48,7 +48,6 @@ int main() {
 	// Load models
 	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
 	model_files["plank"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
-	model_files["can"].model = LoadModel("base/models/can.obj");
 	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(50.0, 50.0, 0.1) );
 
 	// Create a couple entities
@@ -68,7 +67,7 @@ int main() {
 		Layers::MOVING
 	);
 	can.add<Velocity>();
-	can.get_mut<HSE::Model>().data = &model_files["can"];
+	can.set<HSE::Model>( HSE::Model("base/models/can.obj") );
 
 	flecs::entity plank = Game.entity();
 	plank.add<HSE::Model>();
@@ -126,7 +125,7 @@ int main() {
 	c6.set<Body>( Body(Game, can_body_settings) );
 
 	Game.script().filename("base/script/player.flecs").run();
-	// Game.script().filename("base/script/can.flecs").run();
+	Game.script().filename("base/script/can.flecs").run();
 	// Game.script().filename("base/script/test.flecs").run();
 
 	// Check to see if a player was added

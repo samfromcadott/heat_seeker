@@ -22,6 +22,7 @@
 #include "HSE/physics_systems.hh"
 #include "HSE/render_types.hh"
 #include "HSE/render_systems.hh"
+#include "HSE/script.hh"
 #include "HSE/modules.hh"
 
 namespace HSE {

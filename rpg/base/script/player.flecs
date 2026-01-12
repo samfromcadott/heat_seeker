@@ -33,4 +33,4 @@ template RpgGuy {
 	}
 }
 
-RpgGuy player(position: {-2.0, 5.0, 10.0})
+RpgGuy player(position: {-2.0, 0.0, 0.0})

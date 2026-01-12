@@ -1,4 +1,7 @@
-using flecs.*
+using HseCore
+using HseRender
+
+const can_model: load_model("base/models/can.obj")
 
 template Can {
 	prop position = Position: {0,0,0}
@@ -8,7 +11,7 @@ template Can {
 	$rotation
 	Velocity
 
-	Model: load_model("models/can.obj")
+	$can_model
 }
 
 Can can()

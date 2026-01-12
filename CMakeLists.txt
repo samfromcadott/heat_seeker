@@ -12,6 +12,8 @@ include_directories(3rdparty/glm)
 include_directories(engine/include)
 
 add_library(heat_seeker
+	engine/src/script.cc
+
 	# Render
 	engine/src/render/render.cc
 	engine/src/render/models.cc

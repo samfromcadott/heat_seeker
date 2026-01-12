@@ -16,9 +16,17 @@ struct ModelData {
 };
 
 struct Model {
-	ModelData* data;
-	int animation;
-	int frame;
+	ModelData* data = nullptr;
+	int animation = 0;
+	int frame = 0;
+
+	Model() = default;
+	Model(ModelData* data, int animation, int frame) {
+		this->data = data;
+		this->animation = animation;
+		this->frame = frame;
+	}
+	Model(const std::string& filename);
 };
 
 }
