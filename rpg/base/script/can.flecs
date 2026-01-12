@@ -1,5 +1,6 @@
 using HseCore
 using HseRender
+using HsePhysics
 
 const can_model: load_model("base/models/can.obj")
 
@@ -12,6 +13,21 @@ template Can {
 	Velocity
 
 	$can_model
+
+	BodyOptions: {
+		shape: {
+			type: CYLINDER,
+			rotation: {0.7071068, 0.7071068, 0, 0},
+			radius: 0.05,
+			height: 0.15
+		}
+		object_layer: 1
+	}
 }
 
-Can can()
+Can( position: {0,0,0.125} )
+Can( position: {0,0.1,0.125} )
+Can( position: {0,-0.1,0.125} )
+Can( position: {0,0.05,0.275} )
+Can( position: {0,-0.05,0.275} )
+Can( position: {0,0,0.425} )

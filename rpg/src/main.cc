@@ -51,24 +51,6 @@ int main() {
 	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(50.0, 50.0, 0.1) );
 
 	// Create a couple entities
-	flecs::entity can = Game.prefab();
-	can.add<HSE::Model>();
-	can.add<Position>();
-	can.add<Rotation>();
-	can.add<Body>();
-	JPH::BodyCreationSettings can_body_settings(
-		new JPH::RotatedTranslatedShape(
-			JPH::RVec3::sZero(), JPH::Quat(0.7071068, 0, 0, 0.7071068),
-			new JPH::CylinderShape(0.075, 0.05)
-		),
-		JPH::RVec3::sZero(),
-		JPH::Quat::sIdentity(),
-		JPH::EMotionType::Dynamic,
-		Layers::MOVING
-	);
-	can.add<Velocity>();
-	can.set<HSE::Model>( HSE::Model("base/models/can.obj") );
-
 	flecs::entity plank = Game.entity();
 	plank.add<HSE::Model>();
 	plank.add<Position>();
@@ -99,42 +81,8 @@ int main() {
 	)));
 	floor.get_mut<HSE::Model>().data = &model_files["floor"];
 
-	// Make the cans
-	flecs::entity c1 = Game.entity().is_a(can);
-	c1.set<Position>( glm::vec3(0,0,0.125) );
-	c1.set<Body>( Body(Game, can_body_settings) );
-
-	flecs::entity c2 = Game.entity().is_a(can);
-	c2.set<Position>( glm::vec3(0,0.1,0.125) );
-	c2.set<Body>( Body(Game, can_body_settings) );
-
-	flecs::entity c3 = Game.entity().is_a(can);
-	c3.set<Position>( glm::vec3(0,-0.1,0.125) );
-	c3.set<Body>( Body(Game, can_body_settings) );
-
-	flecs::entity c4 = Game.entity().is_a(can);
-	c4.set<Position>( glm::vec3(0,0.05,0.275) );
-	c4.set<Body>( Body(Game, can_body_settings) );
-
-	flecs::entity c5 = Game.entity().is_a(can);
-	c5.set<Position>( glm::vec3(0,-0.05,0.275) );
-	c5.set<Body>( Body(Game, can_body_settings) );
-
-	flecs::entity c6 = Game.entity().is_a(can);
-	c6.set<Position>( glm::vec3(0,0,0.425) );
-	c6.set<Body>( Body(Game, can_body_settings) );
-
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
-	// Game.script().filename("base/script/test.flecs").run();
-
-	// Check to see if a player was added
-	auto q = Game.query<Player>();
-
-	std::cout << "Checking if a player was created...\n";
-	q.each([](Player p) {
-		std::cout << "This is a player.\n";
-	});
 
 	Game.import<flecs::stats>();
 
