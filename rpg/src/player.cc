@@ -69,23 +69,10 @@ void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation)
 	launch_point += raylib_to_glm(camera.position);
 	glm::vec3 vel = offset * 10.0f;
 
-	flecs::entity ball = Game.entity();
-
-	ball.add<HSE::Model>();
-	ball.add<Position>();
-	ball.add<Rotation>();
-	ball.add<Velocity>();
-	ball.add<Body>();
+	flecs::entity ball_prefab = Game.lookup("Ball");
+	flecs::entity ball = Game.entity().is_a(ball_prefab);
 
 	ball.set<Position>( glm::vec3(launch_point) );
 	ball.set<Velocity>( glm::vec3(vel) );
 	ball.set<Rotation>(rotation);
-	ball.set<HSE::Model>( HSE::Model("base/models/ball.obj") );
-	ball.set<Body>( Body(Game, JPH::BodyCreationSettings(
-		new JPH::SphereShape(0.05),
-		JPH::RVec3::sZero(),
-		JPH::Quat::sIdentity(),
-		JPH::EMotionType::Dynamic,
-		Layers::MOVING
-	)));
 }

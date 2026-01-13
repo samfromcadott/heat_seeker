@@ -48,6 +48,7 @@ int main() {
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
 	Game.script().filename("base/script/scene.flecs").run();
+	Game.script().filename("base/script/ball.flecs").run();
 
 	Game.import<flecs::stats>();
 

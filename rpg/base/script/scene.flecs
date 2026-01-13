@@ -1,0 +1,38 @@
+using HseCore
+using HseRender
+using HsePhysics
+
+const plank_model: load_model("base/models/plank.obj")
+const floor_model: load_model("base/models/floor.obj")
+
+plank {
+	Position
+	Rotation
+
+	$plank_model
+
+	BodyOptions: {
+		shape: {
+			type: BOX,
+			size: {0.1, 2.0, 0.1}
+		}
+		object_layer: 0
+		motion_type: Static
+	}
+}
+
+floor {
+	Position: {0.0, 0.0, -1.0}
+	Rotation
+
+	$floor_model
+
+	BodyOptions: {
+		shape: {
+			type: BOX,
+			size: {50.0, 50.0, 0.1}
+		}
+		object_layer: 0
+		motion_type: Static
+	}
+}

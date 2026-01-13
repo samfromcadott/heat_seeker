@@ -1,0 +1,23 @@
+using HseCore
+using HseRender
+using HsePhysics
+
+const ball_model: load_model("base/models/ball.obj")
+
+prefab Ball {
+	Position
+	Rotation
+	Velocity
+
+	$ball_model
+
+	BodyOptions: {
+		shape: {
+			type: SPHERE,
+			radius: 0.05,
+		}
+		object_layer: 1
+	}
+}
+
+
