@@ -18,6 +18,11 @@ struct HsePhysics {
 			.constant("CYLINDER", HSE::CYLINDER)
 			.constant("CAPSULE", HSE::CAPSULE);
 
+		world.component<JPH::EMotionType>()
+			.constant("Static", JPH::EMotionType::Static)
+			.constant("Dynamic", JPH::EMotionType::Dynamic)
+			.constant("Kinematic", JPH::EMotionType::Kinematic);
+
 		world.component<HSE::ShapeOptions>()
 			.member("type", &HSE::ShapeOptions::type)
 			.member("translation", &HSE::ShapeOptions::translation)
@@ -91,18 +96,14 @@ struct HseRender {
 		world.system().kind(flecs::PostUpdate).each(HSE::end_render);
 
 		world.component<HSE::Model>();
-		// ecs_function_desc_t load_model_desc;
-		// load_model_desc.name = "load_model";
-		// load_model_desc.return_type = world.id<HSE::Model>();
-		// load_model_desc.params[0] = { .name = "filename", .type = ecs_id(ecs_string_t) };
-		// load_model_desc.callback = HSE::load_model;
-		// ecs_function_init(world, &load_model_desc);
+
 		ecs_function_desc_t load_model_desc = {
 			.name = "load_model",
 			.params = {{ .name = "filename", .type = ecs_id(ecs_string_t) }},
 			.return_type = world.id<HSE::Model>(),
 			.callback = HSE::load_model,
 		};
+
 		ecs_function_init(world, &load_model_desc);
 	}
 };

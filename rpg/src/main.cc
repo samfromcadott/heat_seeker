@@ -45,44 +45,9 @@ int main() {
 		.member("rotation", &PlayerCamera::rotation)
 		.member("offset", &PlayerCamera::offset);
 
-	// Load models
-	model_files["ball"].model = LoadModelFromMesh( GenMeshSphere(0.05, 4, 8) );
-	model_files["plank"].model = LoadModelFromMesh( GenMeshCube(0.1, 2.0, 0.1) );
-	model_files["floor"].model = LoadModelFromMesh( GenMeshCube(50.0, 50.0, 0.1) );
-
-	// Create a couple entities
-	flecs::entity plank = Game.entity();
-	plank.add<HSE::Model>();
-	plank.add<Position>();
-	plank.add<Rotation>();
-	plank.get_mut<Position>() = glm::vec3(0.0,0.0,0.0);
-	plank.add<Body>();
-	plank.set<Body>( Body(Game, JPH::BodyCreationSettings(
-		new JPH::BoxShape( JPH::Vec3Arg(0.05, 1.0, 0.05) ),
-		JPH::RVec3::sZero(),
-		JPH::Quat::sIdentity(),
-		JPH::EMotionType::Static,
-		Layers::NON_MOVING
-	)));
-	plank.get_mut<HSE::Model>().data = &model_files["plank"];
-
-	flecs::entity floor = Game.entity();
-	floor.add<HSE::Model>();
-	floor.add<Position>();
-	floor.add<Rotation>();
-	floor.get_mut<Position>() = glm::vec3(0.0,0.0,-1.0);
-	floor.add<Body>();
-	floor.set<Body>( Body(Game, JPH::BodyCreationSettings(
-		new JPH::BoxShape( JPH::Vec3Arg(25.0, 25.0, 0.05) ),
-		JPH::RVec3::sZero(),
-		JPH::Quat::sIdentity(),
-		JPH::EMotionType::Static,
-		Layers::NON_MOVING
-	)));
-	floor.get_mut<HSE::Model>().data = &model_files["floor"];
-
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
+	Game.script().filename("base/script/scene.flecs").run();
 
 	Game.import<flecs::stats>();
 
