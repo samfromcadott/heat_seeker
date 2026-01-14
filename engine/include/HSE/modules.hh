@@ -111,20 +111,20 @@ struct HseRender {
 struct HseCore {
 	HseCore(flecs::world& world) {
 		// Register basic types
-		world.component<glm::vec2>()
-			.member("x", &glm::vec2::x)
-			.member("y", &glm::vec2::y);
+		world.component<HSE::vec2>()
+			.member("x", &HSE::vec2::x)
+			.member("y", &HSE::vec2::y);
 
-		world.component<glm::vec3>()
-			.member("x", &glm::vec3::x)
-			.member("y", &glm::vec3::y)
-			.member("z", &glm::vec3::z);
+		world.component<HSE::vec3>()
+			.member("x", &HSE::vec3::x)
+			.member("y", &HSE::vec3::y)
+			.member("z", &HSE::vec3::z);
 
-		world.component<glm::quat>()
-			.member("w", &glm::quat::w)
-			.member("x", &glm::quat::x)
-			.member("y", &glm::quat::y)
-			.member("z", &glm::quat::z);
+		world.component<HSE::quat>()
+			.member("w", &HSE::quat::w)
+			.member("x", &HSE::quat::x)
+			.member("y", &HSE::quat::y)
+			.member("z", &HSE::quat::z);
 
 		world.component<HSE::Position>()
 			.member("x", &HSE::Position::x)

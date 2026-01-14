@@ -29,27 +29,27 @@ Body::Body(flecs::world world, const BodyOptions& options) {
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
 }
 
-void Body::set_position(const glm::vec3& position) {
+void Body::set_position(const vec3& position) {
 	engine->physics_system.GetBodyInterface().SetPosition(id, glm_to_jolt(position), JPH::EActivation::Activate);
 }
 
-glm::vec3 Body::get_position() {
+vec3 Body::get_position() {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetPosition(id) );
 }
 
-void Body::set_rotation(const glm::quat& rotation) {
+void Body::set_rotation(const quat& rotation) {
 	engine->physics_system.GetBodyInterface().SetRotation(id, glm_to_jolt(rotation), JPH::EActivation::Activate);
 }
 
-glm::quat Body::get_rotation() {
+quat Body::get_rotation() {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetRotation(id) );
 }
 
-void Body::set_velocity(const glm::vec3& velocity) {
+void Body::set_velocity(const vec3& velocity) {
 	engine->physics_system.GetBodyInterface().SetLinearVelocity( id, glm_to_jolt(velocity) );
 }
 
-glm::vec3 Body::get_velocity() {
+vec3 Body::get_velocity() {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetLinearVelocity(id) );
 }
 

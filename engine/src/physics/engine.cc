@@ -73,10 +73,10 @@ void PhysicsEngine::set_world(flecs::world w) {
 	world = w;
 }
 
-void PhysicsEngine::set_gravity(const glm::vec3 g) {
+void PhysicsEngine::set_gravity(const vec3 g) {
 	physics_system.SetGravity( glm_to_jolt(g) );
 }
 
-glm::vec3 PhysicsEngine::get_gravity() const {
+vec3 PhysicsEngine::get_gravity() const {
 	return jolt_to_glm( physics_system.GetGravity() );
 }

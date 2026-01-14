@@ -109,12 +109,12 @@ enum ShapeType {
 
 struct ShapeOptions {
 	ShapeType type = ShapeType::NONE;
-	glm::vec3 translation = glm::vec3(0,0,0);
-	glm::quat rotation = glm::quat(1,0,0,0);
+	vec3 translation = vec3(0,0,0);
+	quat rotation = quat(1,0,0,0);
 
 	float height = 0.0;
 	float radius = 0.0;
-	glm::vec3 size = glm::vec3(0.0, 0.0, 0.0);
+	vec3 size = vec3(0.0, 0.0, 0.0);
 };
 
 JPH::Ref<JPH::Shape> convert_shape(const ShapeOptions& options);
@@ -127,7 +127,7 @@ struct BodyOptions {
 
 struct CharacterBodyOptions {
 	ShapeOptions shape;
-	glm::vec3 up = glm::vec3(0.0, 0.0, 1.0);
+	vec3 up = vec3(0.0, 0.0, 1.0);
 	float max_slope = JPH::DegreesToRadians(50.0f);
 	float mass = 70.0f;
 	float max_strength = 100.0f;
@@ -160,8 +160,8 @@ public:
 	void update();
 	void set_world(flecs::world w);
 
-	void set_gravity(const glm::vec3 g);
-	glm::vec3 get_gravity() const;
+	void set_gravity(const vec3 g);
+	vec3 get_gravity() const;
 
 	friend class Body;
 	friend class CharacterBody;
@@ -178,14 +178,14 @@ public:
 	Body(flecs::world world, const BodyOptions& options);
 	~Body();
 
-	void set_position(const glm::vec3& position);
-	glm::vec3 get_position();
+	void set_position(const vec3& position);
+	vec3 get_position();
 
-	void set_rotation(const glm::quat& rotation);
-	glm::quat get_rotation();
+	void set_rotation(const quat& rotation);
+	quat get_rotation();
 
-	void set_velocity(const glm::vec3& velocity);
-	glm::vec3 get_velocity();
+	void set_velocity(const vec3& velocity);
+	vec3 get_velocity();
 
 	void set_owner(flecs::entity owner);
 	flecs::entity get_owner();
@@ -206,14 +206,14 @@ public:
 
 	bool on_floor();
 
-	void set_position(const glm::vec3& position);
-	glm::vec3 get_position();
+	void set_position(const vec3& position);
+	vec3 get_position();
 
-	void set_rotation(const glm::quat& rotation);
-	glm::quat get_rotation();
+	void set_rotation(const quat& rotation);
+	quat get_rotation();
 
-	void set_velocity(const glm::vec3& velocity);
-	glm::vec3 get_velocity();
+	void set_velocity(const vec3& velocity);
+	vec3 get_velocity();
 
 	void set_owner(flecs::entity owner);
 	flecs::entity get_owner();
@@ -224,20 +224,20 @@ struct ContactAdded {
 };
 
 // Type converters
-inline JPH::Vec3 glm_to_jolt(glm::vec3 v) {
+inline JPH::Vec3 glm_to_jolt(vec3 v) {
 	return JPH::Vec3(v.x,v.y,v.z);
 }
 
-inline glm::vec3 jolt_to_glm(JPH::Vec3 v) {
-	return glm::vec3( v.GetX(), v.GetY(), v.GetZ() );
+inline vec3 jolt_to_glm(JPH::Vec3 v) {
+	return vec3( v.GetX(), v.GetY(), v.GetZ() );
 }
 
-inline JPH::Quat glm_to_jolt(glm::quat q) {
+inline JPH::Quat glm_to_jolt(quat q) {
 	return JPH::Quat(q.x,q.y,q.z,q.w);
 }
 
-inline glm::quat jolt_to_glm(JPH::Quat q) {
-	return glm::quat( q.GetW(), q.GetX(), q.GetY(), q.GetZ() );
+inline quat jolt_to_glm(JPH::Quat q) {
+	return quat( q.GetW(), q.GetX(), q.GetY(), q.GetZ() );
 }
 
 }

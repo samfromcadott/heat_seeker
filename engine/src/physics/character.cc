@@ -63,28 +63,28 @@ bool CharacterBody::on_floor() {
 	return body->IsSupported();
 }
 
-void CharacterBody::set_position(const glm::vec3& position) {
+void CharacterBody::set_position(const vec3& position) {
 	body->SetPosition( glm_to_jolt(position) );
 }
 
-glm::vec3 CharacterBody::get_position() {
+vec3 CharacterBody::get_position() {
 	return jolt_to_glm( body->GetPosition() );
 }
 
 
-void CharacterBody::set_rotation(const glm::quat& rotation) {
+void CharacterBody::set_rotation(const quat& rotation) {
 	body->SetRotation( glm_to_jolt(rotation) );
 }
 
-glm::quat CharacterBody::get_rotation() {
+quat CharacterBody::get_rotation() {
 	return jolt_to_glm( body->GetRotation() );
 }
 
-void CharacterBody::set_velocity(const glm::vec3& velocity) {
+void CharacterBody::set_velocity(const vec3& velocity) {
 	body->SetLinearVelocity( glm_to_jolt(velocity) );
 }
 
-glm::vec3 CharacterBody::get_velocity() {
+vec3 CharacterBody::get_velocity() {
 	return jolt_to_glm( body->GetLinearVelocity() );
 }
 

@@ -17,14 +17,14 @@ struct Position {
 		this->z = z;
 	}
 
-	Position(const glm::vec3&& v) {
+	Position(const vec3&& v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	}
 
-	operator glm::vec3() const {
-		return glm::vec3(x,y,z);
+	operator vec3() const {
+		return vec3(x,y,z);
 	}
 
 	Position(const Vector3&& v) {
@@ -55,15 +55,15 @@ struct Rotation {
 		this->z = z;
 	}
 
-	Rotation(const glm::quat&& q) {
+	Rotation(const quat&& q) {
 		w = q.w;
 		x = q.x;
 		y = q.y;
 		z = q.z;
 	}
 
-	operator glm::quat() const {
-		return glm::quat(w,x,y,z);
+	operator quat() const {
+		return quat(w,x,y,z);
 	}
 };
 
@@ -76,14 +76,14 @@ struct Velocity {
 		z = 0.0;
 	}
 
-	Velocity(const glm::vec3&& v) {
+	Velocity(const vec3&& v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	}
 
-	operator glm::vec3() const {
-		return glm::vec3(x,y,z);
+	operator vec3() const {
+		return vec3(x,y,z);
 	}
 
 	Velocity(const Vector3&& v) {
@@ -97,11 +97,11 @@ struct Velocity {
 	}
 };
 
-inline glm::vec3 raylib_to_glm(Vector3 v) {
-	return glm::vec3(v.x,v.y,v.z);
+inline vec3 raylib_to_glm(Vector3 v) {
+	return vec3(v.x,v.y,v.z);
 }
 
-inline Vector3 glm_to_raylib(glm::vec3 v) {
+inline Vector3 glm_to_raylib(vec3 v) {
 	return Vector3 {v.x,v.y,v.z};
 }
 

@@ -5,12 +5,12 @@
 struct Player {}; // Tag for player entity
 
 struct PlayerCamera {
-	glm::vec3 rotation;
-	glm::vec3 offset;
+	HSE::vec3 rotation;
+	HSE::vec3 offset;
 };
 
 struct GroundMovement {
-	glm::vec3 direction;
+	HSE::vec3 direction;
 	float max_speed = 10.0;
 	float acceleration = 3.125;
 	float decceleration = 3.125;

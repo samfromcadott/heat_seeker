@@ -17,6 +17,13 @@
 #include <glm/ext/quaternion_trigonometric.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+// Merge glm namespace into HSE
+namespace HSE {
+
+inline namespace glm { using namespace ::glm; }
+
+}
+
 #include "HSE/basic_types.hh"
 #include "HSE/physics_types.hh"
 #include "HSE/physics_systems.hh"
