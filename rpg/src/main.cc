@@ -27,7 +27,8 @@ int main() {
 	Game.import<HseCore>();
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
-	Game.system<Player, Position&, Rotation&, Velocity&, CharacterBody&, GroundMovement&>().each(player_movement);
+	Game.system<Player, Velocity&, GroundMovement&, Rotation&>().each(player_movement);
+	Game.system<HSE::Position&, HSE::Velocity&, HSE::CharacterBody&, GroundMovement&>().each(ground_movement);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
