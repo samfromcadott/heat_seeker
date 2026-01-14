@@ -47,10 +47,8 @@ void player_movement(Player player, HSE::Velocity& velocity, GroundMovement& mov
 }
 
 void ground_movement(HSE::Position& position, HSE::Velocity& velocity, HSE::CharacterBody& body, GroundMovement& movement) {
-	float input_mag = glm::length(movement.direction);
-
 	float a;
-	if (input_mag != 0)
+	if ( movement.direction != glm::vec3(0,0,0) )
 		a = body.on_floor()? movement.acceleration : movement.acceleration_air;
 	else
 		a = body.on_floor()? movement.decceleration : movement.decceleration_air;
