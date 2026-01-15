@@ -27,6 +27,8 @@ template RpgGuy {
 		decceleration_air: 0.0
 	}
 
+	Jump: { speed: 5.0 }
+
 	PlayerCamera: {
 		rotation: {0.0, 0.0, 0.0},
 		offset: {0.0, 0.0, 0.75}

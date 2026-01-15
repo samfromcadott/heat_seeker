@@ -29,7 +29,7 @@ int main() {
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Velocity&, GroundMovement&, Rotation&>().each(player_movement);
 	Game.system<HSE::Position&, HSE::Velocity&, HSE::CharacterBody&, GroundMovement&>().each(ground_movement);
-	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&>().each(player_jump);
+	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>().each(player_jump);
 	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 
 	Game.component<Player>();
@@ -45,6 +45,9 @@ int main() {
 	Game.component<PlayerCamera>()
 		.member("rotation", &PlayerCamera::rotation)
 		.member("offset", &PlayerCamera::offset);
+
+	Game.component<Jump>()
+		.member("speed", &Jump::speed);
 
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();

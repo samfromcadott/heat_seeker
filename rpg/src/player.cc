@@ -60,10 +60,10 @@ void ground_movement(HSE::Position& position, HSE::Velocity& velocity, HSE::Char
 	velocity.y = v.y;
 }
 
-void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity) {
+void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity, const Jump& jump) {
 	if ( !IsKeyPressed(KEY_SPACE) or !body.on_floor() ) return;
 
-	velocity.z = 5.0;
+	velocity.z = jump.speed;
 }
 
 void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {

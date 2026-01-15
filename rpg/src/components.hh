@@ -17,3 +17,30 @@ struct GroundMovement {
 	float acceleration_air = 0.5;
 	float decceleration_air = 0.0;
 };
+
+struct Jump {
+	float speed;
+};
+
+struct Timer {
+	bool active;
+	float timer; // Time since it became active
+};
+
+struct Weapon {
+	float launch_time; // Time until the proectile/hitscan is fired
+	float rate; // Time until it can fire again
+};
+
+struct Damage {
+	int value;
+};
+
+struct Hitscan {
+	float range;
+};
+
+struct LaunchMissile {
+	flecs::entity missile;
+	float speed;
+};
