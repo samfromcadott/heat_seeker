@@ -3,6 +3,7 @@
 
 #include "components.hh"
 #include "systems.hh"
+#include "weapon.hh"
 
 using namespace HSE;
 
@@ -66,18 +67,7 @@ void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocit
 	velocity.z = jump.speed;
 }
 
-void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation) {
-	if ( !IsMouseButtonPressed(0) ) return;
-
-	vec3 offset = raylib_to_glm(camera.target) - raylib_to_glm(camera.position);
-	vec3 launch_point = offset * 0.5f;
-	launch_point += raylib_to_glm(camera.position);
-	vec3 vel = offset * 10.0f;
-
-	flecs::entity ball_prefab = Game.lookup("Ball");
-	flecs::entity ball = Game.entity().is_a(ball_prefab);
-
-	ball.set<Position>( vec3(launch_point) );
-	ball.set<Velocity>( vec3(vel) );
-	ball.set<Rotation>(rotation);
+void player_fire(Player player, HeldWeapon& weapon) {
+	if ( !IsMouseButtonDown(0) ) return;
+	fire_weapon(weapon.entity);
 }

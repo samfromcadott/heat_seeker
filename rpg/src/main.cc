@@ -2,6 +2,7 @@
 
 #include "components.hh"
 #include "systems.hh"
+#include "weapon.hh"
 
 flecs::world HSE::Game;
 std::map<std::string, HSE::ModelData> HSE::model_files;
@@ -30,10 +31,14 @@ int main() {
 	Game.system<Player, Velocity&, GroundMovement&, Rotation&>().each(player_movement);
 	Game.system<HSE::Position&, HSE::Velocity&, HSE::CharacterBody&, GroundMovement&>().each(ground_movement);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>().each(player_jump);
-	Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
+	// Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
+	Game.system<Player, HeldWeapon&>().each(player_fire);
+	Game.system<Weapon&, Timer&>().each(weapon_update);
+	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
 
 	Game.component<Player>();
 
+	// Register components
 	Game.component<GroundMovement>()
 		.member("direction", &GroundMovement::direction)
 		.member("max_speed", &GroundMovement::max_speed)
@@ -49,6 +54,29 @@ int main() {
 	Game.component<Jump>()
 		.member("speed", &Jump::speed);
 
+	Game.component<Timer>()
+		.member("active", &Timer::active)
+		.member("time", &Timer::time);
+
+	Game.component<Weapon>()
+		.member("launch_time", &Weapon::launch_time)
+		.member("rate", &Weapon::rate)
+		.member("has_fired", &Weapon::has_fired);
+
+	Game.component<HeldWeapon>()
+		.member("entity", &HeldWeapon::entity);
+
+	Game.component<Damage>()
+		.member("value", &Damage::value);
+
+	Game.component<Hitscan>()
+		.member("range", &Hitscan::range);
+
+	Game.component<LaunchMissile>()
+		.member("missile", &LaunchMissile::missile)
+		.member("speed", &LaunchMissile::speed);
+
+	// Load scripts
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
 	Game.script().filename("base/script/scene.flecs").run();

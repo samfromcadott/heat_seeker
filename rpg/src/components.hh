@@ -23,13 +23,18 @@ struct Jump {
 };
 
 struct Timer {
-	bool active;
-	float timer; // Time since it became active
+	bool active = false;
+	float time = 0.0; // Time since it became active
 };
 
 struct Weapon {
 	float launch_time; // Time until the proectile/hitscan is fired
 	float rate; // Time until it can fire again
+	bool has_fired = true; // Has the weapon fired since the current cycle started
+};
+
+struct HeldWeapon {
+	flecs::entity entity;
 };
 
 struct Damage {
