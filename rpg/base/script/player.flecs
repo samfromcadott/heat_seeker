@@ -1,5 +1,8 @@
 using HseCore
 using HsePhysics
+using HseRender
+
+const ball_model: load_model("base/models/ball.obj")
 
 template RpgGuy {
 	prop position = Position: {0,0,0}
@@ -42,7 +45,24 @@ template RpgGuy {
 
 		Timer
 
+		prefab missile_ball {
+			Position
+			Rotation
+			Velocity
+
+			$ball_model
+
+			BodyOptions: {
+				shape: {
+					type: SPHERE,
+					radius: 0.05,
+				}
+				object_layer: 1
+			}
+		}
+
 		LaunchMissile: {
+			missile: missile_ball
 			speed: 10.0
 		}
 	}

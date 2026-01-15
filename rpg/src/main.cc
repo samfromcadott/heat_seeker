@@ -31,14 +31,13 @@ int main() {
 	Game.system<Player, Velocity&, GroundMovement&, Rotation&>().each(player_movement);
 	Game.system<HSE::Position&, HSE::Velocity&, HSE::CharacterBody&, GroundMovement&>().each(ground_movement);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>().each(player_jump);
-	// Game.system<Player, HSE::Position&, HSE::Rotation&>().each(shoot_ball);
 	Game.system<Player, HeldWeapon&>().each(player_fire);
 	Game.system<Weapon&, Timer&>().each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
 
+	// Register components
 	Game.component<Player>();
 
-	// Register components
 	Game.component<GroundMovement>()
 		.member("direction", &GroundMovement::direction)
 		.member("max_speed", &GroundMovement::max_speed)
