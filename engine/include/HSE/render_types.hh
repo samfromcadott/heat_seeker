@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <raylib.h>
 
 namespace HSE {
@@ -28,5 +29,7 @@ struct Model {
 	}
 	Model(const std::string& filename);
 };
+
+extern std::function<void(void)> ui_function;
 
 }

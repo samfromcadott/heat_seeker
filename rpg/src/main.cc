@@ -86,6 +86,11 @@ int main() {
 	// Creates REST server on default port (27750)
 	Game.set<flecs::Rest>({});
 
+	// Setup the HUD
+	ui_function = []() {
+		DrawFPS(10, 10);
+	};
+
 	// Main game loop
 	while ( !WindowShouldClose() ) {
 		Game.progress();

@@ -93,6 +93,7 @@ struct HseRender {
 		world.system().kind(flecs::PostUpdate).each(HSE::start_3D);
 		world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().kind(flecs::PostUpdate).each(HSE::render_models);
 		world.system().kind(flecs::PostUpdate).each(HSE::end_3D);
+		world.system().kind(flecs::PostUpdate).each(HSE::update_ui);
 		world.system().kind(flecs::PostUpdate).each(HSE::end_render);
 
 		world.component<HSE::Model>();

@@ -11,5 +11,6 @@ void end_3D(); ///< Ends rendering from the active 3D camera
 void render_models(HSE::Model& m, Position& p, Rotation& r); ///< Renders non-BVH models
 void render_bvh_models(); ///< Renders BVH models
 void update_armature(); ///< Advances the animation armatures of models
+void update_ui(); ///< Render the UI and process input
 
 }

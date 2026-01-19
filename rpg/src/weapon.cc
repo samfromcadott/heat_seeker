@@ -36,7 +36,7 @@ void launch_missile(Weapon& weapon, Timer& timer, LaunchMissile& lm) {
 
 	missile.set<Position>( vec3(launch_point) );
 	missile.set<Velocity>( vec3(vel) );
-	// ball.set<Rotation>(rotation);
+	// missile.set<Rotation>(rotation);
 
 	weapon.has_fired = true;
 }
