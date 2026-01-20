@@ -13,6 +13,7 @@ Camera3D HSE::camera = {
 	.fovy = 45.0f,
 	.projection = CAMERA_PERSPECTIVE,
 };
+Shader HSE::GouraudShader;
 
 using namespace HSE;
 
@@ -24,6 +25,11 @@ int main() {
 
 	SetTargetFPS(60);
 	DisableCursor();
+
+	GouraudShader = LoadShader(
+		TextFormat("base/shaders/basic_vert.glsl", 330),
+		TextFormat("base/shaders/basic_frag.glsl", 330)
+	);
 
 	Game.import<HseCore>();
 

@@ -31,5 +31,6 @@ struct Model {
 };
 
 extern std::function<void(void)> ui_function;
+extern Shader GouraudShader;
 
 }
