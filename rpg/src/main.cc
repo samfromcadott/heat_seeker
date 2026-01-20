@@ -87,7 +87,7 @@ int main() {
 	Game.set<flecs::Rest>({});
 
 	// Setup the HUD
-	ui_function = []() {
+	ui_function = [&]() {
 		DrawFPS(10, 10);
 	};
 
