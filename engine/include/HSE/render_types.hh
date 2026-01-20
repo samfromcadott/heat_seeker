@@ -20,6 +20,7 @@ struct Model {
 	ModelData* data = nullptr;
 	int animation = 0;
 	int frame = 0;
+	Color debug_color;
 
 	Model() = default;
 	Model(ModelData* data, int animation, int frame) {

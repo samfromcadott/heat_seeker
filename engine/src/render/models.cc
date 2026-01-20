@@ -14,12 +14,5 @@ HSE::Model::Model(const std::string& filename) {
 void HSE::render_models(HSE::Model& m, HSE::Position& p, HSE::Rotation& r) {
 	vec3 ax = axis( quat(r) );
 	float ang = angle( quat(r) ) * 180.0 / PI;
-
-	// Choose a random color for the model
-	uint8_t red = (long)m.data^73856093 % 256;
-	uint8_t green = (long)m.data^19349663 % 256;
-	uint8_t blue = (long)m.data^83492791 % 256;
-	Color c = {red, green, blue, 255};
-
-	DrawModelEx(m.data->model, p, Vector3 {ax.x,ax.y,ax.z}, ang, {1.0,1.0,1.0}, c);
+	DrawModelEx(m.data->model, p, Vector3 {ax.x,ax.y,ax.z}, ang, {1.0,1.0,1.0}, m.debug_color);
 }
