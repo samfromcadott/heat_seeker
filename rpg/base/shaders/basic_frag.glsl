@@ -13,7 +13,7 @@ out vec4 finalColor;
 
 void main() {
 	vec4 texelColor = texture(texture0, fragTexCoord);
-	finalColor = texelColor * colDiffuse * fragColor;
+	finalColor = texelColor * texelColor * colDiffuse * fragColor;
 
 	// finalColor = pow(finalColor, vec4(1.0/2.2)); // Gamma correction
 }

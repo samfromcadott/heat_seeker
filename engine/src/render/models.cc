@@ -4,10 +4,13 @@ using namespace HSE;
 
 HSE::Model::Model(const std::string& filename) {
 	if ( HSE::model_files.count(filename) == 0 ) HSE::model_files[filename].model = LoadModel( filename.c_str() );
+
 	// Set the shader for the model
 	for (int i = 0; i < HSE::model_files[filename].model.materialCount; i++) {
-		HSE::model_files[filename].model.materials[i].shader = GouraudShader;
+		HSE::model_files[filename].model.materials[i].shader = gouraud_shader;
+		HSE::model_files[filename].model.materials[i].maps[MATERIAL_MAP_DIFFUSE].texture = uv_debug_texture;
 	}
+
 	data = &HSE::model_files[filename];
 }
 

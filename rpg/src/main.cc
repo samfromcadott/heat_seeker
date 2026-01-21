@@ -13,7 +13,8 @@ Camera3D HSE::camera = {
 	.fovy = 45.0f,
 	.projection = CAMERA_PERSPECTIVE,
 };
-Shader HSE::GouraudShader;
+Shader HSE::gouraud_shader;
+Texture2D HSE::uv_debug_texture;
 
 using namespace HSE;
 
@@ -26,10 +27,11 @@ int main() {
 	SetTargetFPS(60);
 	DisableCursor();
 
-	GouraudShader = LoadShader(
+	gouraud_shader = LoadShader(
 		TextFormat("base/shaders/basic_vert.glsl", 330),
 		TextFormat("base/shaders/basic_frag.glsl", 330)
 	);
+	uv_debug_texture = LoadTexture("base/textures/uv_debug.png");
 
 	Game.import<HseCore>();
 
@@ -103,6 +105,7 @@ int main() {
 	}
 
 	CloseWindow();
+	UnloadTexture(uv_debug_texture);
 
 	return 0;
 }

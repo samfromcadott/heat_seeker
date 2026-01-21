@@ -108,12 +108,7 @@ struct HseRender {
 		ecs_function_init(world, &load_model_desc);
 
 		world.observer<HSE::Model>().event(flecs::OnSet).each([&](flecs::entity e, HSE::Model& m){
-			m.debug_color = {
-				static_cast<uint8_t>(rand()%255),
-				static_cast<uint8_t>(rand()%255),
-				static_cast<uint8_t>(rand()%255),
-				255
-			};
+			m.debug_color = ColorFromHSV(rand()%360, (float)rand()/(float)RAND_MAX, 1.0);
 		});
 	}
 };
