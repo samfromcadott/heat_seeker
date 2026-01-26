@@ -38,4 +38,7 @@ extern flecs::world Game;
 extern Camera3D camera;
 extern std::map<std::string, ModelData> model_files;
 
+void init(const std::string& title, const int width, const int height);
+void quit();
+
 }

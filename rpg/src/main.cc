@@ -19,12 +19,7 @@ Texture2D HSE::uv_debug_texture;
 using namespace HSE;
 
 int main() {
-	const int screenWidth = 1280;
-	const int screenHeight = 720;
-
-	InitWindow(screenWidth, screenHeight, "HEAT SEEKER");
-
-	SetTargetFPS(60);
+	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
 
 	gouraud_shader = LoadShader(
@@ -104,7 +99,7 @@ int main() {
 		Game.progress();
 	}
 
-	CloseWindow();
+	HSE::quit();
 	UnloadTexture(uv_debug_texture);
 
 	return 0;
