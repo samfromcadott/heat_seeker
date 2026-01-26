@@ -6,5 +6,6 @@ void HSE::init(const std::string& title, const int width, const int height) {
 }
 
 void HSE::quit() {
+	UnloadShader(gouraud_shader);
 	CloseWindow();
 }

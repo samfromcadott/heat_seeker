@@ -2,6 +2,14 @@
 
 using namespace HSE;
 
+const char* gouraud_vert =
+#include "render/shaders/gouraud_vert.glsl"
+;
+
+const char* gouraud_frag =
+#include "render/shaders/gouraud_frag.glsl"
+;
+
 HsePhysics::HsePhysics(flecs::world& world) {
 	// Add physics engine
 	world.component<HSE::PhysicsEngine>().add(flecs::Singleton);
@@ -111,6 +119,8 @@ HseRender::HseRender(flecs::world& world) {
 	world.observer<HSE::Model>().event(flecs::OnSet).each([&](flecs::entity e, HSE::Model& m){
 		m.debug_color = ColorFromHSV(rand()%360, (float)rand()/(float)RAND_MAX, 1.0);
 	});
+
+	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
 
 

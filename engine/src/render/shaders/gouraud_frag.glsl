@@ -1,3 +1,4 @@
+R"(
 #version 330
 
 // Input vertex attributes (from vertex shader)
@@ -17,3 +18,4 @@ void main() {
 
 	// finalColor = pow(finalColor, vec4(1.0/2.2)); // Gamma correction
 }
+)"

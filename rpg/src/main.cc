@@ -22,10 +22,6 @@ int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
 
-	gouraud_shader = LoadShader(
-		TextFormat("base/shaders/basic_vert.glsl", 330),
-		TextFormat("base/shaders/basic_frag.glsl", 330)
-	);
 	uv_debug_texture = LoadTexture("base/textures/uv_debug.png");
 
 	Game.import<HseCore>();
