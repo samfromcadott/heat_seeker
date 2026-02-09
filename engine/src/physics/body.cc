@@ -27,6 +27,7 @@ Body::Body(flecs::world world, const BodyOptions& options) {
 	);
 
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
+	set_gravity_scale(options.gravity_scale);
 }
 
 void Body::set_position(const vec3& position) {
@@ -61,6 +62,14 @@ void Body::set_owner(flecs::entity owner) {
 flecs::entity Body::get_owner() {
 	auto owner = engine->physics_system.GetBodyInterface().GetUserData(id);
 	return flecs::entity(engine->world, owner);
+}
+
+void Body::set_gravity_scale(const float scale) {
+	engine->physics_system.GetBodyInterface().SetGravityFactor(id, scale);
+}
+
+float Body::get_gravity_scale() const {
+	return engine->physics_system.GetBodyInterface().GetGravityFactor(id);
 }
 
 void Body::destroy() {

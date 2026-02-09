@@ -58,6 +58,7 @@ template RpgGuy {
 					radius: 0.05,
 				}
 				object_layer: 1
+				gravity_scale: 0
 			}
 		}
 

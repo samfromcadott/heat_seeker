@@ -125,6 +125,7 @@ struct BodyOptions {
 	ShapeOptions shape;
 	JPH::EMotionType motion_type = JPH::EMotionType::Dynamic;
 	JPH::ObjectLayer object_layer = 0;
+	float gravity_scale = 1.0f;
 };
 
 struct CharacterBodyOptions {
@@ -195,6 +196,9 @@ public:
 
 	void set_owner(flecs::entity owner);
 	flecs::entity get_owner();
+
+	void set_gravity_scale(const float scale);
+	float get_gravity_scale() const;
 
 	void destroy();
 };
