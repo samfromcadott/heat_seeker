@@ -62,3 +62,8 @@ flecs::entity Body::get_owner() {
 	auto owner = engine->physics_system.GetBodyInterface().GetUserData(id);
 	return flecs::entity(engine->world, owner);
 }
+
+void Body::destroy() {
+	engine->physics_system.GetBodyInterface().RemoveBody(id);
+	engine->physics_system.GetBodyInterface().DestroyBody(id);
+}

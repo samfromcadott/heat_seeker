@@ -50,7 +50,8 @@ HsePhysics::HsePhysics(flecs::world& world) {
 		.member("up", &HSE::CharacterBodyOptions::up)
 		.member("max_slope", &HSE::CharacterBodyOptions::max_slope)
 		.member("mass", &HSE::CharacterBodyOptions::mass)
-		.member("max_strength", &HSE::CharacterBodyOptions::max_strength);
+		.member("max_strength", &HSE::CharacterBodyOptions::max_strength)
+		.member("gravity_scale", &HSE::CharacterBodyOptions::gravity_scale);
 
 	// Register systems
 	world.system<HSE::Body&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::pos_to_body);
@@ -74,13 +75,17 @@ HsePhysics::HsePhysics(flecs::world& world) {
 		b.set_owner(e);
 	});
 
-	world.observer<HSE::CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, HSE::CharacterBody& b) {
-		b.set_owner(e);
+	world.observer<HSE::Body>().event(flecs::OnRemove).each([](flecs::entity e, HSE::Body& b) {
+		b.destroy();
 	});
 
 	world.observer<HSE::CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, HSE::CharacterBody& b) {
 		b.set_owner(e);
 	});
+
+	// world.observer<HSE::CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, HSE::CharacterBody& b) {
+	// 	b.set_owner(e);
+	// });
 
 	world.observer<HSE::BodyOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::BodyOptions& o) {
 		// Add a new body using the options

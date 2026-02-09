@@ -15,7 +15,11 @@ bool CharacterListener::OnCharacterContactValidate(const JPH::CharacterVirtual* 
 }
 
 void CharacterListener::OnContactAdded(const JPH::CharacterVirtual* inCharacter, const JPH::BodyID& inBodyID2, const JPH::SubShapeID& inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings& ioSettings) {
+	auto ent_1 = flecs::entity( Game, inCharacter->GetUserData() );
+	auto ent_2 = flecs::entity( Game, Game.get_mut<PhysicsEngine>().get_system().GetBodyInterface().GetUserData(inBodyID2) );
 
+	ent_1.set<ContactAdded>({ ent_2 });
+	ent_2.set<ContactAdded>({ ent_1 });
 }
 
 void CharacterListener::OnContactPersisted(const JPH::CharacterVirtual* inCharacter, const JPH::BodyID& inBodyID2, const JPH::SubShapeID& inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings& ioSettings) {
@@ -27,7 +31,11 @@ void CharacterListener::OnContactRemoved(const JPH::CharacterVirtual* inCharacte
 }
 
 void CharacterListener::OnCharacterContactAdded(const JPH::CharacterVirtual* inCharacter, const JPH::CharacterVirtual* inOtherCharacter, const JPH::SubShapeID& inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings& ioSettings) {
+	auto ent_1 = flecs::entity( Game, inCharacter->GetUserData() );
+	auto ent_2 = flecs::entity( Game, inOtherCharacter->GetUserData() );
 
+	ent_1.set<ContactAdded>({ ent_2 });
+	ent_2.set<ContactAdded>({ ent_1 });
 }
 
 void CharacterListener::OnCharacterContactPersisted(const JPH::CharacterVirtual* inCharacter, const JPH::CharacterVirtual* inOtherCharacter, const JPH::SubShapeID& inSubShapeID2, JPH::RVec3Arg inContactPosition, JPH::Vec3Arg inContactNormal, JPH::CharacterContactSettings& ioSettings) {

@@ -105,6 +105,7 @@ enum ShapeType {
 	BOX,
 	CYLINDER,
 	CAPSULE,
+	MESH,
 };
 
 struct ShapeOptions {
@@ -118,6 +119,7 @@ struct ShapeOptions {
 };
 
 JPH::Ref<JPH::Shape> convert_shape(const ShapeOptions& options);
+JPH::Ref<JPH::Shape> convert_mesh_shape(const std::string& name);
 
 struct BodyOptions {
 	ShapeOptions shape;
@@ -131,6 +133,7 @@ struct CharacterBodyOptions {
 	float max_slope = JPH::DegreesToRadians(50.0f);
 	float mass = 70.0f;
 	float max_strength = 100.0f;
+	float gravity_scale = 1.0f;
 };
 
 class PhysicsEngine {
@@ -145,6 +148,7 @@ private:
 	ObjectLayerPairFilter object_vs_object_layer_filter;
 	BodyActivationListener body_activation_listener;
 	ContactListener contact_listener;
+	CharacterListener character_listener;
 
 	const JPH::uint max_bodies = 65536;
 	const JPH::uint body_mutexes = 0;
@@ -162,6 +166,8 @@ public:
 
 	void set_gravity(const vec3 g);
 	vec3 get_gravity() const;
+
+	JPH::PhysicsSystem& get_system();
 
 	friend class Body;
 	friend class CharacterBody;
@@ -189,6 +195,8 @@ public:
 
 	void set_owner(flecs::entity owner);
 	flecs::entity get_owner();
+
+	void destroy();
 };
 
 class CharacterBody {
@@ -197,6 +205,8 @@ private:
 	PhysicsEngine* engine = nullptr;
 
 public:
+	float gravity_scale = 1.0;
+
 	CharacterBody();
 	CharacterBody(flecs::world world, const JPH::CharacterVirtualSettings& settings);
 	CharacterBody(flecs::world world, const CharacterBodyOptions& options);
@@ -204,19 +214,19 @@ public:
 
 	void update();
 
-	bool on_floor();
+	bool on_floor() const;
 
 	void set_position(const vec3& position);
-	vec3 get_position();
+	vec3 get_position() const;
 
 	void set_rotation(const quat& rotation);
-	quat get_rotation();
+	quat get_rotation() const;
 
 	void set_velocity(const vec3& velocity);
-	vec3 get_velocity();
+	vec3 get_velocity() const;
 
 	void set_owner(flecs::entity owner);
-	flecs::entity get_owner();
+	flecs::entity get_owner() const;
 };
 
 struct ContactAdded {

@@ -80,3 +80,7 @@ void PhysicsEngine::set_gravity(const vec3 g) {
 vec3 PhysicsEngine::get_gravity() const {
 	return jolt_to_glm( physics_system.GetGravity() );
 }
+
+JPH::PhysicsSystem& PhysicsEngine::get_system() {
+	return physics_system;
+}
