@@ -9,6 +9,7 @@ template Zombie {
 	prop rotation = Rotation: {1,0,0,0}
 
 	Monster
+	Target
 
 	$position
 	$rotation
@@ -31,7 +32,7 @@ template Zombie {
 	}
 
 	GroundMovement: {
-		max_speed: 10.0,
+		max_speed: 5.0,
 		acceleration: 3.125,
 		decceleration: 3.125,
 		acceleration_air: 0.5,

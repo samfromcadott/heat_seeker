@@ -34,6 +34,7 @@ int main() {
 	Game.system<Weapon&, Timer&>().each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
 	Game.system<Health&>().each(die_when_no_health);
+	Game.system<Position&, GroundMovement&, Target&>().each(chase_target);
 
 	// Register components
 	Game.component<Player>();
@@ -82,11 +83,12 @@ int main() {
 		.member("speed", &LaunchMissile::speed);
 
 	// Observers
-	// Game.observer<Monster>()
-	// .event(flecs::OnAdd)
-	// .each([&](flecs::entity e, Monster& m) {
-	// 	e.set<Target>( {Game.lookup("player")} );
-	// });
+	Game.observer<Target>()
+	.event(flecs::OnAdd)
+	.with<Monster>()
+	.each([&](flecs::entity entity, Target& t) {
+		t.entity = Game.lookup("player");
+	});
 
 	Game.observer<ContactAdded>()
 	.event(flecs::OnSet)
