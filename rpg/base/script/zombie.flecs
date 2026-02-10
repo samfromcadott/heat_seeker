@@ -1,0 +1,43 @@
+using HseCore
+using HsePhysics
+using HseRender
+
+const capsule_model: load_model("base/models/capsule.obj")
+
+template Zombie {
+	prop position = Position: {0,0,0}
+	prop rotation = Rotation: {1,0,0,0}
+
+	Monster
+
+	$position
+	$rotation
+	Velocity
+
+	$capsule_model
+
+	Health: {
+		now: 20
+		max: 20
+	}
+
+	CharacterBodyOptions: {
+		shape: {
+			type: CAPSULE,
+			rotation: {0.7071068, 0.7071068, 0, 0},
+			radius: 0.25,
+			height: 1.5
+		}
+	}
+
+	GroundMovement: {
+		max_speed: 10.0,
+		acceleration: 3.125,
+		decceleration: 3.125,
+		acceleration_air: 0.5,
+		decceleration_air: 0.0
+	}
+}
+
+Zombie zombie01(position: {4.0, 0.0, 0.0})
+

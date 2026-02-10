@@ -33,9 +33,16 @@ int main() {
 	Game.system<Player, HeldWeapon&>().each(player_fire);
 	Game.system<Weapon&, Timer&>().each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
+	Game.system<Health&>().each(die_when_no_health);
 
 	// Register components
 	Game.component<Player>();
+	Game.component<Monster>();
+	Game.component<Missile>();
+
+	Game.component<Health>()
+		.member("max", &Health::max)
+		.member("now", &Health::now);
 
 	Game.component<GroundMovement>()
 		.member("direction", &GroundMovement::direction)
@@ -74,11 +81,30 @@ int main() {
 		.member("missile", &LaunchMissile::missile)
 		.member("speed", &LaunchMissile::speed);
 
+	// Observers
+	// Game.observer<Monster>()
+	// .event(flecs::OnAdd)
+	// .each([&](flecs::entity e, Monster& m) {
+	// 	e.set<Target>( {Game.lookup("player")} );
+	// });
+
+	Game.observer<ContactAdded>()
+	.event(flecs::OnSet)
+	.with<Missile>()
+	.each([](flecs::entity entity, ContactAdded& contact) {
+		// Check if the entity hit has health
+		if ( contact.other.has<Health>() and entity.has<Damage>() )
+			contact.other.get_mut<Health>().now -= entity.get<Damage>().value;
+
+		entity.destruct();
+	});
+
 	// Load scripts
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
 	Game.script().filename("base/script/scene.flecs").run();
 	Game.script().filename("base/script/ball.flecs").run();
+	Game.script().filename("base/script/zombie.flecs").run();
 
 	Game.import<flecs::stats>();
 
@@ -88,6 +114,8 @@ int main() {
 	// Setup the HUD
 	ui_function = [&]() {
 		DrawFPS(10, 10);
+		int health = Game.lookup("player").get<Health>().now;
+		DrawText(TextFormat("%d", health), 10, 690, 20, BLACK);
 	};
 
 	// Main game loop

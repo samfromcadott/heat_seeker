@@ -66,7 +66,7 @@ PhysicsEngine& PhysicsEngine::operator=(const PhysicsEngine& other) {
 }
 
 void PhysicsEngine::update() {
-	physics_system.Update(1.0/60.0, 1, temp_allocator, &job_system);
+	physics_system.Update(1.0/60.0, 4, temp_allocator, &job_system);
 }
 
 void PhysicsEngine::set_world(flecs::world w) {

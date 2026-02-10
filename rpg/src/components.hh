@@ -3,6 +3,17 @@
 #include <heat_seeker.hh>
 
 struct Player {}; // Tag for player entity
+struct Monster {};
+struct Missile {};
+
+struct Target {
+	flecs::entity entity;
+};
+
+struct Health {
+	int max = 100;
+	int now = max;
+};
 
 struct PlayerCamera {
 	HSE::vec3 rotation;

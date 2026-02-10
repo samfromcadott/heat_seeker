@@ -38,6 +38,7 @@ add_executable(rpg
 	rpg/src/main.cc
 	rpg/src/player.cc
 	rpg/src/weapon.cc
+	rpg/src/combat.cc
 )
 
 target_link_libraries(rpg heat_seeker)

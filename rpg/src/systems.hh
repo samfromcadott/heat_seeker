@@ -6,3 +6,4 @@ void ground_movement(HSE::Position& position, HSE::Velocity& velocity, HSE::Char
 void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity, const Jump& jump);
 // void shoot_ball(Player player, HSE::Position& position, HSE::Rotation& rotation);
 void player_fire(Player player, HeldWeapon& weapon);
+void die_when_no_health(flecs::entity e, Health& h);
