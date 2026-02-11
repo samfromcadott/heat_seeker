@@ -150,6 +150,7 @@ private:
 	BodyActivationListener body_activation_listener;
 	ContactListener contact_listener;
 	CharacterListener character_listener;
+	JPH::CharacterVsCharacterCollisionSimple character_collision_handler;
 
 	const JPH::uint max_bodies = 65536;
 	const JPH::uint body_mutexes = 0;
@@ -231,6 +232,8 @@ public:
 
 	void set_owner(flecs::entity owner);
 	flecs::entity get_owner() const;
+
+	void destroy();
 };
 
 struct ContactAdded {

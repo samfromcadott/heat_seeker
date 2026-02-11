@@ -84,9 +84,9 @@ HsePhysics::HsePhysics(flecs::world& world) {
 		b.set_owner(e);
 	});
 
-	// world.observer<HSE::CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, HSE::CharacterBody& b) {
-	// 	b.set_owner(e);
-	// });
+	world.observer<HSE::CharacterBody>().event(flecs::OnRemove).each([](flecs::entity e, HSE::CharacterBody& b) {
+		b.destroy();
+	});
 
 	world.observer<HSE::BodyOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::BodyOptions& o) {
 		// Add a new body using the options

@@ -15,6 +15,7 @@ CharacterBody::CharacterBody(flecs::world world, const JPH::CharacterVirtualSett
 		&(engine->physics_system)
 	);
 	body->SetListener(&engine->character_listener);
+	body->SetCharacterVsCharacterCollision( &(engine->character_collision_handler) );
 }
 
 CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& options) {
@@ -36,6 +37,8 @@ CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& opt
 	body->SetListener(&engine->character_listener);
 
 	gravity_scale = options.gravity_scale;
+	body->SetCharacterVsCharacterCollision( &(engine->character_collision_handler) );
+	engine->character_collision_handler.Add(body);
 }
 
 CharacterBody::~CharacterBody() {
@@ -100,4 +103,8 @@ void CharacterBody::set_owner(flecs::entity owner) {
 flecs::entity CharacterBody::get_owner() const {
 	auto owner = body->GetUserData();
 	return flecs::entity(engine->world, owner);
+}
+
+void CharacterBody::destroy() {
+	engine->character_collision_handler.Remove(body);
 }
