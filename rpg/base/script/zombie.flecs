@@ -41,4 +41,5 @@ template Zombie {
 }
 
 Zombie zombie01(position: {4.0, 0.0, 0.0})
-
+Zombie zombie02(position: {4.0, 4.0, 0.0})
+Zombie zombie03(position: {4.0, -4.0, 0.0})
