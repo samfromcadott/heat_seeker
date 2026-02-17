@@ -4,6 +4,43 @@ using HseRender
 
 const ball_model: load_model("base/models/ball.obj")
 
+prefab missile_ball {
+	Missile
+
+	Position
+	Rotation
+	Velocity
+
+	$ball_model
+
+	BodyOptions: {
+		shape: {
+			type: SPHERE,
+			radius: 0.05,
+		}
+		object_layer: 1
+		gravity_scale: 0
+	}
+
+	Damage: {
+		value: 10
+	}
+}
+
+prefab weapon_ball {
+	Weapon: {
+		launch_time: 0.0
+		rate: 0.1
+	}
+
+	Timer
+
+	LaunchMissile: {
+		missile: new prefab _ : missile_ball {}
+		speed: 20.0
+	}
+}
+
 template RpgGuy {
 	prop position = Position: {0,0,0}
 	prop rotation = Rotation: {1,0,0,0}
@@ -42,46 +79,8 @@ template RpgGuy {
 		offset: {0.0, 0.0, 0.75}
 	}
 
-	weapon_ball {
-
-		Weapon: {
-			launch_time: 0.0
-			rate: 0.1
-		}
-
-		Timer
-
-		prefab missile_ball {
-			Missile
-
-			Position
-			Rotation
-			Velocity
-
-			$ball_model
-
-			BodyOptions: {
-				shape: {
-					type: SPHERE,
-					radius: 0.05,
-				}
-				object_layer: 1
-				gravity_scale: 0
-			}
-
-			Damage: {
-				value: 10
-			}
-		}
-
-		LaunchMissile: {
-			missile: missile_ball
-			speed: 20.0
-		}
-	}
-
 	HeldWeapon: {
-		entity: weapon_ball
+		entity: new _ : weapon_ball {}
 	}
 }
 
