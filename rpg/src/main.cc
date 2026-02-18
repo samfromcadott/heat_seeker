@@ -101,6 +101,13 @@ int main() {
 		entity.destruct();
 	});
 
+	Game.observer<HeldWeapon>()
+	.event(flecs::OnSet)
+	.each([&](flecs::entity owner, HeldWeapon& hw) {
+		if ( !hw.entity.is_valid() ) return;
+		hw.entity.child_of(owner);
+	});
+
 	// Load scripts
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
@@ -116,6 +123,7 @@ int main() {
 	// Setup the HUD
 	ui_function = [&]() {
 		DrawFPS(10, 10);
+		DrawCircle(1280/2, 720/2, 2.0, WHITE);
 		auto p = Game.lookup("player");
 
 		DrawText("HEALTH", 10, 680, 10, RED);
