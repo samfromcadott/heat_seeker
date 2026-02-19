@@ -137,6 +137,12 @@ struct CharacterBodyOptions {
 	float gravity_scale = 1.0f;
 };
 
+struct RayCastHit {
+	bool hit;
+	flecs::entity entity;
+	float fraction;
+};
+
 class PhysicsEngine {
 private:
 	flecs::world world;
@@ -170,6 +176,8 @@ public:
 	vec3 get_gravity() const;
 
 	JPH::PhysicsSystem& get_system();
+
+	RayCastHit ray_cast(vec3 origin, vec3 direction) const;
 
 	friend class Body;
 	friend class CharacterBody;

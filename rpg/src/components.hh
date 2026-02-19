@@ -44,8 +44,15 @@ struct Weapon {
 	bool has_fired = true; // Has the weapon fired since the current cycle started
 };
 
+// Current weapon used by a player
 struct HeldWeapon {
 	flecs::entity entity;
+};
+
+// Used by monsters to attack close enemies
+struct MeleeAttack {
+	flecs::entity weapon;
+	float range;
 };
 
 struct Damage {

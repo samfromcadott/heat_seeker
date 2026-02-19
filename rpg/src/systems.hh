@@ -10,3 +10,4 @@ void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocit
 void player_fire(Player player, HeldWeapon& weapon);
 void die_when_no_health(flecs::entity e, Health& h);
 void chase_target(HSE::Position& p, GroundMovement& gm, Target& t);
+void melee_attack(flecs::entity e, HSE::Position& p, Target& t, MeleeAttack& attack);

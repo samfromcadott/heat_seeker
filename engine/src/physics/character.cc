@@ -27,6 +27,8 @@ CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& opt
 	settings.mMaxSlopeAngle = options.max_slope;
 	settings.mUp = glm_to_jolt(options.up);
 	settings.mShape = convert_shape(options.shape);
+	settings.mInnerBodyShape = convert_shape(options.shape);
+	settings.mInnerBodyLayer = Layers::MOVING;
 
 	body = new JPH::CharacterVirtual(
 		&settings,
@@ -37,6 +39,8 @@ CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& opt
 	body->SetListener(&engine->character_listener);
 
 	gravity_scale = options.gravity_scale;
+
+	// Add the character to the collision handler
 	body->SetCharacterVsCharacterCollision( &(engine->character_collision_handler) );
 	engine->character_collision_handler.Add(body);
 }
@@ -98,6 +102,7 @@ vec3 CharacterBody::get_velocity() const {
 void CharacterBody::set_owner(flecs::entity owner) {
 	if (!body) return;
 	body->SetUserData( owner.id() );
+	engine->physics_system.GetBodyInterface().SetUserData( body->GetInnerBodyID(), owner.id() );
 }
 
 flecs::entity CharacterBody::get_owner() const {
@@ -106,5 +111,7 @@ flecs::entity CharacterBody::get_owner() const {
 }
 
 void CharacterBody::destroy() {
+	engine->physics_system.GetBodyInterface().RemoveBody(body->GetInnerBodyID());
+	engine->physics_system.GetBodyInterface().DestroyBody(body->GetInnerBodyID());
 	engine->character_collision_handler.Remove(body);
 }

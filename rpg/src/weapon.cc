@@ -40,3 +40,33 @@ void launch_missile(Weapon& weapon, Timer& timer, LaunchMissile& lm) {
 
 	weapon.has_fired = true;
 }
+
+void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan& hs, Damage& d) {
+	if (weapon.has_fired) return;
+	if (timer.time < weapon.launch_time) return;
+
+	// Get the weapon's owner
+	auto owner = entity.parent();
+
+	// Create a raycast
+	vec3 p = vec3( owner.get<Position>() );
+	quat r = quat( owner.get<Rotation>() );
+	vec3 start = p + ( r * vec3(1,0,0) );
+	// vec3 start = p + vec3(0,0,10);
+	vec3 dir(hs.range, 0, 0);
+	// vec3 dir(0, 0, -hs.range);
+	dir = r * dir;
+
+	// Check for collisions
+	// std::cout << "CHECKING FOR HIT...\n";
+	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir);
+	if (!hit.hit) return;
+	std::cout << "HAD HIT!\n";
+
+	// Reduce health for intersecting entity with Health component
+	if ( !hit.entity.has<Health>() ) return;
+	if ( !hit.entity.is_valid() or !hit.entity.is_alive() ) return;
+	hit.entity.get_mut<Health>().now -= d.value;
+
+	weapon.has_fired = true;
+}

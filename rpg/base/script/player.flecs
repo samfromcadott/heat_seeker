@@ -36,8 +36,25 @@ prefab weapon_ball {
 	Timer
 
 	LaunchMissile: {
-		missile: new prefab _ : missile_ball {}
+		missile: new _ : missile_ball {}
 		speed: 20.0
+	}
+}
+
+prefab weapon_pistol {
+	Weapon: {
+		launch_time: 0.0
+		rate: 0.1
+	}
+
+	Timer
+
+	Damage: {
+		value: 10
+	}
+
+	Hitscan: {
+		range: 1000.0
 	}
 }
 
@@ -80,7 +97,7 @@ template RpgGuy {
 	}
 
 	HeldWeapon: {
-		entity: new _ : weapon_ball {}
+		entity: new _ : weapon_pistol {}
 	}
 }
 

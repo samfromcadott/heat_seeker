@@ -33,6 +33,7 @@ int main() {
 	Game.system<Player, HeldWeapon&>().each(player_fire);
 	Game.system<Weapon&, Timer&>().each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
+	Game.system<Weapon&, Timer&, Hitscan&, Damage&>().each(launch_hitscan);
 	Game.system<Health&>().each(die_when_no_health);
 	Game.system<Position&, GroundMovement&, Target&>().each(chase_target);
 

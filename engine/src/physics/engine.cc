@@ -84,3 +84,26 @@ vec3 PhysicsEngine::get_gravity() const {
 JPH::PhysicsSystem& PhysicsEngine::get_system() {
 	return physics_system;
 }
+
+RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 direction) const {
+	JPH::RRayCast ray( glm_to_jolt(origin), glm_to_jolt(direction) );
+
+	JPH::RayCastResult result;
+	bool had_hit = physics_system.GetNarrowPhaseQuery().CastRay(
+		ray,
+		result,
+		JPH::SpecifiedBroadPhaseLayerFilter(BroadPhaseLayers::MOVING),
+		JPH::SpecifiedObjectLayerFilter(Layers::MOVING)
+	);
+
+	RayCastHit hit;
+	hit.hit = had_hit;
+
+	if (had_hit) {
+		hit.fraction = result.mFraction;
+		auto entity_id = physics_system.GetBodyInterface().GetUserData(result.mBodyID);
+		hit.entity = flecs::entity(world, entity_id);
+	}
+
+	return hit;
+}

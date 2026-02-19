@@ -38,6 +38,21 @@ template Zombie {
 		acceleration_air: 0.5,
 		decceleration_air: 0.0
 	}
+
+	zombie_melee {
+		Weapon: {
+			rate: 1.0
+			launch_time: 0.5
+		}
+
+		Hitscan: {
+			range: 1.0
+		}
+
+		Damage: {
+			value: 10
+		}
+	}
 }
 
 Zombie zombie01(position: {4.0, 0.0, 0.0})
