@@ -35,7 +35,8 @@ int main() {
 	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
 	Game.system<Weapon&, Timer&, Hitscan&, Damage&>().each(launch_hitscan);
 	Game.system<Health&>().each(die_when_no_health);
-	Game.system<Position&, GroundMovement&, Target&>().each(chase_target);
+	Game.system<Position&, Rotation&, GroundMovement&, Target&>().each(chase_target);
+	Game.system<Position&, Target&, MeleeAttack&>().each(melee_attack);
 
 	// Register components
 	Game.component<Player>();
@@ -83,6 +84,10 @@ int main() {
 		.member("missile", &LaunchMissile::missile)
 		.member("speed", &LaunchMissile::speed);
 
+	Game.component<MeleeAttack>()
+		.member("weapon", &MeleeAttack::weapon)
+		.member("range", &MeleeAttack::range);
+
 	// Observers
 	Game.observer<Target>()
 	.event(flecs::OnAdd)
@@ -107,6 +112,13 @@ int main() {
 	.each([&](flecs::entity owner, HeldWeapon& hw) {
 		if ( !hw.entity.is_valid() ) return;
 		hw.entity.child_of(owner);
+	});
+
+	Game.observer<MeleeAttack>()
+	.event(flecs::OnSet)
+	.each([&](flecs::entity owner, MeleeAttack& ma) {
+		if ( !ma.weapon.is_valid() ) return;
+		ma.weapon.child_of(owner);
 	});
 
 	// Load scripts

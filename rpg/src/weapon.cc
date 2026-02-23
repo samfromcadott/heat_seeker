@@ -51,17 +51,13 @@ void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan&
 	// Create a raycast
 	vec3 p = vec3( owner.get<Position>() );
 	quat r = quat( owner.get<Rotation>() );
-	vec3 start = p + ( r * vec3(1,0,0) );
-	// vec3 start = p + vec3(0,0,10);
+	vec3 start = p + ( r * vec3(0.251,0,0) );
 	vec3 dir(hs.range, 0, 0);
-	// vec3 dir(0, 0, -hs.range);
 	dir = r * dir;
 
 	// Check for collisions
-	// std::cout << "CHECKING FOR HIT...\n";
 	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir);
 	if (!hit.hit) return;
-	std::cout << "HAD HIT!\n";
 
 	// Reduce health for intersecting entity with Health component
 	if ( !hit.entity.has<Health>() ) return;

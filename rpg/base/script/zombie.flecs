@@ -4,6 +4,23 @@ using HseRender
 
 const capsule_model: load_model("base/models/capsule.obj")
 
+prefab zombie_melee {
+	Timer
+
+	Weapon: {
+		rate: 1.0
+		launch_time: 0.5
+	}
+
+	Hitscan: {
+		range: 1.0
+	}
+
+	Damage: {
+		value: 10
+	}
+}
+
 template Zombie {
 	prop position = Position: {0,0,0}
 	prop rotation = Rotation: {1,0,0,0}
@@ -39,19 +56,9 @@ template Zombie {
 		decceleration_air: 0.0
 	}
 
-	zombie_melee {
-		Weapon: {
-			rate: 1.0
-			launch_time: 0.5
-		}
-
-		Hitscan: {
-			range: 1.0
-		}
-
-		Damage: {
-			value: 10
-		}
+	MeleeAttack: {
+		weapon: new _ : zombie_melee {}
+		range: 2.0
 	}
 }
 
