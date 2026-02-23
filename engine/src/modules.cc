@@ -101,8 +101,6 @@ HsePhysics::HsePhysics(flecs::world& world) {
 	});
 }
 
-
-
 HseRender::HseRender(flecs::world& world) {
 	world.system().kind(flecs::PostUpdate).each(HSE::start_render);
 	world.system().kind(flecs::PostUpdate).each(HSE::start_3D);
@@ -112,15 +110,14 @@ HseRender::HseRender(flecs::world& world) {
 	world.system().kind(flecs::PostUpdate).each(HSE::end_render);
 
 	world.component<HSE::Model>();
+	world.component<ModelOptions>()
+		.member("file", &ModelOptions::file);
 
-	ecs_function_desc_t load_model_desc = {
-		.name = "load_model",
-		.params = {{ .name = "filename", .type = ecs_id(ecs_string_t) }},
-		.return_type = world.id<HSE::Model>(),
-		.callback = HSE::load_model,
-	};
-
-	ecs_function_init(world, &load_model_desc);
+	world.observer<HSE::ModelOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::ModelOptions& o) {
+		// Load a model and add it to the entity
+		e.set<HSE::Model>( HSE::Model(o.file) );
+		e.remove<HSE::ModelOptions>();
+	});
 
 	world.observer<HSE::Model>().event(flecs::OnSet).each([&](flecs::entity e, HSE::Model& m){
 		m.debug_color = ColorFromHSV(rand()%360, (float)rand()/(float)RAND_MAX, 1.0);
@@ -129,9 +126,18 @@ HseRender::HseRender(flecs::world& world) {
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
 
-
 HseCore::HseCore(flecs::world& world) {
 	// Register basic types
+	world.component<std::string>()
+	.opaque(flecs::String) // Opaque type that maps to string
+	.serialize([](const flecs::serializer *s, const std::string *data) {
+		const char *str = data->c_str();
+		return s->value(flecs::String, &str); // Forward to serializer
+	})
+	.assign_string([](std::string* data, const char *value) {
+		*data = value; // Assign new value to std::string
+	});
+
 	world.component<HSE::vec2>()
 		.member("x", &HSE::vec2::x)
 		.member("y", &HSE::vec2::y);

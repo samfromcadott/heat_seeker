@@ -2,14 +2,13 @@ using HseCore
 using HseRender
 using HsePhysics
 
-const plank_model: load_model("base/models/plank.obj")
-const floor_model: load_model("base/models/floor.obj")
-
 plank {
 	Position
 	Rotation
 
-	$plank_model
+	ModelOptions: {
+		file: "base/models/plank.obj"
+	}
 
 	BodyOptions: {
 		shape: {
@@ -25,7 +24,9 @@ floor {
 	Position: {0.0, 0.0, -1.0}
 	Rotation
 
-	$floor_model
+	ModelOptions: {
+		file: "base/models/floor.obj"
+	}
 
 	BodyOptions: {
 		shape: {

@@ -2,8 +2,6 @@ using HseCore
 using HsePhysics
 using HseRender
 
-const ball_model: load_model("base/models/ball.obj")
-
 prefab missile_ball {
 	Missile
 
@@ -11,7 +9,9 @@ prefab missile_ball {
 	Rotation
 	Velocity
 
-	$ball_model
+	ModelOptions: {
+		file: "base/models/ball.obj"
+	}
 
 	BodyOptions: {
 		shape: {
@@ -97,7 +97,7 @@ template RpgGuy {
 	}
 
 	HeldWeapon: {
-		entity: new _ : weapon_pistol {}
+		entity: new _ : weapon_ball {}
 	}
 }
 

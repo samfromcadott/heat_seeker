@@ -2,8 +2,6 @@ using HseCore
 using HseRender
 using HsePhysics
 
-const can_model: load_model("base/models/can.obj")
-
 template Can {
 	prop position = Position: {0,0,0}
 	prop rotation = Rotation: {1,0,0,0}
@@ -12,7 +10,9 @@ template Can {
 	$rotation
 	Velocity
 
-	$can_model
+	ModelOptions: {
+		file: "base/models/can.obj"
+	}
 
 	BodyOptions: {
 		shape: {

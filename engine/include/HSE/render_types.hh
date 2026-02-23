@@ -31,6 +31,10 @@ struct Model {
 	Model(const std::string& filename);
 };
 
+struct ModelOptions {
+	std::string file;
+};
+
 class LevelModel {
 public:
 	LevelModel();

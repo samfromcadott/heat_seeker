@@ -2,8 +2,6 @@ using HseCore
 using HsePhysics
 using HseRender
 
-const capsule_model: load_model("base/models/capsule.obj")
-
 prefab zombie_melee {
 	Timer
 
@@ -32,7 +30,9 @@ template Zombie {
 	$rotation
 	Velocity
 
-	$capsule_model
+	ModelOptions: {
+		file: "base/models/capsule.obj"
+	}
 
 	Health: {
 		now: 20
