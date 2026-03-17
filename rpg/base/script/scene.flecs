@@ -2,7 +2,7 @@ using HseCore
 using HseRender
 using HsePhysics
 
-plank {
+level {
 	Position
 	Rotation
 
