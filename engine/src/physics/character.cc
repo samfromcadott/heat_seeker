@@ -66,7 +66,7 @@ void CharacterBody::update() {
 }
 
 bool CharacterBody::on_floor() const {
-	return body->IsSupported();
+	return body->GetGroundState() == JPH::CharacterVirtual::EGroundState::OnGround;
 }
 
 void CharacterBody::set_position(const vec3& position) {
