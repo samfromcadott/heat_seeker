@@ -136,15 +136,15 @@ int main() {
 	// Setup the HUD
 	ui_function = [&]() {
 		DrawFPS(10, 10);
-		DrawCircle(1280/2, 720/2, 2.0, WHITE);
+		DrawCircle(1280/2, 720/2, 2.0, GREEN);
 		auto p = Game.lookup("player");
 
-		DrawText("HEALTH", 10, 680, 10, RED);
+		DrawText("HEALTH", 10, 680, 10, GREEN);
 
 		if ( !p.is_valid() or !p.is_alive() ) return;
 
 		int health = p.get<Health>().now;
-		DrawText(TextFormat("%d", health), 10, 690, 20, RED);
+		DrawText(TextFormat("%d", health), 10, 690, 20, GREEN);
 	};
 
 	// Main game loop

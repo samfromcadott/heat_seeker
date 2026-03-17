@@ -29,6 +29,7 @@ CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& opt
 	settings.mShape = convert_shape(options.shape);
 	settings.mInnerBodyShape = convert_shape(options.shape);
 	settings.mInnerBodyLayer = Layers::MOVING;
+	settings.mSupportingVolume = { settings.mUp, -0.05 };
 
 	body = new JPH::CharacterVirtual(
 		&settings,
@@ -50,14 +51,8 @@ CharacterBody::~CharacterBody() {
 }
 
 void CharacterBody::update() {
-	// Gravity update
-	if ( !on_floor() ) {
-		auto v = body->GetLinearVelocity();
-		v += engine->physics_system.GetGravity()  * gravity_scale * 1.0/60.0;
-		body->SetLinearVelocity(v);
-	}
-
 	JPH::CharacterVirtual::ExtendedUpdateSettings update_settings;
+	update_settings.mStickToFloorStepDown = -body->GetUp() * update_settings.mStickToFloorStepDown.Length();
 	body->ExtendedUpdate(
 		1.0/60.0,
 		engine->physics_system.GetGravity() * gravity_scale,

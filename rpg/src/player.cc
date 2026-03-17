@@ -48,6 +48,9 @@ void player_movement(Player player, HSE::Velocity& velocity, GroundMovement& mov
 }
 
 void ground_movement(HSE::Position& position, HSE::Velocity& velocity, HSE::CharacterBody& body, GroundMovement& movement) {
+	if ( body.on_floor() ) velocity.z = 0.0;
+	else velocity = vec3(velocity) + Game.get<PhysicsEngine>().get_gravity() * GetFrameTime();
+
 	float a;
 	if ( movement.direction != vec3(0,0,0) )
 		a = body.on_floor()? movement.acceleration : movement.acceleration_air;
