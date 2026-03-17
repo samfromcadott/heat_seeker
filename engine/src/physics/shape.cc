@@ -20,7 +20,7 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 			shape = new JPH::CapsuleShape(options.height / 2.0, options.radius);
 			break;
 		case ShapeType::MESH:
-			shape = convert_mesh_shape("");
+			shape = convert_mesh_shape(options.file);
 			break;
 	}
 
@@ -32,33 +32,72 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 }
 
 JPH::Ref<JPH::Shape> HSE::convert_mesh_shape(const std::string& name) {
+	std::cout << "Converting mesh shape...\n";
+	std::cout << name << '\n';
 	auto& model = HSE::model_files[name].model;
+	std::cout << "Number of vertecies in mesh: " << model.meshes[0].vertexCount << '\n';
+	std::cout << "Number of faces in mesh: " << model.meshes[0].triangleCount << '\n';
 
 	// Convert each mesh to a Jolt mesh shape
 	JPH::VertexList verts;
 	JPH::IndexedTriangleList tris;
 	int index_offset = 0; // Offest
-	for (int i = 0; i < model.meshCount; i++) {
-		// Add vertices to the mesh
-		for (int j = 0; j < model.meshes[i].vertexCount; j+=3) {
-			const auto& v1 = model.meshes[i].vertices[j+0];
-			const auto& v2 = model.meshes[i].vertices[j+1];
-			const auto& v3 = model.meshes[i].vertices[j+2];
-			verts.push_back( JPH::Float3(v1,v2,v3) );
-		}
-
-		// Add indices to the vertices
-		if (!model.meshes[i].indices) continue; // Skip this step for meshes without indices
-
-		for (int k = 0; k < model.meshes[i].triangleCount; k+=3) {
-			const auto& a = model.meshes[i].indices[k+0] + index_offset;
-			const auto& b = model.meshes[i].indices[k+1] + index_offset;
-			const auto& c = model.meshes[i].indices[k+2] + index_offset;
-			tris.push_back( JPH::IndexedTriangle(a, b, c) );
-		}
-
-		index_offset += model.meshes[i].vertexCount;
+	// for (int i = 0; i < model.meshCount; i++) {
+	// 	// Add vertices to the mesh
+	// 	for (int j = 0; j < model.meshes[i].vertexCount; j+=3) {
+	// 		const auto& v1 = model.meshes[i].vertices[j+0];
+	// 		const auto& v2 = model.meshes[i].vertices[j+1];
+	// 		const auto& v3 = model.meshes[i].vertices[j+2];
+	// 		verts.push_back( JPH::Float3(v1,v2,v3) );
+	// 	}
+ //
+	// 	for (int k = 0; k < model.meshes[i].triangleCount; k++) {
+	// 		// tris.push_back(k+0);
+	// 		// tris.push_back(k+1);
+	// 		// tris.push_back(k+2);
+	// 		tris.push_back( JPH::IndexedTriangle(k*3+0, k*3+1, k*3+2) );
+	// 	}
+ //
+	// 	index_offset += model.meshes[i].vertexCount;
+	// }
+	// for (int i = 0; i < model.meshCount; i++) {
+	// 	// Add vertices to the mesh
+	// 	for (int j = 0; j < model.meshes[i].vertexCount; j+=3) {
+	// 		const auto& v1 = model.meshes[i].vertices[j+0];
+	// 		const auto& v2 = model.meshes[i].vertices[j+1];
+	// 		const auto& v3 = model.meshes[i].vertices[j+2];
+	// 		verts.push_back( JPH::Float3(v1,v2,v3) );
+	// 	}
+ //
+	// 	// Add indices to the vertices
+	// 	if (!model.meshes[i].indices) continue; // Skip this step for meshes without indices
+ //
+	// 	for (int k = 0; k < model.meshes[i].triangleCount; k+=3) {
+	// 		const auto& a = model.meshes[i].indices[k+0] + index_offset;
+	// 		const auto& b = model.meshes[i].indices[k+1] + index_offset;
+	// 		const auto& c = model.meshes[i].indices[k+2] + index_offset;
+	// 		tris.push_back( JPH::IndexedTriangle(a, b, c) );
+	// 	}
+ //
+	// 	index_offset += model.meshes[i].vertexCount;
+	// }
+	// Add vertices to the mesh
+	for (int j = 0; j < model.meshes[0].vertexCount*3; j+=3) {
+		const auto& v1 = model.meshes[0].vertices[j+0];
+		const auto& v2 = model.meshes[0].vertices[j+1];
+		const auto& v3 = model.meshes[0].vertices[j+2];
+		verts.push_back( JPH::Float3(v1,v2,v3) );
 	}
 
-	return new JPH::EmptyShape();
+	for (int k = 0; k < model.meshes[0].triangleCount; k++) {
+		tris.push_back( JPH::IndexedTriangle(k*3+0, k*3+1, k*3+2) );
+	}
+
+	JPH::MeshShapeSettings settings;
+	if (tris.size() > 0) settings = JPH::MeshShapeSettings(verts, tris);
+	settings.Sanitize();
+	JPH::Shape::ShapeResult result;
+
+	return new JPH::MeshShape(settings, result);
+	// return new JPH::EmptyShape();
 }

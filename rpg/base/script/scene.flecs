@@ -7,31 +7,13 @@ plank {
 	Rotation
 
 	ModelOptions: {
-		file: "base/models/plank.obj"
+		file: "base/models/scene.obj"
 	}
 
 	BodyOptions: {
 		shape: {
-			type: BOX,
-			size: {0.1, 2.0, 0.1}
-		}
-		object_layer: 0
-		motion_type: Static
-	}
-}
-
-floor {
-	Position: {0.0, 0.0, -1.0}
-	Rotation
-
-	ModelOptions: {
-		file: "base/models/floor.obj"
-	}
-
-	BodyOptions: {
-		shape: {
-			type: BOX,
-			size: {50.0, 50.0, 0.1}
+			type: MESH
+			file: "base/models/scene.obj"
 		}
 		object_layer: 0
 		motion_type: Static

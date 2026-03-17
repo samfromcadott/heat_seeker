@@ -116,6 +116,7 @@ struct ShapeOptions {
 	float height = 0.0;
 	float radius = 0.0;
 	vec3 size = vec3(0.0, 0.0, 0.0);
+	std::string file = ""; //< Used by MESH type
 };
 
 JPH::Ref<JPH::Shape> convert_shape(const ShapeOptions& options);

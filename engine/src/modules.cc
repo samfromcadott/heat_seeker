@@ -25,7 +25,8 @@ HsePhysics::HsePhysics(flecs::world& world) {
 		.constant("SPHERE", HSE::SPHERE)
 		.constant("BOX", HSE::BOX)
 		.constant("CYLINDER", HSE::CYLINDER)
-		.constant("CAPSULE", HSE::CAPSULE);
+		.constant("CAPSULE", HSE::CAPSULE)
+		.constant("MESH", HSE::MESH);
 
 	world.component<JPH::EMotionType>()
 		.constant("Static", JPH::EMotionType::Static)
@@ -38,7 +39,8 @@ HsePhysics::HsePhysics(flecs::world& world) {
 		.member("rotation", &HSE::ShapeOptions::rotation)
 		.member("height", &HSE::ShapeOptions::height)
 		.member("radius", &HSE::ShapeOptions::radius)
-		.member("size", &HSE::ShapeOptions::size);
+		.member("size", &HSE::ShapeOptions::size)
+		.member("file", &HSE::ShapeOptions::file);
 
 	world.component<HSE::BodyOptions>()
 		.member("shape", &HSE::BodyOptions::shape)
