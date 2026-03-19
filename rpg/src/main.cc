@@ -100,6 +100,9 @@ int main() {
 	.event(flecs::OnSet)
 	.with<Missile>()
 	.each([](flecs::entity entity, ContactAdded& contact) {
+		if (entity.has<Owner>() and entity.get<Owner>().entity == contact.other)
+			return;
+
 		// Check if the entity hit has health
 		if ( contact.other.has<Health>() and entity.has<Damage>() )
 			contact.other.get_mut<Health>().now -= entity.get<Damage>().value;

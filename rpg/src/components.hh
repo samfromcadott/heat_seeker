@@ -10,6 +10,10 @@ struct Target {
 	flecs::entity entity;
 };
 
+struct Owner {
+	flecs::entity entity;
+};
+
 struct Health {
 	int max = 100;
 	int now = max;

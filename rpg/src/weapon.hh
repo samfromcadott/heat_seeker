@@ -5,5 +5,5 @@
 
 void weapon_update(Weapon& weapon, Timer& timer);
 void fire_weapon(flecs::entity weapon);
-void launch_missile(Weapon& weapon, Timer& timer, LaunchMissile& lm);
+void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMissile& lm);
 void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan& hs, Damage& d);

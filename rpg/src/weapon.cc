@@ -23,7 +23,7 @@ void fire_weapon(flecs::entity weapon) {
 	if (!timer.active) timer.active = true;
 }
 
-void launch_missile(Weapon& weapon, Timer& timer, LaunchMissile& lm) {
+void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMissile& lm) {
 	if (weapon.has_fired) return;
 	if (timer.time < weapon.launch_time) return;
 
@@ -37,6 +37,8 @@ void launch_missile(Weapon& weapon, Timer& timer, LaunchMissile& lm) {
 	missile.set<Position>( vec3(launch_point) );
 	missile.set<Velocity>( vec3(vel) );
 	// missile.set<Rotation>(rotation);
+
+	missile.set<Owner>({ entity.parent() });
 
 	weapon.has_fired = true;
 }
