@@ -106,6 +106,7 @@ HsePhysics::HsePhysics(flecs::world& world) {
 HseRender::HseRender(flecs::world& world) {
 	world.system().kind(flecs::PostUpdate).each(HSE::start_render);
 	world.system().kind(flecs::PostUpdate).each(HSE::start_3D);
+	world.system<HSE::Model&>().kind(flecs::PostUpdate).each(HSE::update_animation);
 	world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().kind(flecs::PostUpdate).each(HSE::render_models);
 	world.system().kind(flecs::PostUpdate).each(HSE::end_3D);
 	world.system().kind(flecs::PostUpdate).each(HSE::update_ui);

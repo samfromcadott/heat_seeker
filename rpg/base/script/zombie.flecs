@@ -31,7 +31,7 @@ template Zombie {
 	Velocity
 
 	ModelOptions: {
-		file: "base/models/capsule.obj"
+		file: "base/models/zombie.glb"
 	}
 
 	Health: {
