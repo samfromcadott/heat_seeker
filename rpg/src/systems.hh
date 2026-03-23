@@ -11,3 +11,4 @@ void player_fire(Player player, HeldWeapon& weapon);
 void die_when_no_health(flecs::entity e, Health& h);
 void chase_target(HSE::Position& p, HSE::Rotation& r, GroundMovement& gm, Target& t);
 void melee_attack(flecs::entity e, HSE::Position& p, Target& t, MeleeAttack& attack);
+void monster_animation(flecs::entity e, HSE::Model& m);

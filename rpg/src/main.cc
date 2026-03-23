@@ -37,6 +37,7 @@ int main() {
 	Game.system<Health&>().each(die_when_no_health);
 	Game.system<Position&, Rotation&, GroundMovement&, Target&>().each(chase_target);
 	Game.system<Position&, Target&, MeleeAttack&>().each(melee_attack);
+	Game.system<HSE::Model&>().with<Monster>().each(monster_animation);
 
 	// Register components
 	Game.component<Player>();
