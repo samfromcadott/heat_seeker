@@ -12,7 +12,7 @@ std::function<void(void)> HSE::ui_function;
 
 void HSE::start_render() {
 	BeginDrawing();
-	ClearBackground(RAYWHITE);
+	ClearBackground(GRAY);
 }
 
 void HSE::start_3D() {
