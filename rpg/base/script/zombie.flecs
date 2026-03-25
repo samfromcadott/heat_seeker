@@ -6,8 +6,8 @@ prefab zombie_melee {
 	Timer
 
 	Weapon: {
-		rate: 1.0
-		launch_time: 0.5
+		rate: 2.6
+		launch_time: 1.0
 	}
 
 	Hitscan: {

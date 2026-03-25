@@ -122,10 +122,6 @@ HseRender::HseRender(flecs::world& world) {
 		e.remove<HSE::ModelOptions>();
 	});
 
-	world.observer<HSE::Model>().event(flecs::OnSet).each([&](flecs::entity e, HSE::Model& m){
-		m.debug_color = ColorFromHSV(rand()%360, (float)rand()/(float)RAND_MAX, 1.0);
-	});
-
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
 

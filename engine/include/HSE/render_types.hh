@@ -9,8 +9,12 @@ struct ModelData {
 	::Model model;
 	ModelAnimation* animations = nullptr;
 	int animation_count = 0;
+	std::map<std::string, int> anim_names;
 
-	~ModelData() {
+	ModelData() = default;
+	ModelData(const std::string& filename);
+
+	void unload() {
 		UnloadModel(model);
 		UnloadModelAnimations(animations, animation_count);
 	}
@@ -20,7 +24,6 @@ struct Model {
 	ModelData* data = nullptr;
 	int animation = 0;
 	int frame = 0;
-	Color debug_color;
 
 	Model() = default;
 	Model(ModelData* data, int animation, int frame) {
@@ -29,6 +32,8 @@ struct Model {
 		this->frame = frame;
 	}
 	Model(const std::string& filename);
+
+	void play(const std::string& anim_name);
 };
 
 struct ModelOptions {

@@ -34,9 +34,8 @@ void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, MeleeAttac
 }
 
 void monster_animation(flecs::entity e, HSE::Model& m) {
-	// If monster is moving play the walk animation
-	m.animation = 1;
-
 	if (e.has<MeleeAttack>() and e.get<MeleeAttack>().weapon.get<Timer>().active)
-		m.animation = 0;
+		m.play("Attack");
+	else
+		m.play("Walk");
 }
