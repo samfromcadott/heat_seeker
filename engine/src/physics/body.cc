@@ -28,6 +28,7 @@ Body::Body(flecs::world world, const BodyOptions& options) {
 
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
 	set_gravity_scale(options.gravity_scale);
+	engine->physics_system.GetBodyInterface().SetIsSensor(id, options.sensor);
 }
 
 void Body::set_position(const vec3& position) {

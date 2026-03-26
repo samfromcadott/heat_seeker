@@ -46,7 +46,8 @@ HsePhysics::HsePhysics(flecs::world& world) {
 		.member("shape", &HSE::BodyOptions::shape)
 		.member("motion_type", &HSE::BodyOptions::motion_type)
 		.member("object_layer", &HSE::BodyOptions::object_layer)
-		.member("gravity_scale", &HSE::BodyOptions::gravity_scale);
+		.member("gravity_scale", &HSE::BodyOptions::gravity_scale)
+		.member("sensor", &HSE::BodyOptions::sensor);
 
 	world.component<HSE::CharacterBodyOptions>()
 		.member("shape", &HSE::CharacterBodyOptions::shape)

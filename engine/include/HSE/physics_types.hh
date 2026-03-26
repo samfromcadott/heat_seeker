@@ -127,6 +127,7 @@ struct BodyOptions {
 	JPH::EMotionType motion_type = JPH::EMotionType::Dynamic;
 	JPH::ObjectLayer object_layer = 0;
 	float gravity_scale = 1.0f;
+	bool sensor = false;
 };
 
 struct CharacterBodyOptions {

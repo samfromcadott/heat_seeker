@@ -20,6 +20,7 @@ prefab missile_ball {
 		}
 		object_layer: 1
 		gravity_scale: 0
+		sensor: true
 	}
 
 	Damage: {
