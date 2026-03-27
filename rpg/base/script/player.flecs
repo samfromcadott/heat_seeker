@@ -37,7 +37,7 @@ prefab weapon_ball {
 	Timer
 
 	LaunchMissile: {
-		missile: new _ : missile_ball {}
+		missile: new prefab _ : missile_ball {}
 		speed: 20.0
 	}
 }
@@ -59,13 +59,8 @@ prefab weapon_pistol {
 	}
 }
 
-template RpgGuy {
-	prop position = Position: {0,0,0}
-	prop rotation = Rotation: {1,0,0,0}
-
+prefab RpgGuy {
 	Player
-	$position
-	$rotation
 	Velocity
 
 	Health: {
@@ -96,10 +91,12 @@ template RpgGuy {
 		rotation: {0.0, 0.0, 0.0},
 		offset: {0.0, 0.0, 0.75}
 	}
+}
 
+player : RpgGuy {
+	Position: {-2.0, 0.0, 0.0}
+	Rotation: {1,0,0,0}
 	HeldWeapon: {
 		entity: new _ : weapon_ball {}
 	}
 }
-
-RpgGuy player(position: {-2.0, 0.0, 0.0})
