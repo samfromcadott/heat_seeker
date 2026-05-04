@@ -48,6 +48,11 @@ struct Weapon {
 	bool has_fired = true; // Has the weapon fired since the current cycle started
 };
 
+struct Muzzle {
+	HSE::vec3 direction;
+	HSE::vec3 offset;
+};
+
 // Current weapon used by a player
 struct HeldWeapon {
 	flecs::entity entity;
