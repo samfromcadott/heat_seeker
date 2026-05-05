@@ -31,6 +31,7 @@ inline namespace glm { using namespace ::glm; }
 #include "HSE/render_systems.hh"
 #include "HSE/script.hh"
 #include "HSE/modules.hh"
+#include "HSE/level.hh"
 
 namespace HSE {
 

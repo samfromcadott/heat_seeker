@@ -14,6 +14,7 @@ include_directories(engine/include)
 add_library(heat_seeker
 	engine/src/hse.cc
 	engine/src/modules.cc
+	engine/src/level.cc
 
 	# Render
 	engine/src/render/render.cc

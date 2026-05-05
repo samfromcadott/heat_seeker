@@ -2,12 +2,9 @@ using HseCore
 using HseRender
 using HsePhysics
 
-template Can {
-	prop position = Position: {0,0,0}
-	prop rotation = Rotation: {1,0,0,0}
-
-	$position
-	$rotation
+prefab prop_can {
+	Position: {0,0,0}
+	Rotation: {1,0,0,0}
 	Velocity
 
 	ModelOptions: {
@@ -25,9 +22,9 @@ template Can {
 	}
 }
 
-Can( position: {0,0,0.125} )
-Can( position: {0,0.1,0.125} )
-Can( position: {0,-0.1,0.125} )
-Can( position: {0,0.05,0.275} )
-Can( position: {0,-0.05,0.275} )
-Can( position: {0,0,0.425} )
+_ : prop_can { Position: {0,0,0.125} }
+_ : prop_can { Position: {0,0.1,0.125} }
+_ : prop_can { Position: {0,-0.1,0.125} }
+_ : prop_can { Position: {0,0.05,0.275} }
+_ : prop_can { Position: {0,-0.05,0.275} }
+_ : prop_can { Position: {0,0,0.425} }

@@ -132,6 +132,13 @@ int main() {
 	Game.script().filename("base/script/ball.flecs").run();
 	Game.script().filename("base/script/zombie.flecs").run();
 
+	// Entity to test `parse_entity`
+	HSE::EntityDict test_dict;
+	test_dict["classname"] = "prop_can";
+	test_dict["HseCore::Position"] = "2 2 40";
+	auto test_can = HSE::parse_entity(Game, test_dict);
+	test_can.set_name("test_can");
+
 	Game.import<flecs::stats>();
 
 	// Creates REST server on default port (27750)
