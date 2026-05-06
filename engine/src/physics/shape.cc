@@ -20,7 +20,7 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 			shape = new JPH::CapsuleShape(options.height / 2.0, options.radius);
 			break;
 		case ShapeType::MESH:
-			shape = convert_mesh_shape(options.file);
+			shape = convert_mesh_shape( HSE::model_files[options.file].model );
 			break;
 	}
 
@@ -31,13 +31,7 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 	return shape;
 }
 
-JPH::Ref<JPH::Shape> HSE::convert_mesh_shape(const std::string& name) {
-	std::cout << "Converting mesh shape...\n";
-	std::cout << name << '\n';
-	auto& model = HSE::model_files[name].model;
-	std::cout << "Number of vertecies in mesh: " << model.meshes[0].vertexCount << '\n';
-	std::cout << "Number of faces in mesh: " << model.meshes[0].triangleCount << '\n';
-
+JPH::Ref<JPH::Shape> HSE::convert_mesh_shape(const ::Model& model) {
 	// Convert each mesh to a Jolt mesh shape
 	JPH::VertexList verts;
 	JPH::IndexedTriangleList tris;

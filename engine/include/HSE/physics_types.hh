@@ -120,7 +120,7 @@ struct ShapeOptions {
 };
 
 JPH::Ref<JPH::Shape> convert_shape(const ShapeOptions& options);
-JPH::Ref<JPH::Shape> convert_mesh_shape(const std::string& name);
+JPH::Ref<JPH::Shape> convert_mesh_shape(const ::Model& model);
 
 struct BodyOptions {
 	ShapeOptions shape;
