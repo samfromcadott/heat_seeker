@@ -10,7 +10,7 @@ void HSE::load_level(flecs::world& world, const string& filename) {
 
 flecs::entity HSE::parse_entity(flecs::world& world, const EntityDict& dict) {
 	// Make entity from prefab
-	auto prefab = world.entity( dict.at("classname").c_str() );
+	auto prefab = world.lookup( dict.at("classname").c_str() );
 	auto entity = world.entity().is_a(prefab);
 
 	// Loop through keys

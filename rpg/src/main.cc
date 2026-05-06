@@ -136,6 +136,7 @@ int main() {
 	HSE::EntityDict test_dict;
 	test_dict["classname"] = "prop_can";
 	test_dict["HseCore::Position"] = "2 2 40";
+	test_dict["HseCore::Rotation"] = "0.9238795 0 0.3826834 0";
 	auto test_can = HSE::parse_entity(Game, test_dict);
 	test_can.set_name("test_can");
 
