@@ -8,6 +8,7 @@ add_subdirectory(3rdparty/raylib)
 add_subdirectory(3rdparty/flecs)
 add_subdirectory(3rdparty/Jolt/Build)
 
+include_directories(3rdparty)
 include_directories(3rdparty/glm)
 include_directories(engine/include)
 

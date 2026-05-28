@@ -2,11 +2,13 @@
 
 // STD Libraries
 #include <iostream>
+#include <fstream>
 #include <map>
 
 #include <raylib.h>
 #include <raymath.h>
 #include <flecs.h>
+#include <json.hpp>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/vec3.hpp>
