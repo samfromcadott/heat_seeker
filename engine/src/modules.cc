@@ -10,7 +10,8 @@ const char* gouraud_frag =
 #include "render/shaders/gouraud_frag.glsl"
 ;
 
-HsePhysics::HsePhysics(flecs::world& world) {
+// HsePhysics::HsePhysics(flecs::world& world) {
+void HSE::init_physics(flecs::world& world) {
 	// Add physics engine
 	world.component<HSE::PhysicsEngine>().add(flecs::Singleton);
 	world.set<HSE::PhysicsEngine>( HSE::PhysicsEngine() );
@@ -104,7 +105,8 @@ HsePhysics::HsePhysics(flecs::world& world) {
 	});
 }
 
-HseRender::HseRender(flecs::world& world) {
+// HseRender::HseRender(flecs::world& world) {
+void HSE::init_render(flecs::world& world) {
 	world.system().kind(flecs::PostUpdate).each(HSE::start_render);
 	world.system().kind(flecs::PostUpdate).each(HSE::start_3D);
 	world.system<HSE::Model&>().kind(flecs::PostUpdate).each(HSE::update_animation);
@@ -126,7 +128,8 @@ HseRender::HseRender(flecs::world& world) {
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
 
-HseCore::HseCore(flecs::world& world) {
+// HseCore::HseCore(flecs::world& world) {
+void HSE::init_core(flecs::world& world) {
 	// Register basic types
 	world.component<std::string>()
 	.opaque(flecs::String) // Opaque type that maps to string
@@ -153,23 +156,23 @@ HseCore::HseCore(flecs::world& world) {
 		.member("y", &HSE::quat::y)
 		.member("z", &HSE::quat::z);
 
-	world.component<HSE::Position>()
+	world.component<HSE::Position>("Position")
 		.member("x", &HSE::Position::x)
 		.member("y", &HSE::Position::y)
 		.member("z", &HSE::Position::z);
 
-	world.component<HSE::Rotation>()
+	world.component<HSE::Rotation>("Rotation")
 		.member("w", &HSE::Rotation::w)
 		.member("x", &HSE::Rotation::x)
 		.member("y", &HSE::Rotation::y)
 		.member("z", &HSE::Rotation::z);
 
-	world.component<HSE::Velocity>()
+	world.component<HSE::Velocity>("Velocity")
 		.member("x", &HSE::Velocity::x)
 		.member("y", &HSE::Velocity::y)
 		.member("z", &HSE::Velocity::z);
 
-	world.import<HsePhysics>();
-	world.import<HseRender>();
+	// world.import<HsePhysics>();
+	// world.import<HseRender>();
 }
 

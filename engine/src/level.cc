@@ -50,6 +50,10 @@ flecs::entity HSE::parse_entity(flecs::world& world, const nlohmann::json& json)
 	}
 
 	// If it has a model convert and add it
+	if ( json.contains("MODEL") ) {
+		add_level_model(entity, json["MODEL"]);
+		add_level_collider(entity);
+	}
 
 	// Loop through keys
 	for ( const auto& [key, value] : json.items() ) {

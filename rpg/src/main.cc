@@ -24,7 +24,10 @@ int main() {
 
 	uv_debug_texture = LoadTexture("base/textures/uv_debug.png");
 
-	Game.import<HseCore>();
+	// Game.import<HseCore>();
+	init_core(Game);
+	init_physics(Game);
+	init_render(Game);
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
 	Game.system<Player, Velocity&, GroundMovement&, Rotation&>().each(player_movement);
@@ -135,9 +138,9 @@ int main() {
 	// Entity to test `parse_entity`
 	nlohmann::json test_dict;
 	test_dict["INHERIT"] = "prop_can";
-	test_dict["HseCore::Position"]["x"] = 2;
-	test_dict["HseCore::Position"]["y"] = 2;
-	test_dict["HseCore::Position"]["z"] = 2;
+	test_dict["Position"]["x"] = 2;
+	test_dict["Position"]["y"] = 2;
+	test_dict["Position"]["z"] = 2;
 	auto test_can = HSE::parse_entity(Game, test_dict);
 	test_can.set_name("test_can");
 

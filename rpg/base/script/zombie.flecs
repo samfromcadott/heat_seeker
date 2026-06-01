@@ -1,6 +1,7 @@
-using HseCore
-using HsePhysics
-using HseRender
+//using HseCore
+//using HsePhysics
+//using HseRender
+using HSE
 
 prefab zombie_melee {
 	Timer

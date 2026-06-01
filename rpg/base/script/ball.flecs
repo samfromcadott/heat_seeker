@@ -1,6 +1,7 @@
-using HseCore
-using HseRender
-using HsePhysics
+//using HseCore
+//using HseRender
+//using HsePhysics
+using HSE
 
 const ball_model: load_model("base/models/ball.obj")
 
