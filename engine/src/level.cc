@@ -74,8 +74,6 @@ void HSE::parse_component(flecs::entity& entity, const string& component, const 
 		else if (type == "f32") cur.set_float(value);
 		else if (type == "f64") cur.set_float(value);
 		else if (type == "string") cur.set_string( string(value).c_str() );
-
-		cur.next();
 	}
 	cur.pop();
 }
