@@ -118,6 +118,9 @@ int main() {
 	.event(flecs::OnSet)
 	.each([&](flecs::entity owner, HeldWeapon& hw) {
 		if ( !hw.entity.is_valid() ) return;
+		if ( hw.entity.has(flecs::Prefab) )
+			hw.entity = Game.entity().is_a(hw.entity);
+
 		hw.entity.child_of(owner);
 	});
 
@@ -125,24 +128,30 @@ int main() {
 	.event(flecs::OnSet)
 	.each([&](flecs::entity owner, MeleeAttack& ma) {
 		if ( !ma.weapon.is_valid() ) return;
+		if ( ma.weapon.has(flecs::Prefab) )
+			ma.weapon = Game.entity().is_a(ma.weapon);
+
 		ma.weapon.child_of(owner);
 	});
 
 	// Load scripts
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
-	Game.script().filename("base/script/scene.flecs").run();
+	// Game.script().filename("base/script/scene.flecs").run();
 	Game.script().filename("base/script/ball.flecs").run();
 	Game.script().filename("base/script/zombie.flecs").run();
 
 	// Entity to test `parse_entity`
-	nlohmann::json test_dict;
-	test_dict["INHERIT"] = "prop_can";
-	test_dict["Position"]["x"] = 2;
-	test_dict["Position"]["y"] = 2;
-	test_dict["Position"]["z"] = 2;
-	auto test_can = HSE::parse_entity(Game, test_dict);
-	test_can.set_name("test_can");
+	// nlohmann::json test_dict;
+	// test_dict["INHERIT"] = "prop_can";
+	// test_dict["Position"]["x"] = 2;
+	// test_dict["Position"]["y"] = 2;
+	// test_dict["Position"]["z"] = 2;
+	// auto test_can = HSE::parse_entity(Game, test_dict);
+	// test_can.set_name("test_can");
+
+	// Load the first map
+	load_level(Game, "base/maps/test.hsm");
 
 	Game.import<flecs::stats>();
 

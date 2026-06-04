@@ -5,20 +5,23 @@ using namespace std;
 using namespace nlohmann;
 
 void HSE::load_level(flecs::world& world, const string& filename) {
+	std::cout << "Loading map " << filename << '\n';
 	std::ifstream map_file(filename); // Load map
 	auto json_file = json::from_cbor(map_file); // Convert to JSON object
 
 	// Loop through entities in ENT
-	for (const auto& e : json_file["ENT"]) {
+	for ( const auto& [name, e] : json_file["ENT"].items() ) {
+		std::cout << "Parsing entity " << name << '\n';
 		flecs::entity entity = parse_entity(world, e);
+		entity.set_name( name.c_str() );
 	}
 
 	// Make entities from models
-	for (const auto& m : json_file["MODEL"]) {
-		auto entity = world.entity();
-		add_level_model(entity, m);
-		add_level_collider(entity);
-	}
+	// for (const auto& m : json_file["MODEL"]) {
+	// 	auto entity = world.entity();
+	// 	add_level_model(entity, m);
+	// 	add_level_collider(entity);
+	// }
 }
 
 flecs::entity HSE::parse_entity(flecs::world& world, const nlohmann::json& json) {
@@ -87,28 +90,40 @@ void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 	model.meshes = new Mesh[model.meshCount];
 
 	// Materials
-	model.materials = new Material[ model.meshCount ];
-	model.materialCount = model.meshCount;
+	// model.materials = new Material[ model.meshCount ];
+	model.materials = new Material[1];
+	// model.materialCount = model.meshCount;
+	model.materialCount = 1;
 	model.meshMaterial = new int[model.meshCount];
+	model.materials[0] = LoadMaterialDefault();
+	model.materials[0].shader = gouraud_shader;
 
 	// Convert the meshes
 	for (int i=0; i < model.meshCount; i++) {
+		auto& m = json["MESH"][i];
 		Mesh mesh = {0};
-		mesh.vertices = new float[ json["VERT"].get_binary().size() / 4 ];
-		mesh.normals = new float[ json["NORM"].get_binary().size() / 4 ];
-		mesh.texcoords = new float[ json["UV"].get_binary().size() / 4 ];
+		mesh.vertices = new float[ m["VERT"].get_binary().size() / 4 ];
+		mesh.normals = new float[ m["NORM"].get_binary().size() / 4 ];
+		mesh.texcoords = new float[ m["UV"].get_binary().size() / 4 ];
 
-		mesh.vertexCount = json["VERT"].get_binary().size() / 4 / 3;
+		mesh.vertexCount = m["VERT"].get_binary().size() / 4 / 3;
 		mesh.triangleCount = mesh.vertexCount / 3;
 
-		memcpy(mesh.vertices, json["VERT"].get_binary().data(), json["VERT"].get_binary().size());
-		memcpy(mesh.normals, json["NORM"].get_binary().data(), json["NORM"].get_binary().size());
-		memcpy(mesh.texcoords, json["UV"].get_binary().data(), json["UV"].get_binary().size());
+		memcpy(mesh.vertices, m["VERT"].get_binary().data(), m["VERT"].get_binary().size());
+		memcpy(mesh.normals, m["NORM"].get_binary().data(), m["NORM"].get_binary().size());
+		memcpy(mesh.texcoords, m["UV"].get_binary().data(), m["UV"].get_binary().size());
 
-		model.meshMaterial[i] = i;
+		// model.meshMaterial[i] = i;
+		model.meshMaterial[i] = 0;
 		// model.materials[i] = level_materials[ j["MESH"][i]["MAT"] ];
+		model.meshes[i] = mesh;
 		UploadMesh(&model.meshes[i], false);
 	}
+
+	ModelData* data = new ModelData;
+	data->model = model;
+	entity.add<HSE::Model>();
+	entity.get_mut<HSE::Model>().data = data;
 }
 
 void HSE::add_level_collider(flecs::entity& entity) {

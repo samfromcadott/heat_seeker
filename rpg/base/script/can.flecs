@@ -23,9 +23,9 @@ prefab prop_can {
 	}
 }
 
-_ : prop_can { Position: {0,0,0.125} }
-_ : prop_can { Position: {0,0.1,0.125} }
-_ : prop_can { Position: {0,-0.1,0.125} }
-_ : prop_can { Position: {0,0.05,0.275} }
-_ : prop_can { Position: {0,-0.05,0.275} }
-_ : prop_can { Position: {0,0,0.425} }
+// _ : prop_can { Position: {0,0,0.125} }
+// _ : prop_can { Position: {0,0.1,0.125} }
+// _ : prop_can { Position: {0,-0.1,0.125} }
+// _ : prop_can { Position: {0,0.05,0.275} }
+// _ : prop_can { Position: {0,-0.05,0.275} }
+// _ : prop_can { Position: {0,0,0.425} }
