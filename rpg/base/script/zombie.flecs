@@ -20,49 +20,6 @@ prefab zombie_melee {
 	}
 }
 
-template Zombie {
-	prop position = Position: {0,0,0}
-	prop rotation = Rotation: {1,0,0,0}
-
-	Monster
-	Target
-
-	$position
-	$rotation
-	Velocity
-
-	ModelOptions: {
-		file: "base/models/zombie.glb"
-	}
-
-	Health: {
-		now: 20
-		max: 20
-	}
-
-	CharacterBodyOptions: {
-		shape: {
-			type: CAPSULE,
-			rotation: {0.7071068, 0.7071068, 0, 0},
-			radius: 0.25,
-			height: 1.5
-		}
-	}
-
-	GroundMovement: {
-		max_speed: 5.0,
-		acceleration: 3.125,
-		decceleration: 3.125,
-		acceleration_air: 0.5,
-		decceleration_air: 0.0
-	}
-
-	MeleeAttack: {
-		weapon: new _ : zombie_melee {}
-		range: 2.0
-	}
-}
-
 prefab monster_zombie {
 	Position: {0,0,0}
 	Rotation: {1,0,0,0}
@@ -89,7 +46,7 @@ prefab monster_zombie {
 		}
 	}
 
-	GroundMovement: {
+	Walk: {
 		max_speed: 5.0,
 		acceleration: 3.125,
 		decceleration: 3.125,
@@ -102,11 +59,3 @@ prefab monster_zombie {
 		range: 2.0
 	}
 }
-
-// Zombie zombie01(position: {2.0, 0.0, 0.0})
-// Zombie zombie02(position: {2.0, 4.0, 0.0})
-// Zombie zombie03(position: {2.0, -4.0, 0.0})
-
-// zombie01 : monster_zombie {Position: {2.0, 0.0, 0.0}}
-// zombie02 : monster_zombie {Position: {2.0, 4.0, 0.0}}
-// zombie03 : monster_zombie {Position: {2.0, -4.0, 0.0}}

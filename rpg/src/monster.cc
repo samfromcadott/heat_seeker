@@ -6,7 +6,7 @@
 
 using namespace HSE;
 
-void chase_target(Position& p, Rotation& r, GroundMovement& gm, Target& t) {
+void chase_target(Position& p, Rotation& r, Walk& gm, Target& t) {
 	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
 
 	// Get direction to target
@@ -27,8 +27,8 @@ void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, MeleeAttac
 	if (dist > attack.range) return;
 
 	// Stop monster if it's moving
-	if ( monster.has<GroundMovement>() )
-		monster.get_mut<GroundMovement>().direction = vec3(0,0,0);
+	if ( monster.has<Walk>() )
+		monster.get_mut<Walk>().direction = vec3(0,0,0);
 
 	fire_weapon(attack.weapon);
 }

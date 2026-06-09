@@ -78,7 +78,7 @@ prefab RpgGuy {
 		}
 	}
 
-	GroundMovement: {
+	Walk: {
 		max_speed: 10.0,
 		acceleration: 3.125,
 		decceleration: 3.125,
