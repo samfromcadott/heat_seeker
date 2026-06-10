@@ -30,15 +30,16 @@ int main() {
 	init_render(Game);
 
 	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
-	Game.system<Player, Velocity&, Walk&, Rotation&>().each(player_movement);
-	Game.system<HSE::Velocity&, HSE::CharacterBody&, Walk&>().each(walking);
+	Game.system<Player, Velocity&, MoveDir&, Rotation&>().each(player_movement);
+	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>().each(walking);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>().each(player_jump);
 	Game.system<Player, HeldWeapon&>().each(player_fire);
 	Game.system<Weapon&, Timer&>().each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
 	Game.system<Weapon&, Timer&, Hitscan&, Damage&>().each(launch_hitscan);
 	Game.system<Health&>().each(die_when_no_health);
-	Game.system<Position&, Rotation&, Walk&, Target&>().each(chase_target);
+	// Game.system<Position&, Rotation&, Walk&, Target&>().each(chase_target);
+	Game.system<Position&, Rotation&, MoveDir&, Target&>().each(chase_target);
 	Game.system<Position&, Target&, MeleeAttack&>().each(melee_attack);
 	Game.system<HSE::Model&>().with<Monster>().each(monster_animation);
 
@@ -51,8 +52,11 @@ int main() {
 		.member("max", &Health::max)
 		.member("now", &Health::now);
 
+	Game.component<MoveDir>()
+		.member("value", &MoveDir::value);
+
 	Game.component<Walk>()
-		.member("direction", &Walk::direction)
+		// .member("direction", &Walk::direction)
 		.member("max_speed", &Walk::max_speed)
 		.member("acceleration", &Walk::acceleration)
 		.member("decceleration", &Walk::decceleration)

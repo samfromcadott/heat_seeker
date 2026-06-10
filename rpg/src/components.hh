@@ -24,8 +24,11 @@ struct PlayerCamera {
 	HSE::vec3 offset;
 };
 
+struct MoveDir {
+	HSE::vec3 value;
+};
+
 struct Walk {
-	HSE::vec3 direction;
 	float max_speed = 10.0;
 	float acceleration = 3.125;
 	float decceleration = 3.125;

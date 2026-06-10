@@ -27,6 +27,7 @@ prefab monster_zombie {
 	Monster
 	Target
 	Velocity
+	MoveDir
 
 	ModelOptions: {
 		file: "base/models/zombie.glb"

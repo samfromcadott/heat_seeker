@@ -6,13 +6,13 @@
 
 using namespace HSE;
 
-void chase_target(Position& p, Rotation& r, Walk& gm, Target& t) {
+void chase_target(HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
 	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
 
 	// Get direction to target
 	vec3 dir = vec3( t.entity.get<Position>() ) - vec3(p);
 	dir = normalize(dir);
-	gm.direction = dir;
+	md.value = dir;
 
 	// Rotate to movement direction
 	r = quat(vec3( 0, 0, atan2(dir.y, dir.x) ));
@@ -27,8 +27,8 @@ void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, MeleeAttac
 	if (dist > attack.range) return;
 
 	// Stop monster if it's moving
-	if ( monster.has<Walk>() )
-		monster.get_mut<Walk>().direction = vec3(0,0,0);
+	if ( monster.has<MoveDir>() )
+		monster.get_mut<MoveDir>().value = vec3(0,0,0);
 
 	fire_weapon(attack.weapon);
 }

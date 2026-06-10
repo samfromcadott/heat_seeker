@@ -63,6 +63,7 @@ prefab weapon_pistol {
 prefab RpgGuy {
 	Player
 	Velocity
+	MoveDir
 
 	Health: {
 		now: 100
@@ -97,15 +98,3 @@ prefab RpgGuy {
 		entity: new prefab _ : weapon_pistol {}
 	}
 }
-
-// player : RpgGuy {
-// 	Position: {-2.0, 0.0, 0.0}
-// 	Rotation: {1,0,0,0}
-// 	HeldWeapon: {
-// 		entity: new _ : weapon_ball {}
-// 	}
-// }
-// player : RpgGuy {
-// 	Position: {-2.0, 0.0, 0.0}
-// 	Rotation: {1,0,0,0}
-// }
