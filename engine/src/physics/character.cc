@@ -52,9 +52,9 @@ CharacterBody::~CharacterBody() {
 
 void CharacterBody::update() {
 	JPH::CharacterVirtual::ExtendedUpdateSettings update_settings;
-	update_settings.mStickToFloorStepDown = -body->GetUp() * update_settings.mStickToFloorStepDown.Length();
 	update_settings.mWalkStairsStepUp = {0,0,0.5};
 	update_settings.mStickToFloorStepDown = {0,0,-0.5};
+
 	body->ExtendedUpdate(
 		1.0/60.0,
 		engine->physics_system.GetGravity() * gravity_scale,
