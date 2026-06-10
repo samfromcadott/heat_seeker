@@ -10,7 +10,6 @@ const char* gouraud_frag =
 #include "render/shaders/gouraud_frag.glsl"
 ;
 
-// HsePhysics::HsePhysics(flecs::world& world) {
 void HSE::init_physics(flecs::world& world) {
 	// Add physics engine
 	world.component<HSE::PhysicsEngine>().add(flecs::Singleton);
@@ -59,20 +58,34 @@ void HSE::init_physics(flecs::world& world) {
 		.member("gravity_scale", &HSE::CharacterBodyOptions::gravity_scale);
 
 	// Register systems
-	world.system<HSE::Body&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::pos_to_body);
-	world.system<HSE::Body&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::rot_to_body);
-	world.system<HSE::Body&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::vel_to_body);
-	world.system<HSE::CharacterBody&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::pos_to_character);
-	world.system<HSE::CharacterBody&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::rot_to_character);
-	world.system<HSE::CharacterBody&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::vel_to_character);
-	world.system<HSE::PhysicsEngine&>().kind(flecs::PreUpdate).each(HSE::physics_update);
-	world.system<HSE::CharacterBody&>().kind(flecs::PreUpdate).each(HSE::character_update);
-	world.system<HSE::Body&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::body_to_pos);
-	world.system<HSE::Body&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::body_to_rot);
-	world.system<HSE::Body&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::body_to_vel);
-	world.system<HSE::CharacterBody&, HSE::Position&>().kind(flecs::PreUpdate).each(HSE::character_to_pos);
-	world.system<HSE::CharacterBody&, HSE::Rotation&>().kind(flecs::PreUpdate).each(HSE::character_to_rot);
-	world.system<HSE::CharacterBody&, HSE::Velocity&>().kind(flecs::PreUpdate).each(HSE::character_to_vel);
+	world.system<HSE::Body&, HSE::Position&>("HSE::pos_to_body")
+		.kind(flecs::PreUpdate).each(HSE::pos_to_body);
+	world.system<HSE::Body&, HSE::Rotation&>("HSE::rot_to_body")
+		.kind(flecs::PreUpdate).each(HSE::rot_to_body);
+	world.system<HSE::Body&, HSE::Velocity&>("HSE::vel_to_body")
+		.kind(flecs::PreUpdate).each(HSE::vel_to_body);
+	world.system<HSE::CharacterBody&, HSE::Position&>("HSE::pos_to_character")
+		.kind(flecs::PreUpdate).each(HSE::pos_to_character);
+	world.system<HSE::CharacterBody&, HSE::Rotation&>("HSE::rot_to_character")
+		.kind(flecs::PreUpdate).each(HSE::rot_to_character);
+	world.system<HSE::CharacterBody&, HSE::Velocity&>("HSE::vel_to_character")
+		.kind(flecs::PreUpdate).each(HSE::vel_to_character);
+	world.system<HSE::PhysicsEngine&>("HSE::physics_update")
+		.kind(flecs::PreUpdate).each(HSE::physics_update);
+	world.system<HSE::CharacterBody&>("HSE::character_update")
+		.kind(flecs::PreUpdate).each(HSE::character_update);
+	world.system<HSE::Body&, HSE::Position&>("HSE::body_to_pos")
+		.kind(flecs::PreUpdate).each(HSE::body_to_pos);
+	world.system<HSE::Body&, HSE::Rotation&>("HSE::body_to_rot")
+		.kind(flecs::PreUpdate).each(HSE::body_to_rot);
+	world.system<HSE::Body&, HSE::Velocity&>("HSE::body_to_vel")
+		.kind(flecs::PreUpdate).each(HSE::body_to_vel);
+	world.system<HSE::CharacterBody&, HSE::Position&>("HSE::character_to_pos")
+		.kind(flecs::PreUpdate).each(HSE::character_to_pos);
+	world.system<HSE::CharacterBody&, HSE::Rotation&>("HSE::character_to_rot")
+		.kind(flecs::PreUpdate).each(HSE::character_to_rot);
+	world.system<HSE::CharacterBody&, HSE::Velocity&>("HSE::character_to_vel")
+		.kind(flecs::PreUpdate).each(HSE::character_to_vel);
 
 
 	// Set body observer
@@ -105,15 +118,21 @@ void HSE::init_physics(flecs::world& world) {
 	});
 }
 
-// HseRender::HseRender(flecs::world& world) {
 void HSE::init_render(flecs::world& world) {
-	world.system().kind(flecs::PostUpdate).each(HSE::start_render);
-	world.system().kind(flecs::PostUpdate).each(HSE::start_3D);
-	world.system<HSE::Model&>().kind(flecs::PostUpdate).each(HSE::update_animation);
-	world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>().kind(flecs::PostUpdate).each(HSE::render_models);
-	world.system().kind(flecs::PostUpdate).each(HSE::end_3D);
-	world.system().kind(flecs::PostUpdate).each(HSE::update_ui);
-	world.system().kind(flecs::PostUpdate).each(HSE::end_render);
+	world.system("HSE::start_render")
+		.kind(flecs::PostUpdate).each(HSE::start_render);
+	world.system("HSE::start_3D")
+		.kind(flecs::PostUpdate).each(HSE::start_3D);
+	world.system<HSE::Model&>("HSE::update_animation")
+		.kind(flecs::PostUpdate).each(HSE::update_animation);
+	world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>("HSE::render_models")
+		.kind(flecs::PostUpdate).each(HSE::render_models);
+	world.system("HSE::end_3D")
+		.kind(flecs::PostUpdate).each(HSE::end_3D);
+	world.system("HSE::update_ui")
+		.kind(flecs::PostUpdate).each(HSE::update_ui);
+	world.system("HSE::end_render")
+		.kind(flecs::PostUpdate).each(HSE::end_render);
 
 	world.component<HSE::Model>();
 	world.component<ModelOptions>()
@@ -128,7 +147,6 @@ void HSE::init_render(flecs::world& world) {
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
 
-// HseCore::HseCore(flecs::world& world) {
 void HSE::init_core(flecs::world& world) {
 	// Register basic types
 	world.component<std::string>()
@@ -171,8 +189,5 @@ void HSE::init_core(flecs::world& world) {
 		.member("x", &HSE::Velocity::x)
 		.member("y", &HSE::Velocity::y)
 		.member("z", &HSE::Velocity::z);
-
-	// world.import<HsePhysics>();
-	// world.import<HseRender>();
 }
 

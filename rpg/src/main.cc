@@ -29,19 +29,18 @@ int main() {
 	init_physics(Game);
 	init_render(Game);
 
-	Game.system<PlayerCamera&, Position&, Rotation&>().each(mouse_look);
-	Game.system<Player, Velocity&, MoveDir&, Rotation&>().each(player_movement);
-	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>().each(walking);
-	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>().each(player_jump);
-	Game.system<Player, HeldWeapon&>().each(player_fire);
-	Game.system<Weapon&, Timer&>().each(weapon_update);
-	Game.system<Weapon&, Timer&, LaunchMissile&>().each(launch_missile);
-	Game.system<Weapon&, Timer&, Hitscan&, Damage&>().each(launch_hitscan);
-	Game.system<Health&>().each(die_when_no_health);
-	// Game.system<Position&, Rotation&, Walk&, Target&>().each(chase_target);
-	Game.system<Position&, Rotation&, MoveDir&, Target&>().each(chase_target);
-	Game.system<Position&, Target&, MeleeAttack&>().each(melee_attack);
-	Game.system<HSE::Model&>().with<Monster>().each(monster_animation);
+	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").each(mouse_look);
+	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
+	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);
+	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);
+	Game.system<Player, HeldWeapon&>("player_fire").each(player_fire);
+	Game.system<Weapon&, Timer&>("weapon_update").each(weapon_update);
+	Game.system<Weapon&, Timer&, LaunchMissile&>("launch_missile").each(launch_missile);
+	Game.system<Weapon&, Timer&, Hitscan&, Damage&>("launch_hitscan").each(launch_hitscan);
+	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
+	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
+	Game.system<Position&, Target&, MeleeAttack&>("melee_attack").each(melee_attack);
+	Game.system<HSE::Model&>().with<Monster>("monster_animation").each(monster_animation);
 
 	// Register components
 	Game.component<Player>();
@@ -56,7 +55,6 @@ int main() {
 		.member("value", &MoveDir::value);
 
 	Game.component<Walk>()
-		// .member("direction", &Walk::direction)
 		.member("max_speed", &Walk::max_speed)
 		.member("acceleration", &Walk::acceleration)
 		.member("decceleration", &Walk::decceleration)
