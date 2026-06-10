@@ -15,13 +15,6 @@ void HSE::load_level(flecs::world& world, const string& filename) {
 		flecs::entity entity = parse_entity(world, e);
 		entity.set_name( name.c_str() );
 	}
-
-	// Make entities from models
-	// for (const auto& m : json_file["MODEL"]) {
-	// 	auto entity = world.entity();
-	// 	add_level_model(entity, m);
-	// 	add_level_collider(entity);
-	// }
 }
 
 flecs::entity HSE::parse_entity(flecs::world& world, const nlohmann::json& json) {
@@ -90,18 +83,15 @@ void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 	model.meshes = new Mesh[model.meshCount];
 
 	// Materials
-	// model.materials = new Material[ model.meshCount ];
-	model.materials = new Material[1];
-	// model.materialCount = model.meshCount;
-	model.materialCount = 1;
+	model.materials = new Material[ model.meshCount ];
+	model.materialCount = model.meshCount;
 	model.meshMaterial = new int[model.meshCount];
-	model.materials[0] = LoadMaterialDefault();
-	model.materials[0].shader = gouraud_shader;
 
 	// Convert the meshes
 	for (int i=0; i < model.meshCount; i++) {
 		auto& m = json["MESH"][i];
 		Mesh mesh = {0};
+
 		mesh.vertices = new float[ m["VERT"].get_binary().size() / 4 ];
 		mesh.normals = new float[ m["NORM"].get_binary().size() / 4 ];
 		mesh.texcoords = new float[ m["UV"].get_binary().size() / 4 ];
@@ -113,9 +103,8 @@ void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 		memcpy(mesh.normals, m["NORM"].get_binary().data(), m["NORM"].get_binary().size());
 		memcpy(mesh.texcoords, m["UV"].get_binary().data(), m["UV"].get_binary().size());
 
-		// model.meshMaterial[i] = i;
-		model.meshMaterial[i] = 0;
-		// model.materials[i] = level_materials[ j["MESH"][i]["MAT"] ];
+		model.materials[i] = load_level_material( m["MAT"] );
+		model.meshMaterial[i] = i;
 		model.meshes[i] = mesh;
 		UploadMesh(&model.meshes[i], false);
 	}
@@ -137,4 +126,12 @@ void HSE::add_level_collider(flecs::entity& entity) {
 	);
 
 	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );
+}
+
+Material HSE::load_level_material(const std::string& name) {
+	Material mat = LoadMaterialDefault();
+	mat.shader = gouraud_shader;
+	mat.maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture( name.c_str() );
+
+	return mat;
 }
