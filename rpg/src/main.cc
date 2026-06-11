@@ -62,7 +62,7 @@ int main() {
 		.member("decceleration_air", &Walk::decceleration_air);
 
 	Game.component<PlayerCamera>()
-		.member("rotation", &PlayerCamera::rotation)
+		.member("pitch", &PlayerCamera::pitch)
 		.member("offset", &PlayerCamera::offset);
 
 	Game.component<Jump>()

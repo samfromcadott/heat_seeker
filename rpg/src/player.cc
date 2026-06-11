@@ -12,15 +12,16 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 	Vector2 delta = GetMouseDelta();
 
 	// Update camera rotation
-	player_camera.rotation.z -= delta.x * GetFrameTime() * 0.1;
-	player_camera.rotation.y -= delta.y * GetFrameTime() * 0.1;
-	player_camera.rotation.y = std::clamp(player_camera.rotation.y, -1.5f, 1.5f);
+	float yaw = eulerAngles( quat(rotation) ).z;
+	yaw -= delta.x * GetFrameTime() * 0.1;
+	player_camera.pitch -= delta.y * GetFrameTime() * 0.1;
+	player_camera.pitch = std::clamp(player_camera.pitch, -1.5f, 1.5f);
 
-	rotation = quat( vec3(0.0,0.0,player_camera.rotation.z) ); // Update player rotation
+	rotation = quat( vec3(0.0,0.0,yaw) ); // Update player rotation
 
 	// Update view
-	vec3 vector_h( cos(player_camera.rotation.z), sin(player_camera.rotation.z), 0.0f );
-	vec3 vector_v( cos(player_camera.rotation.y), 0.0f, sin(player_camera.rotation.y) );
+	vec3 vector_h( cos(yaw), sin(yaw), 0.0f );
+	vec3 vector_v( cos(player_camera.pitch), 0.0f, sin(player_camera.pitch) );
 
 	vec3 camera_target( vector_h.x*vector_v.x, vector_h.y*vector_v.x, vector_v.z );
 	camera_target += vec3(position) + player_camera.offset;

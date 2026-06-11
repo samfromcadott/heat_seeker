@@ -20,7 +20,7 @@ struct Health {
 };
 
 struct PlayerCamera {
-	HSE::vec3 rotation;
+	float pitch = 0;
 	HSE::vec3 offset;
 };
 
