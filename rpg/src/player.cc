@@ -14,16 +14,13 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 	// Update camera rotation
 	float yaw = eulerAngles( quat(rotation) ).z;
 	yaw -= delta.x * GetFrameTime() * 0.1;
-	player_camera.pitch -= delta.y * GetFrameTime() * 0.1;
+	player_camera.pitch += delta.y * GetFrameTime() * 0.1;
 	player_camera.pitch = std::clamp(player_camera.pitch, -1.5f, 1.5f);
 
 	rotation = quat( vec3(0.0,0.0,yaw) ); // Update player rotation
 
 	// Update view
-	vec3 vector_h( cos(yaw), sin(yaw), 0.0f );
-	vec3 vector_v( cos(player_camera.pitch), 0.0f, sin(player_camera.pitch) );
-
-	vec3 camera_target( vector_h.x*vector_v.x, vector_h.y*vector_v.x, vector_v.z );
+	vec3 camera_target = quat( vec3(0, player_camera.pitch, yaw) ) * vec3(1,0,0);
 	camera_target += vec3(position) + player_camera.offset;
 
 	auto camera_position = vec3(position) + player_camera.offset;
