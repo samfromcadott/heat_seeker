@@ -21,6 +21,8 @@ void weapon_update(Weapon& weapon, Timer& timer) {
 void fire_weapon(flecs::entity weapon) {
 	auto& timer = weapon.get_mut<Timer>();
 	if (!timer.active) timer.active = true;
+
+	// If the weapon has a sound play it
 }
 
 void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMissile& lm) {
@@ -51,11 +53,24 @@ void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan&
 	auto owner = entity.parent();
 
 	// Create a raycast
-	vec3 p = vec3( owner.get<Position>() );
-	quat r = quat( owner.get<Rotation>() );
-	vec3 start = p + ( r * vec3(0.251,0,0) );
-	vec3 dir(hs.range, 0, 0);
-	dir = r * dir;
+	vec3 start, dir;
+	if ( owner.has<PlayerCamera>() ) {
+		vec3 p = vec3( owner.get<Position>() );
+		quat r = quat( owner.get<Rotation>() );
+
+		float yaw = eulerAngles( quat(r) ).z;
+		float pitch = owner.get<PlayerCamera>().pitch;
+
+		dir = quat(vec3(0, pitch, yaw)) * vec3(1,0,0);
+		start = p + owner.get<PlayerCamera>().offset + dir;
+	}
+	else {
+		vec3 p = vec3( owner.get<Position>() );
+		quat r = quat( owner.get<Rotation>() );
+		start = p + ( r * vec3(0.251,0,0) );
+		dir = vec3(hs.range, 0, 0);
+		dir = r * dir;
+	}
 
 	// Check for collisions
 	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir);
