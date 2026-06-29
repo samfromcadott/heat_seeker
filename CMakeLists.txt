@@ -7,10 +7,12 @@ set(USE_STATIC_MSVC_RUNTIME_LIBRARY OFF)
 add_subdirectory(3rdparty/raylib)
 add_subdirectory(3rdparty/flecs)
 add_subdirectory(3rdparty/Jolt/Build)
+add_subdirectory(3rdparty/physfs)
 
 include_directories(3rdparty)
 include_directories(3rdparty/glm)
 include_directories(engine/include)
+include_directories(3rdparty/physfs/src)
 
 add_library(heat_seeker
 	engine/src/hse.cc
