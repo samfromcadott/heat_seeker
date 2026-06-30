@@ -29,25 +29,27 @@ template<class T> T* read_file(const FileData& data);
 template<typename T>
 class Asset {
 private:
-	T* pointer = nullptr;
-	size_t* uses = nullptr;
-	std::string* filename = nullptr;
+	struct Data {
+		T* pointer = nullptr;
+		size_t uses = 0;
+		std::string filename = "";
+	};
+	Data* data = nullptr;
 
 public:
 	Asset() = default;
 
 	Asset(const Asset<T>& other) {
-		pointer = other.pointer;
-		uses = other.uses;
-		filename = other.filename;
-
-		++(*uses);
+		data = other.data;
+		++(data->uses);
 	}
 
 	Asset(std::string filename) {
 		// Check if the file is already loaded
 		if ( File::asset_table.contains(filename) ) {
-			*this = *(Asset<T>*)(File::asset_table[filename]);
+			data = (Data*)(File::asset_table[filename]);
+			++(data->uses);
+			return;
 		}
 
 		// Open file
@@ -55,74 +57,68 @@ public:
 		size_t file_size = PHYSFS_fileLength(file);
 
 		// Load data
-		FileData data;
-		data.resize(file_size);
-		PHYSFS_readBytes(file, data.data(), file_size);
+		FileData file_data;
+		file_data.resize(file_size);
+		PHYSFS_readBytes(file, file_data.data(), file_size);
 		PHYSFS_close(file);
 
 		// Read file
-		pointer = File::read_file<T>(data);
+		data = new Data;
+		data->pointer = File::read_file<T>(file_data);
 
-		uses = new size_t;
-		this->filename = new std::string;
+		data->uses = 1;
+		data->filename = filename;
 
-		*uses = 1;
-		*(this->filename) = filename;
-
-		File::asset_table[filename] = this;
+		File::asset_table[filename] = data;
 	}
 
 	~Asset() {
-		if (!pointer) return; // Don't do anything if the resource was never initialized
+		if (!data->pointer) return; // Don't do anything if the asset was never initialized
 
-		--(*uses); // Decrement uses
-		if (*uses > 0) return; // Return if resource still has users
+		--(data->uses); // Decrement uses
+		if (data->uses > 0) return; // Return if asset still has users
 
-		// Remove entry from resource_table
-		File::asset_table.erase(*filename);
+		// Remove entry from asset_table
+		File::asset_table.erase(data->filename);
 
 		// Delete pointers
-		delete pointer;
-		delete uses;
-		delete filename;
+		delete data->pointer;
+		delete data;
 	}
 
 	Asset<T>& operator=(const Asset<T>& other) {
-		pointer = other.pointer;
-		uses = other.uses;
-		filename = other.filename;
-
-		++(*uses);
+		data = other.data;
+		++(data->uses);
 
 		return *this;
 	}
 
 	T operator*() {
-		return *pointer;
+		return *(data->pointer);
 	}
 
 	T* operator->() const {
-		return &*pointer;
+		return &(data->pointer);
 	}
 
 	explicit operator bool() const noexcept {
-		return pointer != nullptr;
+		return data != nullptr;
 	}
 
 	size_t use_count() const {
-		return uses? *uses : 0;
+		return data? data->uses : 0;
 	}
 
 	std::string path() const {
-		return filename? *filename : "Resource not initialized";
+		return data? data->filename : "Resource not initialized";
 	}
 
 	T* get() {
-		return pointer;
+		return data->pointer;
 	}
 
 	bool unique() const {
-		return *uses == 1;
+		return data->uses == 1;
 	}
 };
 
