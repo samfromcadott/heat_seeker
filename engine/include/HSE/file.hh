@@ -23,6 +23,7 @@ inline void mount(std::string directory, std::string mount_point = "/") {
 }
 
 template<class T> T* read_file(const FileData& data);
+template<> std::string* read_file(const FileData& data);
 
 }
 
@@ -70,6 +71,7 @@ public:
 		data->filename = filename;
 
 		File::asset_table[filename] = data;
+		std::cout << "Loaded " << data->filename << '\n';
 	}
 
 	~Asset() {
@@ -78,10 +80,9 @@ public:
 		--(data->uses); // Decrement uses
 		if (data->uses > 0) return; // Return if asset still has users
 
-		// Remove entry from asset_table
-		File::asset_table.erase(data->filename);
-
 		// Delete pointers
+		std::cout << "Unloaded " << data->filename << '\n';
+		File::asset_table.erase(data->filename);
 		delete data->pointer;
 		delete data;
 	}
