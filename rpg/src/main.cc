@@ -24,10 +24,16 @@ int main() {
 
 	uv_debug_texture = LoadTexture("base/textures/uv_debug.png");
 
-	// Game.import<HseCore>();
 	init_core(Game);
 	init_physics(Game);
 	init_render(Game);
+	File::mount("base");
+
+	// Testing Asset
+	{
+		Asset<std::string> text_file("test.txt");
+		std::cout << *text_file;
+	}
 
 	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").each(mouse_look);
 	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
@@ -139,18 +145,8 @@ int main() {
 	// Load scripts
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
-	// Game.script().filename("base/script/scene.flecs").run();
 	Game.script().filename("base/script/ball.flecs").run();
 	Game.script().filename("base/script/zombie.flecs").run();
-
-	// Entity to test `parse_entity`
-	// nlohmann::json test_dict;
-	// test_dict["INHERIT"] = "prop_can";
-	// test_dict["Position"]["x"] = 2;
-	// test_dict["Position"]["y"] = 2;
-	// test_dict["Position"]["z"] = 2;
-	// auto test_can = HSE::parse_entity(Game, test_dict);
-	// test_can.set_name("test_can");
 
 	// Load the first map
 	load_level(Game, "base/maps/test.hsm");
@@ -167,11 +163,15 @@ int main() {
 		auto p = Game.lookup("player");
 
 		DrawText("HEALTH", 10, 680, 10, GREEN);
+		DrawText("SPEED", 1200, 680, 10, GREEN);
 
 		if ( !p.is_valid() or !p.is_alive() ) return;
 
 		int health = p.get<Health>().now;
 		DrawText(TextFormat("%d", health), 10, 690, 20, GREEN);
+
+		float speed = length( vec3(p.get<Velocity>()) );
+		DrawText(TextFormat("%02.02f", speed), 1200, 690, 20, GREEN);
 	};
 
 	// Main game loop

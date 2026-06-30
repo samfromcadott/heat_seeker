@@ -17,6 +17,7 @@ include_directories(3rdparty/physfs/src)
 add_library(heat_seeker
 	engine/src/hse.cc
 	engine/src/modules.cc
+	engine/src/file.cc
 	engine/src/level.cc
 
 	# Render
@@ -35,7 +36,7 @@ add_library(heat_seeker
 	engine/src/physics/shape.cc
 )
 
-target_link_libraries(heat_seeker raylib flecs_static Jolt)
+target_link_libraries(heat_seeker raylib flecs_static Jolt physfs-static)
 
 add_executable(rpg
 	rpg/src/main.cc

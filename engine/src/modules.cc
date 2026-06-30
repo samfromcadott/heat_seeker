@@ -189,5 +189,7 @@ void HSE::init_core(flecs::world& world) {
 		.member("x", &HSE::Velocity::x)
 		.member("y", &HSE::Velocity::y)
 		.member("z", &HSE::Velocity::z);
+
+	File::init();
 }
 
