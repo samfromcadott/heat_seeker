@@ -14,11 +14,11 @@ namespace File {
 
 extern std::map<std::string, void*> asset_table;
 
-void init() {
+inline void init() {
 	PHYSFS_init(NULL);
 }
 
-void mount(std::string directory, std::string mount_point = "/") {
+inline void mount(std::string directory, std::string mount_point = "/") {
 	PHYSFS_mount(directory.c_str(), mount_point.c_str(), 1);
 }
 
