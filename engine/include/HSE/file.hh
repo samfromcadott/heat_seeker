@@ -18,12 +18,27 @@ inline void init() {
 	PHYSFS_init(NULL);
 }
 
-inline void mount(std::string directory, std::string mount_point = "/") {
+inline void mount(const std::string& directory, const std::string& mount_point = "/") {
 	PHYSFS_mount(directory.c_str(), mount_point.c_str(), 1);
+}
+
+inline FileData open(const std::string& filename) {
+	// Open file
+	PHYSFS_file* file = PHYSFS_openRead( filename.c_str() );
+	size_t file_size = PHYSFS_fileLength(file);
+
+	// Load data
+	FileData file_data;
+	file_data.resize(file_size);
+	PHYSFS_readBytes(file, file_data.data(), file_size);
+	PHYSFS_close(file);
+
+	return file_data;
 }
 
 template<class T> T* read_file(const FileData& data);
 template<> std::string* read_file(const FileData& data);
+template<> ModelData* read_file(const FileData& data);
 
 }
 
@@ -45,7 +60,7 @@ public:
 		++(data->uses);
 	}
 
-	Asset(std::string filename) {
+	Asset(const std::string& filename) {
 		// Check if the file is already loaded
 		if ( File::asset_table.contains(filename) ) {
 			data = (Data*)(File::asset_table[filename]);
@@ -53,18 +68,9 @@ public:
 			return;
 		}
 
-		// Open file
-		PHYSFS_file* file = PHYSFS_openRead( filename.c_str() );
-		size_t file_size = PHYSFS_fileLength(file);
-
-		// Load data
-		FileData file_data;
-		file_data.resize(file_size);
-		PHYSFS_readBytes(file, file_data.data(), file_size);
-		PHYSFS_close(file);
-
 		// Read file
 		data = new Data;
+		auto file_data = File::open(filename);
 		data->pointer = File::read_file<T>(file_data);
 
 		data->uses = 1;
