@@ -145,7 +145,6 @@ int main() {
 	// Load scripts
 	Game.script().filename("base/script/player.flecs").run();
 	Game.script().filename("base/script/can.flecs").run();
-	Game.script().filename("base/script/ball.flecs").run();
 	Game.script().filename("base/script/zombie.flecs").run();
 
 	// Load the first map

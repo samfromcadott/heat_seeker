@@ -11,7 +11,7 @@ prefab missile_ball {
 	Velocity
 
 	ModelOptions: {
-		file: "base/models/ball.obj"
+		file: "models/ball.obj"
 	}
 
 	BodyOptions: {

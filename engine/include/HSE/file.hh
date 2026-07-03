@@ -14,27 +14,10 @@ namespace File {
 
 extern std::map<std::string, void*> asset_table;
 
-inline void init() {
-	PHYSFS_init(NULL);
-}
-
-inline void mount(const std::string& directory, const std::string& mount_point = "/") {
-	PHYSFS_mount(directory.c_str(), mount_point.c_str(), 1);
-}
-
-inline FileData open(const std::string& filename) {
-	// Open file
-	PHYSFS_file* file = PHYSFS_openRead( filename.c_str() );
-	size_t file_size = PHYSFS_fileLength(file);
-
-	// Load data
-	FileData file_data;
-	file_data.resize(file_size);
-	PHYSFS_readBytes(file, file_data.data(), file_size);
-	PHYSFS_close(file);
-
-	return file_data;
-}
+void init();
+void mount(const std::string& directory, const std::string& mount_point = "/");
+FileData open(const std::string& filename);
+unsigned char* read_bin_file_callback(const char *fileName, int *dataSize);
 
 template<class T> T* read_file(const FileData& data);
 template<> std::string* read_file(const FileData& data);

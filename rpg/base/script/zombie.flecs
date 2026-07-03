@@ -30,7 +30,7 @@ prefab monster_zombie {
 	MoveDir
 
 	ModelOptions: {
-		file: "base/models/zombie.glb"
+		file: "models/zombie.glb"
 	}
 
 	Health: {

@@ -27,7 +27,6 @@ inline namespace glm { using namespace ::glm; }
 }
 
 #include "HSE/basic_types.hh"
-#include "HSE/file.hh"
 #include "HSE/physics_types.hh"
 #include "HSE/physics_systems.hh"
 #include "HSE/render_types.hh"
@@ -35,6 +34,7 @@ inline namespace glm { using namespace ::glm; }
 #include "HSE/script.hh"
 #include "HSE/modules.hh"
 #include "HSE/level.hh"
+#include "HSE/file.hh"
 
 namespace HSE {
 

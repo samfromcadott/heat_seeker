@@ -9,7 +9,7 @@ prefab prop_can {
 	Velocity
 
 	ModelOptions: {
-		file: "base/models/can.obj"
+		file: "models/can.obj"
 	}
 
 	BodyOptions: {
