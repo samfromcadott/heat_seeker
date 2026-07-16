@@ -29,7 +29,6 @@ FileData HSE::File::open(const std::string& filename) {
 }
 
 unsigned char* HSE::File::read_bin_file_callback(const char *fileName, int *dataSize) {
-	std::cout << "Reading " << fileName << " with custom callback...\n";
 	PHYSFS_file* file = PHYSFS_openRead(fileName);
 	*dataSize = PHYSFS_fileLength(file);
 
@@ -40,20 +39,51 @@ unsigned char* HSE::File::read_bin_file_callback(const char *fileName, int *data
 	return data;
 }
 
-template<> std::string* HSE::File::read_file(const FileData& data) {
+template<> std::string* HSE::File::read_file(const std::string& filename) {
+	auto data = File::open(filename);
 	std::string* s = new std::string( data.begin(), data.end() );
 	return s;
 }
 
-template<> HSE::ModelData* HSE::File::read_file(const FileData& data) {
+template<> HSE::ModelData* HSE::File::read_file(const std::string& filename) {
 	auto md = new ModelData;
-	// md->model = LoadModel( filename.c_str() );
-	// md->animations = LoadModelAnimations(filename.c_str(), &md->animation_count);
+	md->model = LoadModel( filename.c_str() );
+	md->animations = LoadModelAnimations(filename.c_str(), &md->animation_count);
 
-	// // Populate anim_names
-	// for (int i = 0; i < md->animation_count; i++) {
-	// 	md->anim_names[md->animations[i].name] = i;
-	// }
+	// Populate anim_names
+	for (int i = 0; i < md->animation_count; i++) {
+		md->anim_names[md->animations[i].name] = i;
+	}
 
 	return md;
+}
+
+template<> Texture* HSE::File::read_file(const std::string& filename) {
+	auto tex = new Texture;
+	*tex = LoadTexture( filename.c_str() );
+	return tex;
+}
+
+template<> Sound* HSE::File::read_file(const std::string& filename) {
+	auto sound = new Sound;
+	*sound = LoadSound( filename.c_str() );
+	return sound;
+}
+
+template<> void HSE::File::unload(std::string* data) {
+	delete data;
+}
+
+template<> void HSE::File::unload(ModelData* data) {
+	UnloadModel(data->model);
+	UnloadModelAnimations(data->animations, data->animation_count);
+	delete data;
+}
+
+template<> void HSE::File::unload(Texture* data) {
+	UnloadTexture(*data);
+}
+
+template<> void HSE::File::unload(Sound* data) {
+	UnloadSound(*data);
 }

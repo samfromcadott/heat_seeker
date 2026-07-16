@@ -32,9 +32,18 @@ int main() {
 	// Testing Asset
 	{
 		Asset<std::string> text_file("test.txt");
+		auto other_one = text_file;
+		text_file.load();
 		std::cout << *text_file;
+		std::cout << *other_one;
 	}
 
+	auto asset_ent = Game.entity("asset_ent");
+	asset_ent.set< Asset<std::string> >( Asset<std::string>("test.txt") );
+	asset_ent.get_mut< Asset<std::string> >().load();
+	asset_ent.destruct();
+
+	// Create systems
 	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").each(mouse_look);
 	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
 	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);

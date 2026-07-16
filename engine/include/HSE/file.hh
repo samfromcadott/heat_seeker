@@ -19,9 +19,27 @@ void mount(const std::string& directory, const std::string& mount_point = "/");
 FileData open(const std::string& filename);
 unsigned char* read_bin_file_callback(const char *fileName, int *dataSize);
 
-template<class T> T* read_file(const FileData& data);
-template<> std::string* read_file(const FileData& data);
-template<> ModelData* read_file(const FileData& data);
+template<class T> T* read_file(const std::string& filename);
+template<> std::string* read_file(const std::string& filename);
+template<> ModelData* read_file(const std::string& filename);
+template<> Texture* read_file(const std::string& filename);
+template<> Sound* read_file(const std::string& filename);
+
+template<class T> void unload(T* data);
+template<> void unload(std::string* data);
+template<> void unload(ModelData* data);
+template<> void unload(Texture* data);
+template<> void unload(Sound* data);
+
+// For serialization
+template<class T> void assign_string(T* dest, const char* path) {
+	*dest = T(path);
+}
+
+template<class T> int serialize(const flecs::serializer* s, const T* data) {
+	const char *path = data->path().c_str();
+	return s->value(flecs::String, &path);
+}
 
 }
 
@@ -51,20 +69,15 @@ public:
 			return;
 		}
 
-		// Read file
 		data = new Data;
-		auto file_data = File::open(filename);
-		data->pointer = File::read_file<T>(file_data);
-
 		data->uses = 1;
 		data->filename = filename;
 
 		File::asset_table[filename] = data;
-		std::cout << "Loaded " << data->filename << '\n';
 	}
 
 	~Asset() {
-		if (!data->pointer) return; // Don't do anything if the asset was never initialized
+		if (not data) return; // Don't do anything if the asset was never initialized
 
 		--(data->uses); // Decrement uses
 		if (data->uses > 0) return; // Return if asset still has users
@@ -72,7 +85,8 @@ public:
 		// Delete pointers
 		std::cout << "Unloaded " << data->filename << '\n';
 		File::asset_table.erase(data->filename);
-		delete data->pointer;
+		if (data->pointer)
+			File::unload(data->pointer);
 		delete data;
 	}
 
@@ -83,7 +97,11 @@ public:
 		return *this;
 	}
 
-	T operator*() {
+	T& operator*() {
+		return *(data->pointer);
+	}
+
+	const T& operator*() const {
 		return *(data->pointer);
 	}
 
@@ -93,6 +111,15 @@ public:
 
 	explicit operator bool() const noexcept {
 		return data != nullptr;
+	}
+
+	void load() {
+		if (not data) return;
+		if (data->pointer) return; // File already loaded
+
+		// Read file
+		data->pointer = File::read_file<T>(data->filename);
+		std::cout << "Loaded " << data->filename << '\n';
 	}
 
 	size_t use_count() const {
