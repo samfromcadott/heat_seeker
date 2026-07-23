@@ -85,12 +85,12 @@ JPH::PhysicsSystem& PhysicsEngine::get_system() {
 	return physics_system;
 }
 
-RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 direction) const {
-	JPH::RRayCast ray( glm_to_jolt(origin), glm_to_jolt(direction) );
+RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray) const {
+	JPH::RRayCast r( glm_to_jolt(origin), glm_to_jolt(ray) );
 
 	JPH::RayCastResult result;
 	bool had_hit = physics_system.GetNarrowPhaseQuery().CastRay(
-		ray,
+		r,
 		result,
 		JPH::SpecifiedBroadPhaseLayerFilter(BroadPhaseLayers::MOVING),
 		JPH::SpecifiedObjectLayerFilter(Layers::MOVING)

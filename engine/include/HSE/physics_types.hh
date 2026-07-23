@@ -179,7 +179,7 @@ public:
 
 	JPH::PhysicsSystem& get_system();
 
-	RayCastHit ray_cast(vec3 origin, vec3 direction) const;
+	RayCastHit ray_cast(vec3 origin, vec3 ray) const;
 
 	friend class Body;
 	friend class CharacterBody;

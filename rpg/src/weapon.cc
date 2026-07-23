@@ -73,12 +73,17 @@ void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan&
 	}
 
 	// Check for collisions
-	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir);
+	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir * hs.range);
 	if (!hit.hit) return;
+
+	if (owner.name() == "player") {
+		std::cout << hit.entity.name() << '\n';
+	}
 
 	// Reduce health for intersecting entity with Health component
 	if ( !hit.entity.has<Health>() ) return;
 	if ( !hit.entity.is_valid() or !hit.entity.is_alive() ) return;
+	if (hit.entity == owner) return;
 	hit.entity.get_mut<Health>().now -= d.value;
 
 	weapon.has_fired = true;
