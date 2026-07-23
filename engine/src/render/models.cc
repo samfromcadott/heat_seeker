@@ -13,15 +13,7 @@ ModelData::ModelData(const std::string& filename) {
 }
 
 HSE::Model::Model(const std::string& filename) {
-	if ( HSE::model_files.count(filename) == 0 )
-		HSE::model_files[filename] = ModelData(filename);
-
-	// Set the shader for the model
-	for (int i = 0; i < HSE::model_files[filename].model.materialCount; i++) {
-		HSE::model_files[filename].model.materials[i].shader = gouraud_shader;
-	}
-
-	data = &HSE::model_files[filename];
+	data = Asset<ModelData>(filename);
 }
 
 void HSE::Model::play(const std::string& anim_name) {

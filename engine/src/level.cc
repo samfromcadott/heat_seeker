@@ -12,12 +12,14 @@ void HSE::load_level(flecs::world& world, const string& filename) {
 	// Loop through entities in ENT
 	for ( const auto& [name, e] : json_file["ENT"].items() ) {
 		std::cout << "Parsing entity " << name << '\n';
-		flecs::entity entity = parse_entity(world, e);
-		entity.set_name( name.c_str() );
+		// std::string n = name;
+		flecs::entity entity = parse_entity(world, name, e);
+		// parse_entity(world, name, e);
+		// entity.set_name( name.c_str() );
 	}
 }
 
-flecs::entity HSE::parse_entity(flecs::world& world, const nlohmann::json& json) {
+flecs::entity HSE::parse_entity(flecs::world& world, const std::string& name, const nlohmann::json& json) {
 	flecs::entity entity;
 
 	// Make entity from prefab
@@ -29,6 +31,8 @@ flecs::entity HSE::parse_entity(flecs::world& world, const nlohmann::json& json)
 	else {
 		entity = world.entity();
 	}
+
+	entity.set_name( name.c_str() );
 
 	// If it has a model convert and add it
 	if ( json.contains("MODEL") ) {
@@ -75,7 +79,11 @@ void HSE::parse_component(flecs::entity& entity, const string& component, const 
 }
 
 void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
-	::Model model;
+	Asset<ModelData> data( entity.name().c_str() );
+	data.make_new();
+
+	auto& model = data->model;
+	model = {0};
 	model.transform = MatrixIdentity();
 
 	// Meshes
@@ -92,11 +100,11 @@ void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 		auto& m = json["MESH"][i];
 		Mesh mesh = {0};
 
-		mesh.vertices = new float[ m["VERT"].get_binary().size() / 4 ];
-		mesh.normals = new float[ m["NORM"].get_binary().size() / 4 ];
-		mesh.texcoords = new float[ m["UV"].get_binary().size() / 4 ];
+		mesh.vertices = new float[ m["VERT"].get_binary().size() / sizeof(float) ];
+		mesh.normals = new float[ m["NORM"].get_binary().size() / sizeof(float) ];
+		mesh.texcoords = new float[ m["UV"].get_binary().size() / sizeof(float) ];
 
-		mesh.vertexCount = m["VERT"].get_binary().size() / 4 / 3;
+		mesh.vertexCount = m["VERT"].get_binary().size() / sizeof(float) / 3;
 		mesh.triangleCount = mesh.vertexCount / 3;
 
 		memcpy(mesh.vertices, m["VERT"].get_binary().data(), m["VERT"].get_binary().size());
@@ -109,10 +117,9 @@ void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 		UploadMesh(&model.meshes[i], false);
 	}
 
-	ModelData* data = new ModelData;
-	data->model = model;
 	entity.add<HSE::Model>();
 	entity.get_mut<HSE::Model>().data = data;
+	std::cout << "Model \"" << entity.name().c_str() << "\" created\n";
 }
 
 void HSE::add_level_collider(flecs::entity& entity) {

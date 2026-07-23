@@ -20,7 +20,9 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 			shape = new JPH::CapsuleShape(options.height / 2.0, options.radius);
 			break;
 		case ShapeType::MESH:
-			shape = convert_mesh_shape( HSE::model_files[options.file].model );
+			auto model = Asset<ModelData>(options.file);
+			model.load();
+			shape = convert_mesh_shape( model->model );
 			break;
 	}
 

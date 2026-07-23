@@ -13,24 +13,14 @@ struct ModelData {
 
 	ModelData() = default;
 	ModelData(const std::string& filename);
-
-	void unload() {
-		UnloadModel(model);
-		UnloadModelAnimations(animations, animation_count);
-	}
 };
 
 struct Model {
-	ModelData* data = nullptr;
+	HSE::Asset<ModelData> data;
 	int animation = 0;
 	int frame = 0;
 
 	Model() = default;
-	Model(ModelData* data, int animation, int frame) {
-		this->data = data;
-		this->animation = animation;
-		this->frame = frame;
-	}
 	Model(const std::string& filename);
 
 	void play(const std::string& anim_name);

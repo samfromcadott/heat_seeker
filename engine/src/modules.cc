@@ -144,6 +144,13 @@ void HSE::init_render(flecs::world& world) {
 		e.remove<HSE::ModelOptions>();
 	});
 
+	world.observer<HSE::Model>().event(flecs::OnSet).each([&](flecs::entity e, HSE::Model& m) {
+		m.data.load();
+		for (int i = 0; i < m.data->model.materialCount; i++) {
+			m.data->model.materials[i].shader = gouraud_shader;
+		}
+	});
+
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
 

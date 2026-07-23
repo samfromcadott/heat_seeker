@@ -76,8 +76,8 @@ template<> void HSE::File::unload(std::string* data) {
 
 template<> void HSE::File::unload(ModelData* data) {
 	UnloadModel(data->model);
-	UnloadModelAnimations(data->animations, data->animation_count);
-	delete data;
+	if (data->animation_count > 0)
+		UnloadModelAnimations(data->animations, data->animation_count);
 }
 
 template<> void HSE::File::unload(Texture* data) {

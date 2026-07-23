@@ -9,6 +9,7 @@ namespace HSE {
 
 typedef std::vector<unsigned char> FileData;
 template<typename T> class Asset;
+struct ModelData;
 
 namespace File {
 
@@ -53,6 +54,18 @@ private:
 	};
 	Data* data = nullptr;
 
+	void unload() {
+		--(data->uses); // Decrement usess
+		if (data->uses > 0) return; // Return if asset still has users
+
+		// Delete pointers
+		std::cout << "Unloaded " << data->filename << '\n';
+		if (data->pointer)
+			File::unload(data->pointer);
+		File::asset_table.erase(data->filename);
+		delete data;
+	}
+
 public:
 	Asset() = default;
 
@@ -77,20 +90,12 @@ public:
 	}
 
 	~Asset() {
-		if (not data) return; // Don't do anything if the asset was never initialized
-
-		--(data->uses); // Decrement uses
-		if (data->uses > 0) return; // Return if asset still has users
-
-		// Delete pointers
-		std::cout << "Unloaded " << data->filename << '\n';
-		File::asset_table.erase(data->filename);
-		if (data->pointer)
-			File::unload(data->pointer);
-		delete data;
+		if (data) unload();
 	}
 
 	Asset<T>& operator=(const Asset<T>& other) {
+		if (data) unload();
+
 		data = other.data;
 		++(data->uses);
 
@@ -106,7 +111,7 @@ public:
 	}
 
 	T* operator->() const {
-		return &(data->pointer);
+		return data->pointer;
 	}
 
 	explicit operator bool() const noexcept {
@@ -132,6 +137,10 @@ public:
 
 	T* get() {
 		return data->pointer;
+	}
+
+	void make_new() {
+		data->pointer = new T;
 	}
 
 	bool unique() const {

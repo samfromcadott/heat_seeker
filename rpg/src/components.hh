@@ -79,3 +79,7 @@ struct LaunchMissile {
 	flecs::entity missile;
 	float speed;
 };
+
+struct WeaponSound {
+	Sound sound;
+};

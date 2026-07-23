@@ -5,7 +5,6 @@
 #include "weapon.hh"
 
 flecs::world HSE::Game;
-std::map<std::string, HSE::ModelData> HSE::model_files;
 Camera3D HSE::camera = {
 	.position = Vector3 { 0.0f, 10.0f, 10.0f },
 	.target = Vector3 { 0.0f, 0.0f, 0.0f },
@@ -28,20 +27,6 @@ int main() {
 	init_physics(Game);
 	init_render(Game);
 	File::mount("base");
-
-	// Testing Asset
-	{
-		Asset<std::string> text_file("test.txt");
-		auto other_one = text_file;
-		text_file.load();
-		std::cout << *text_file;
-		std::cout << *other_one;
-	}
-
-	auto asset_ent = Game.entity("asset_ent");
-	asset_ent.set< Asset<std::string> >( Asset<std::string>("test.txt") );
-	asset_ent.get_mut< Asset<std::string> >().load();
-	asset_ent.destruct();
 
 	// Create systems
 	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").each(mouse_look);
@@ -186,6 +171,10 @@ int main() {
 	while ( !WindowShouldClose() ) {
 		Game.progress();
 	}
+
+	// auto room = Game.entity("room");
+	// room.destruct();
+	Game.remove_all<HSE::Model>();
 
 	HSE::quit();
 	UnloadTexture(uv_debug_texture);

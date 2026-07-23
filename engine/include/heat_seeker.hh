@@ -27,6 +27,7 @@ inline namespace glm { using namespace ::glm; }
 }
 
 #include "HSE/basic_types.hh"
+#include "HSE/file.hh"
 #include "HSE/physics_types.hh"
 #include "HSE/physics_systems.hh"
 #include "HSE/render_types.hh"
@@ -34,13 +35,11 @@ inline namespace glm { using namespace ::glm; }
 #include "HSE/script.hh"
 #include "HSE/modules.hh"
 #include "HSE/level.hh"
-#include "HSE/file.hh"
 
 namespace HSE {
 
 extern flecs::world Game;
 extern Camera3D camera;
-extern std::map<std::string, ModelData> model_files;
 
 void init(const std::string& title, const int width, const int height);
 void quit();
