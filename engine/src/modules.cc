@@ -10,6 +10,57 @@ const char* gouraud_frag =
 #include "render/shaders/gouraud_frag.glsl"
 ;
 
+void HSE::init_core(flecs::world& world) {
+	// Register basic types
+	world.component<std::string>()
+	.opaque(flecs::String) // Opaque type that maps to string
+	.serialize([](const flecs::serializer *s, const std::string *data) {
+		const char *str = data->c_str();
+		return s->value(flecs::String, &str); // Forward to serializer
+	})
+	.assign_string([](std::string* data, const char *value) {
+		*data = value; // Assign new value to std::string
+	});
+
+	world.component<HSE::vec2>()
+	.member("x", &HSE::vec2::x)
+	.member("y", &HSE::vec2::y);
+
+	world.component<HSE::vec3>()
+	.member("x", &HSE::vec3::x)
+	.member("y", &HSE::vec3::y)
+	.member("z", &HSE::vec3::z);
+
+	world.component<HSE::quat>()
+	.member("w", &HSE::quat::w)
+	.member("x", &HSE::quat::x)
+	.member("y", &HSE::quat::y)
+	.member("z", &HSE::quat::z);
+
+	world.component<HSE::Position>("Position")
+	.member("x", &HSE::Position::x)
+	.member("y", &HSE::Position::y)
+	.member("z", &HSE::Position::z);
+
+	world.component<HSE::Rotation>("Rotation")
+	.member("w", &HSE::Rotation::w)
+	.member("x", &HSE::Rotation::x)
+	.member("y", &HSE::Rotation::y)
+	.member("z", &HSE::Rotation::z);
+
+	world.component<HSE::Velocity>("Velocity")
+	.member("x", &HSE::Velocity::x)
+	.member("y", &HSE::Velocity::y)
+	.member("z", &HSE::Velocity::z);
+
+	File::init();
+
+	world.component< HSE::Asset<Sound> >()
+	.opaque(flecs::String)
+	// .serialize( File::serialize< HSE::Asset<Sound> > )
+	.assign_string( File::assign_string< HSE::Asset<Sound> > );
+}
+
 void HSE::init_physics(flecs::world& world) {
 	// Add physics engine
 	world.component<HSE::PhysicsEngine>().add(flecs::Singleton);
@@ -153,50 +204,3 @@ void HSE::init_render(flecs::world& world) {
 
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
-
-void HSE::init_core(flecs::world& world) {
-	// Register basic types
-	world.component<std::string>()
-	.opaque(flecs::String) // Opaque type that maps to string
-	.serialize([](const flecs::serializer *s, const std::string *data) {
-		const char *str = data->c_str();
-		return s->value(flecs::String, &str); // Forward to serializer
-	})
-	.assign_string([](std::string* data, const char *value) {
-		*data = value; // Assign new value to std::string
-	});
-
-	world.component<HSE::vec2>()
-		.member("x", &HSE::vec2::x)
-		.member("y", &HSE::vec2::y);
-
-	world.component<HSE::vec3>()
-		.member("x", &HSE::vec3::x)
-		.member("y", &HSE::vec3::y)
-		.member("z", &HSE::vec3::z);
-
-	world.component<HSE::quat>()
-		.member("w", &HSE::quat::w)
-		.member("x", &HSE::quat::x)
-		.member("y", &HSE::quat::y)
-		.member("z", &HSE::quat::z);
-
-	world.component<HSE::Position>("Position")
-		.member("x", &HSE::Position::x)
-		.member("y", &HSE::Position::y)
-		.member("z", &HSE::Position::z);
-
-	world.component<HSE::Rotation>("Rotation")
-		.member("w", &HSE::Rotation::w)
-		.member("x", &HSE::Rotation::x)
-		.member("y", &HSE::Rotation::y)
-		.member("z", &HSE::Rotation::z);
-
-	world.component<HSE::Velocity>("Velocity")
-		.member("x", &HSE::Velocity::x)
-		.member("y", &HSE::Velocity::y)
-		.member("z", &HSE::Velocity::z);
-
-	File::init();
-}
-

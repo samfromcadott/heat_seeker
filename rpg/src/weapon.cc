@@ -23,6 +23,10 @@ void fire_weapon(flecs::entity weapon) {
 	if (!timer.active) timer.active = true;
 
 	// If the weapon has a sound play it
+	if ( weapon.has<WeaponSound>() ) {
+		auto& fire = weapon.get<WeaponSound>().fire;
+		PlaySound(*fire);
+	}
 }
 
 void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMissile& lm) {

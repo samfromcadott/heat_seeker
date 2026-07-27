@@ -94,6 +94,9 @@ int main() {
 		.member("weapon", &MeleeAttack::weapon)
 		.member("range", &MeleeAttack::range);
 
+	Game.component<WeaponSound>()
+		.member("fire", &WeaponSound::fire);
+
 	// Observers
 	Game.observer<Target>()
 	.event(flecs::OnAdd)
@@ -134,6 +137,12 @@ int main() {
 			ma.weapon = Game.entity().is_a(ma.weapon);
 
 		ma.weapon.child_of(owner);
+	});
+
+	Game.observer<WeaponSound>()
+	.event(flecs::OnSet)
+	.each([&](flecs::entity owner, WeaponSound& ws) {
+		ws.fire.load();
 	});
 
 	// Load scripts

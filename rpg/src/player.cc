@@ -69,6 +69,7 @@ void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocit
 }
 
 void player_fire(Player player, HeldWeapon& weapon) {
-	if ( !IsMouseButtonDown(0) ) return;
+	if ( not IsMouseButtonDown(0) ) return;
+	if ( weapon.entity.get<Timer>().active ) return;
 	fire_weapon(weapon.entity);
 }

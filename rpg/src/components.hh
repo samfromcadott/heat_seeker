@@ -81,5 +81,5 @@ struct LaunchMissile {
 };
 
 struct WeaponSound {
-	Sound sound;
+	HSE::Asset<Sound> fire;
 };
