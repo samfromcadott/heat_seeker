@@ -33,10 +33,27 @@ void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMi
 	if (weapon.has_fired) return;
 	if (timer.time < weapon.launch_time) return;
 
-	vec3 offset = raylib_to_glm(camera.target) - raylib_to_glm(camera.position);
-	vec3 launch_point = offset * 0.5f;
-	launch_point += raylib_to_glm(camera.position);
-	vec3 vel = offset * lm.speed;
+	auto owner = entity.parent();
+
+	vec3 launch_point, vel;
+	if ( owner.has<PlayerCamera>() ) {
+		vec3 p = vec3( owner.get<Position>() );
+		quat r = quat( owner.get<Rotation>() );
+
+		float yaw = eulerAngles( quat(r) ).z;
+		float pitch = owner.get<PlayerCamera>().pitch;
+
+		vec3 dir = quat(vec3(0, pitch, yaw)) * vec3(1,0,0);
+		launch_point = p + owner.get<PlayerCamera>().offset + dir;
+		vel = dir * lm.speed;
+	}
+	else {
+		vec3 p = vec3( owner.get<Position>() );
+		quat r = quat( owner.get<Rotation>() );
+		launch_point = p + ( r * vec3(0.251,0,0) );
+		vec3 dir = r * vec3(1,0,0);
+		vel = dir * lm.speed;
+	}
 
 	flecs::entity missile = Game.entity().is_a(lm.missile);
 

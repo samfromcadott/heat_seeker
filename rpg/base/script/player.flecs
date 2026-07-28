@@ -98,6 +98,6 @@ prefab RpgGuy {
 	}
 
 	HeldWeapon: {
-		entity: new prefab _ : weapon_pistol {}
+		entity: new prefab _ : weapon_ball {}
 	}
 }
