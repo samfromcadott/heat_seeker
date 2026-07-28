@@ -8,6 +8,7 @@ void HSE::File::init() {
 	std::cout << "Initializing PhysFS\n";
 	PHYSFS_init(NULL);
 	SetLoadFileDataCallback(read_bin_file_callback);
+	SetLoadFileTextCallback(read_text_file_callback);
 }
 
 void HSE::File::mount(const std::string& directory, const std::string& mount_point) {
@@ -34,6 +35,17 @@ unsigned char* HSE::File::read_bin_file_callback(const char *fileName, int *data
 
 	unsigned char* data = new unsigned char[*dataSize];
 	PHYSFS_readBytes(file, data, *dataSize);
+	PHYSFS_close(file);
+
+	return data;
+}
+
+char* HSE::File::read_text_file_callback(const char *filename) {
+	PHYSFS_file* file = PHYSFS_openRead(filename);
+	int size = PHYSFS_fileLength(file);
+
+	char* data = new char[size];
+	PHYSFS_readBytes(file, data, size);
 	PHYSFS_close(file);
 
 	return data;

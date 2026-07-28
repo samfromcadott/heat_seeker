@@ -19,6 +19,7 @@ void init();
 void mount(const std::string& directory, const std::string& mount_point = "/");
 FileData open(const std::string& filename);
 unsigned char* read_bin_file_callback(const char *fileName, int *dataSize);
+char* read_text_file_callback(const char *filename);
 
 template<class T> T* read_file(const std::string& filename);
 template<> std::string* read_file(const std::string& filename);
