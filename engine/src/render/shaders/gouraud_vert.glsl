@@ -24,7 +24,7 @@ const vec4 light_color = vec4(1.0, 1.0, 1.0, 1.0);
 const float shininess = 2.0;
 
 void main() {
-	vec4 ambient = vec4(0.2, 0.2, 0.2, 1.0);
+	vec4 ambient = vec4(0.3, 0.3, 0.3, 1.0);
 
 	 // Transform coords
 	fragPosition = vec3(matModel*vec4(vertexPosition, 1.0));
