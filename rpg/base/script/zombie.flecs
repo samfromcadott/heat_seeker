@@ -96,8 +96,8 @@ prefab monster_zombie {
 	}
 
 	MeleeAttack: {
-		// weapon: new prefab _ : zombie_melee {}
-		weapon: new prefab _ : zombie_throw {}
-		range: 10.0
+		weapon: new prefab _ : zombie_melee {}
+		// weapon: new prefab _ : zombie_throw {}
+		range: 2.0
 	}
 }
