@@ -2,4 +2,5 @@ build
 *.exe
 *.zip
 *.dll
+*.blend1
 rpg/tools
