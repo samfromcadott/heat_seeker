@@ -145,8 +145,19 @@ int main() {
 		ws.fire.load();
 	});
 
+	// Enum testing
+	// std::cout << "Testing my enum...\n";
+	// auto my_enum = Game.lookup("HSE::ShapeType");
+	// auto& enum_vec = my_enum.get<EcsConstants>().ordered_constants;
+	// for (int i = 0; i < enum_vec.count; i++) {
+	// 	ecs_enum_constant_t member = reinterpret_cast<ecs_enum_constant_t*>(enum_vec.array)[i];
+	// 	std::cout << member.name << '\t';
+	// 	std::cout << member.value_unsigned << '\n';
+	// }
+
 	// Load scripts
-	Game.script().filename("base/script/player.flecs").run();
+	// Game.script().filename("base/script/player.flecs").run();
+	load_prefab_file(Game, "base/script/player.json");
 	Game.script().filename("base/script/can.flecs").run();
 	Game.script().filename("base/script/zombie.flecs").run();
 

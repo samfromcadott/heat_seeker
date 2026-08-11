@@ -3,6 +3,7 @@
 using namespace HSE;
 using namespace std;
 using namespace nlohmann;
+using namespace flecs::meta;
 
 void HSE::load_level(flecs::world& world, const string& filename) {
 	std::cout << "Loading map " << filename << '\n';
@@ -58,6 +59,8 @@ void HSE::parse_component(flecs::entity& entity, const string& component, const 
 	auto comp_ent = world.lookup( component.c_str() );
 	if (comp_ent == 0) return; // Exit if component doesn't exist
 
+	entity.add(comp_ent);
+	if ( json.empty() ) return;
 	void* ptr = entity.ensure(comp_ent);
 
 	// Use flecs::cursor to go through component and set values
@@ -65,17 +68,62 @@ void HSE::parse_component(flecs::entity& entity, const string& component, const 
 	cur.push();
 	for ( const auto& [key, value] : json.items() ) {
 		cur.member( key.c_str() );
-		string type = cur.get_type().name().c_str();
-
-		if (type == "i32") cur.set_int(value);
-		else if (type == "i64") cur.set_int(value);
-		else if (type == "u32") cur.set_uint(value);
-		else if (type == "u64") cur.set_uint(value);
-		else if (type == "f32") cur.set_float(value);
-		else if (type == "f64") cur.set_float(value);
-		else if (type == "string") cur.set_string( string(value).c_str() );
+		parse_component_member(world, value, cur);
 	}
 	cur.pop();
+}
+
+void HSE::parse_component_member(flecs::world& world, const nlohmann::json& json, flecs::cursor& cur) {
+	auto type = cur.get_type().get<flecs::Type>().kind;
+
+	if (type == PrimitiveType) {
+		auto kind = cur.get_type().get<flecs::Primitive>().kind;
+		switch (kind) {
+			case I8: cur.set_int(json); break;
+			case I16: cur.set_int(json); break;
+			case I32: cur.set_int(json); break;
+			case I64: cur.set_int(json); break;
+			case U8: cur.set_uint(json); break;
+			case U16: cur.set_uint(json); break;
+			case U32: cur.set_uint(json); break;
+			case U64: cur.set_uint(json); break;
+			case F32: cur.set_float(json); break;
+			case F64: cur.set_float(json); break;
+			case Bool: cur.set_bool(json); break;
+			case Entity:
+				if ( json.is_string() )
+					cur.set_entity( world.lookup( string(json).c_str() ) );
+				else if ( json.is_number_integer() )
+					cur.set_entity( flecs::entity(world, json) );
+				break;
+			default: break;
+		}
+	}
+
+	else if (type == StructType) {
+		cur.push();
+		for ( const auto& [key, value] : json.items() ) {
+			cur.member( key.c_str() );
+			parse_component_member(world, value, cur);
+		}
+		cur.pop();
+	}
+
+	else if (type == EnumType) {
+		auto& enum_vec = cur.get_type().get<EcsConstants>().ordered_constants;
+		for (int i = 0; i < enum_vec.count; i++) {
+			auto& member = reinterpret_cast<ecs_enum_constant_t*>(enum_vec.array)[i];
+			if ( json != string(member.name) ) continue;
+
+			cur.set_uint(member.value_unsigned);
+			break;
+		}
+	}
+
+	else if (type == CustomType) {
+		if ( json.is_string() )
+			cur.set_string( string(json).c_str() );
+	}
 }
 
 void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {

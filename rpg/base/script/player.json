@@ -1,0 +1,50 @@
+{
+"ENT": {
+	"weapon_pistol": {
+		"COMP": {
+			"Weapon": {
+				"launch_time": 0.0,
+				"rate": 0.2
+			},
+			"Timer": {},
+			"Damage": { "value": 10 },
+			"Hitscan": { "range": 1000.0 },
+			"WeaponSound": { "fire": "sound/pistol.wav" }
+		}
+	},
+
+	"RpgGuy": {
+		"COMP": {
+			"Player": {},
+			"Velocity": {},
+			"MoveDir": {},
+			"Health": {
+				"now": 100,
+				"max": 100
+			},
+			"HSE::CharacterBodyOptions": {
+				"shape": {
+					"type": "CAPSULE",
+					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"radius": 0.25,
+					"height": 1.5
+				}
+			},
+			"Walk": {
+				"max_speed": 10.0,
+				"acceleration": 3.125,
+				"decceleration": 3.125,
+				"acceleration_air": 0.5,
+				"decceleration_air": 0.0
+			},
+			"Jump": { "speed": 5.0 },
+			"PlayerCamera": {
+				"offset": {"x":0.0, "y":0.0, "z":0.75}
+			},
+			"HeldWeapon": {
+				"entity": "weapon_pistol"
+			}
+		}
+	}
+}
+}
