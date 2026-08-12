@@ -146,13 +146,11 @@ int main() {
 	});
 
 	// Load scripts
-	// Game.script().filename("base/script/player.flecs").run();
-	load_prefab_file(Game, "base/script/player.json");
-	Game.script().filename("base/script/can.flecs").run();
-	Game.script().filename("base/script/zombie.flecs").run();
+	load_prefab_file(Game, "data/player.json");
+	load_prefab_file(Game, "data/zombie.json");
 
 	// Load the first map
-	load_level(Game, "base/maps/test.hsm");
+	load_level(Game, "maps/test.hsm");
 
 	Game.import<flecs::stats>();
 

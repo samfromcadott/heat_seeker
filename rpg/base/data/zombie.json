@@ -1,0 +1,109 @@
+{
+"ENT": {
+	"missile_zombie_ball": {
+		"COMP": {
+			"Missile": {},
+
+			"Position": {},
+			"Rotation": {},
+			"Velocity": {},
+
+			"HSE::ModelOptions": {
+				"file": "models/ball.obj"
+			},
+
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "SPHERE",
+					"radius": 0.05
+				},
+				"object_layer": 1,
+				"gravity_scale": 1.0,
+				"sensor": true
+			},
+
+			"Damage": {
+				"value": 10
+			}
+		}
+	},
+
+	"zombie_throw": {
+		"COMP": {
+			"Weapon": {
+				"launch_time": 1.0,
+				"rate": 2.6
+			},
+
+			"Timer": {},
+
+			"LaunchMissile": {
+				"missile": "missile_zombie_ball",
+				"speed": 20.0
+			}
+		}
+	},
+
+	"zombie_melee": {
+		"COMP": {
+			"Timer": {},
+
+			"Weapon": {
+				"rate": 2.6,
+				"launch_time": 1.0
+			},
+
+			"Hitscan": {
+				"range": 1.0
+			},
+
+			"Damage": {
+				"value": 10
+			}
+		}
+	},
+
+	"monster_zombie": {
+		"COMP": {
+			"Position": {},
+			"Rotation": {},
+
+			"Monster": {},
+			"Target": {},
+			"Velocity": {},
+			"MoveDir": {},
+
+			"HSE::ModelOptions": {
+				"file": "models/zombie.glb"
+			},
+
+			"Health": {
+				"now": 20,
+				"max": 20
+			},
+
+			"HSE::CharacterBodyOptions": {
+				"shape": {
+					"type": "CAPSULE",
+					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"radius": 0.25,
+					"height": 1.5
+				}
+			},
+
+			"Walk": {
+				"max_speed": 5.0,
+				"acceleration": 3.125,
+				"decceleration": 3.125,
+				"acceleration_air": 0.5,
+				"decceleration_air": 0.0
+			},
+
+			"MeleeAttack": {
+				"weapon": "zombie_melee",
+				"range": 2.0
+			}
+		}
+	}
+}
+}
