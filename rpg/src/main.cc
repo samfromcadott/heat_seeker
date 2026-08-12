@@ -98,14 +98,14 @@ int main() {
 		.member("fire", &WeaponSound::fire);
 
 	// Observers
-	Game.observer<Target>()
+	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
 	.with<Monster>()
 	.each([&](flecs::entity entity, Target& t) {
 		t.entity = Game.lookup("player");
 	});
 
-	Game.observer<ContactAdded>()
+	Game.observer<ContactAdded>("missile_contact_added")
 	.event(flecs::OnSet)
 	.with<Missile>()
 	.each([](flecs::entity entity, ContactAdded& contact) {
@@ -119,7 +119,7 @@ int main() {
 		entity.destruct();
 	});
 
-	Game.observer<HeldWeapon>()
+	Game.observer<HeldWeapon>("set_held_weapon")
 	.event(flecs::OnSet)
 	.each([&](flecs::entity owner, HeldWeapon& hw) {
 		if ( !hw.entity.is_valid() ) return;
@@ -129,7 +129,7 @@ int main() {
 		hw.entity.child_of(owner);
 	});
 
-	Game.observer<MeleeAttack>()
+	Game.observer<MeleeAttack>("set_melee_attack")
 	.event(flecs::OnSet)
 	.each([&](flecs::entity owner, MeleeAttack& ma) {
 		if ( !ma.weapon.is_valid() ) return;
@@ -139,21 +139,11 @@ int main() {
 		ma.weapon.child_of(owner);
 	});
 
-	Game.observer<WeaponSound>()
+	Game.observer<WeaponSound>("set_weapon_sound")
 	.event(flecs::OnSet)
 	.each([&](flecs::entity owner, WeaponSound& ws) {
 		ws.fire.load();
 	});
-
-	// Enum testing
-	// std::cout << "Testing my enum...\n";
-	// auto my_enum = Game.lookup("HSE::ShapeType");
-	// auto& enum_vec = my_enum.get<EcsConstants>().ordered_constants;
-	// for (int i = 0; i < enum_vec.count; i++) {
-	// 	ecs_enum_constant_t member = reinterpret_cast<ecs_enum_constant_t*>(enum_vec.array)[i];
-	// 	std::cout << member.name << '\t';
-	// 	std::cout << member.value_unsigned << '\n';
-	// }
 
 	// Load scripts
 	// Game.script().filename("base/script/player.flecs").run();

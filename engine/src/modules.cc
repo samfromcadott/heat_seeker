@@ -140,29 +140,41 @@ void HSE::init_physics(flecs::world& world) {
 
 
 	// Set body observer
-	world.observer<HSE::Body>().event(flecs::OnSet).each([](flecs::entity e, HSE::Body& b) {
+	world.observer<HSE::Body>("body_added")
+	.event(flecs::OnSet)
+	.each([](flecs::entity e, HSE::Body& b) {
 		b.set_owner(e);
 	});
 
-	world.observer<HSE::Body>().event(flecs::OnRemove).each([](flecs::entity e, HSE::Body& b) {
+	world.observer<HSE::Body>("body_removed")
+	.event(flecs::OnRemove)
+	.each([](flecs::entity e, HSE::Body& b) {
 		b.destroy();
 	});
 
-	world.observer<HSE::CharacterBody>().event(flecs::OnSet).each([](flecs::entity e, HSE::CharacterBody& b) {
+	world.observer<HSE::CharacterBody>("character_body_added")
+	.event(flecs::OnSet)
+	.each([](flecs::entity e, HSE::CharacterBody& b) {
 		b.set_owner(e);
 	});
 
-	world.observer<HSE::CharacterBody>().event(flecs::OnRemove).each([](flecs::entity e, HSE::CharacterBody& b) {
+	world.observer<HSE::CharacterBody>("character_body_removed")
+	.event(flecs::OnRemove)
+	.each([](flecs::entity e, HSE::CharacterBody& b) {
 		b.destroy();
 	});
 
-	world.observer<HSE::BodyOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::BodyOptions& o) {
+	world.observer<HSE::BodyOptions>("body_options_set")
+	.event(flecs::OnSet)
+	.each([&](flecs::entity e, HSE::BodyOptions& o) {
 		// Add a new body using the options
 		e.set<HSE::Body>( HSE::Body(world, o) );
 		e.remove<HSE::BodyOptions>();
 	});
 
-	world.observer<HSE::CharacterBodyOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::CharacterBodyOptions& o) {
+	world.observer<HSE::CharacterBodyOptions>("character_body_options_set")
+	.event(flecs::OnSet)
+	.each([&](flecs::entity e, HSE::CharacterBodyOptions& o) {
 		// Add a new character body using the options
 		e.set<HSE::CharacterBody>( HSE::CharacterBody(world, o) );
 		e.remove<HSE::CharacterBodyOptions>();
@@ -189,13 +201,17 @@ void HSE::init_render(flecs::world& world) {
 	world.component<ModelOptions>()
 		.member("file", &ModelOptions::file);
 
-	world.observer<HSE::ModelOptions>().event(flecs::OnSet).each([&](flecs::entity e, HSE::ModelOptions& o) {
+	world.observer<HSE::ModelOptions>("model_options_set")
+	.event(flecs::OnSet)
+	.each([&](flecs::entity e, HSE::ModelOptions& o) {
 		// Load a model and add it to the entity
 		e.set<HSE::Model>( HSE::Model(o.file) );
 		e.remove<HSE::ModelOptions>();
 	});
 
-	world.observer<HSE::Model>().event(flecs::OnSet).each([&](flecs::entity e, HSE::Model& m) {
+	world.observer<HSE::Model>("model_set")
+	.event(flecs::OnSet)
+	.each([&](flecs::entity e, HSE::Model& m) {
 		m.data.load();
 		for (int i = 0; i < m.data->model.materialCount; i++) {
 			m.data->model.materials[i].shader = gouraud_shader;
