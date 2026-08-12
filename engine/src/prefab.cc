@@ -4,8 +4,8 @@ using namespace std;
 
 void HSE::load_prefab_file(flecs::world& world, const std::string& filename) {
 	std::cout << "Loading prefab file " << filename << '\n';
-	std::ifstream map_file(filename); // Load map
-	auto json_file = nlohmann::json::parse(map_file); // Convert to JSON object
+	auto map_file = File::open(filename);
+	auto json_file = nlohmann::json::parse(map_file);
 
 	// Loop through entities in ENT
 	for ( const auto& [name, e] : json_file["ENT"].items() ) {
@@ -15,7 +15,6 @@ void HSE::load_prefab_file(flecs::world& world, const std::string& filename) {
 
 	// Parse prefabs
 	for ( const auto& [name, e] : json_file["ENT"].items() ) {
-		std::cout << "Parsing prefab " << name << '\n';
 		parse_prefab(world, name, e);
 	}
 }

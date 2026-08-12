@@ -7,16 +7,13 @@ using namespace flecs::meta;
 
 void HSE::load_level(flecs::world& world, const string& filename) {
 	std::cout << "Loading map " << filename << '\n';
-	std::ifstream map_file(filename); // Load map
+	auto map_file = File::open(filename);
 	auto json_file = json::from_cbor(map_file); // Convert to JSON object
 
 	// Loop through entities in ENT
 	for ( const auto& [name, e] : json_file["ENT"].items() ) {
 		std::cout << "Parsing entity " << name << '\n';
-		// std::string n = name;
 		flecs::entity entity = parse_entity(world, name, e);
-		// parse_entity(world, name, e);
-		// entity.set_name( name.c_str() );
 	}
 }
 
