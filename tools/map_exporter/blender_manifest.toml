@@ -1,0 +1,14 @@
+schema_version = "1.0.0"
+
+id = "hsm_exporter"
+version = "0.0.1"
+name = "HSM Exporter"
+tagline = "An exporter for the HSM map format"
+maintainer = "Sam Jackson"
+type = "add-on"
+
+blender_version_min = "5.1.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
