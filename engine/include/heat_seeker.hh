@@ -33,7 +33,7 @@ inline namespace glm { using namespace ::glm; }
 #include "HSE/render_types.hh"
 #include "HSE/render_systems.hh"
 #include "HSE/script.hh"
-#include "HSE/prefab.hh"
+#include "HSE/data_parser.hh"
 #include "HSE/modules.hh"
 #include "HSE/level.hh"
 

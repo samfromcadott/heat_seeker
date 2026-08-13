@@ -18,7 +18,7 @@ add_library(heat_seeker
 	engine/src/hse.cc
 	engine/src/modules.cc
 	engine/src/file.cc
-	engine/src/prefab.cc
+	engine/src/data_parser.cc
 	engine/src/level.cc
 
 	# Render
