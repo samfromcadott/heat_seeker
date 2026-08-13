@@ -37,5 +37,8 @@ def make_entities():
 def get_props(object, entity):
 	for K in object.keys():
 		if K in '_RNA_UI': continue
-		entity["COMP"][K] = object[K]
+		if K == "INHERIT":
+			entity["INHERIT"] = object[K]
+		else:
+			entity["COMP"][K] = object[K]
 		

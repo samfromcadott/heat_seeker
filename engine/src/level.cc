@@ -39,8 +39,8 @@ flecs::entity HSE::parse_entity(flecs::world& world, const std::string& name, co
 	}
 
 	// Loop through keys
-	for ( const auto& [key, value] : json.items() ) {
-		if (key == "INHERIT" or key == "MODEL") continue;
+	for ( const auto& [key, value] : json["COMP"].items() ) {
+		// if (key == "INHERIT" or key == "MODEL") continue;
 
 		parse_component(entity, key, value);
 	}
