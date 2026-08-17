@@ -92,7 +92,7 @@ void HSE::parse_primitive(flecs::world& world, flecs::cursor& cur, const json& j
 				cur.set_entity( world.lookup( string(json).c_str() ) );
 			else if ( json.is_number_integer() )
 				cur.set_entity( flecs::entity(world, json) );
-		break;
+			break;
 		default: break;
 	}
 }
@@ -107,14 +107,7 @@ void HSE::parse_struct(flecs::world& world, flecs::cursor& cur, const json& json
 }
 
 void HSE::parse_enum(flecs::world& world, flecs::cursor& cur, const json& json) {
-	auto& enum_vec = cur.get_type().get<EcsConstants>().ordered_constants;
-	for (int i = 0; i < enum_vec.count; i++) {
-		auto& member = reinterpret_cast<ecs_enum_constant_t*>(enum_vec.array)[i];
-		if ( json != string(member.name) ) continue;
-
-		cur.set_uint(member.value_unsigned);
-		break;
-	}
+	cur.set_string( string(json).c_str() );
 }
 
 void HSE::parse_custom(flecs::world& world, flecs::cursor& cur, const nlohmann::json& json) {
