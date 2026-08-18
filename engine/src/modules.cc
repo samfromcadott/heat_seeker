@@ -53,8 +53,6 @@ void HSE::init_core(flecs::world& world) {
 	.member("y", &HSE::Velocity::y)
 	.member("z", &HSE::Velocity::z);
 
-	File::init();
-
 	world.component< HSE::Asset<Sound> >()
 	.opaque(flecs::String)
 	// .serialize( File::serialize< HSE::Asset<Sound> > )

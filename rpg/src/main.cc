@@ -17,12 +17,8 @@ Texture2D HSE::uv_debug_texture;
 
 using namespace HSE;
 
-int main() {
-	HSE::init("R.P.G. Game", 1280, 720);
-	DisableCursor();
-
-	uv_debug_texture = LoadTexture("base/textures/uv_debug.png");
-
+void start_game() {
+	Game = flecs::world();
 	init_core(Game);
 	init_physics(Game);
 	init_render(Game);
@@ -48,54 +44,54 @@ int main() {
 	Game.component<Missile>();
 
 	Game.component<Health>()
-		.member("max", &Health::max)
-		.member("now", &Health::now);
+	.member("max", &Health::max)
+	.member("now", &Health::now);
 
 	Game.component<MoveDir>()
-		.member("value", &MoveDir::value);
+	.member("value", &MoveDir::value);
 
 	Game.component<Walk>()
-		.member("max_speed", &Walk::max_speed)
-		.member("acceleration", &Walk::acceleration)
-		.member("decceleration", &Walk::decceleration)
-		.member("acceleration_air", &Walk::acceleration_air)
-		.member("decceleration_air", &Walk::decceleration_air);
+	.member("max_speed", &Walk::max_speed)
+	.member("acceleration", &Walk::acceleration)
+	.member("decceleration", &Walk::decceleration)
+	.member("acceleration_air", &Walk::acceleration_air)
+	.member("decceleration_air", &Walk::decceleration_air);
 
 	Game.component<PlayerCamera>()
-		.member("pitch", &PlayerCamera::pitch)
-		.member("offset", &PlayerCamera::offset);
+	.member("pitch", &PlayerCamera::pitch)
+	.member("offset", &PlayerCamera::offset);
 
 	Game.component<Jump>()
-		.member("speed", &Jump::speed);
+	.member("speed", &Jump::speed);
 
 	Game.component<Timer>()
-		.member("active", &Timer::active)
-		.member("time", &Timer::time);
+	.member("active", &Timer::active)
+	.member("time", &Timer::time);
 
 	Game.component<Weapon>()
-		.member("launch_time", &Weapon::launch_time)
-		.member("rate", &Weapon::rate)
-		.member("has_fired", &Weapon::has_fired);
+	.member("launch_time", &Weapon::launch_time)
+	.member("rate", &Weapon::rate)
+	.member("has_fired", &Weapon::has_fired);
 
 	Game.component<HeldWeapon>()
-		.member("entity", &HeldWeapon::entity);
+	.member("entity", &HeldWeapon::entity);
 
 	Game.component<Damage>()
-		.member("value", &Damage::value);
+	.member("value", &Damage::value);
 
 	Game.component<Hitscan>()
-		.member("range", &Hitscan::range);
+	.member("range", &Hitscan::range);
 
 	Game.component<LaunchMissile>()
-		.member("missile", &LaunchMissile::missile)
-		.member("speed", &LaunchMissile::speed);
+	.member("missile", &LaunchMissile::missile)
+	.member("speed", &LaunchMissile::speed);
 
 	Game.component<MeleeAttack>()
-		.member("weapon", &MeleeAttack::weapon)
-		.member("range", &MeleeAttack::range);
+	.member("weapon", &MeleeAttack::weapon)
+	.member("range", &MeleeAttack::range);
 
 	Game.component<WeaponSound>()
-		.member("fire", &WeaponSound::fire);
+	.member("fire", &WeaponSound::fire);
 
 	// Observers
 	Game.observer<Target>("set_monster_target")
@@ -152,9 +148,8 @@ int main() {
 	// Load the first map
 	load_level(Game, "maps/test.hsm");
 
+	// Create REST server
 	Game.import<flecs::stats>();
-
-	// Creates REST server on default port (27750)
 	Game.set<flecs::Rest>({});
 
 	// Setup the HUD
@@ -174,18 +169,37 @@ int main() {
 		float speed = length( vec3(p.get<Velocity>()) );
 		DrawText(TextFormat("%02.02f", speed), 1200, 690, 20, GREEN);
 	};
+}
+
+void check_reset() {
+	auto p = Game.lookup("player");
+	if ( p.is_valid() and p.is_alive() ) return;
+	if ( not IsKeyPressed(KEY_E) ) return;
+
+	Game.remove_all<HSE::Body>();
+	Game.remove_all<HSE::CharacterBody>();
+	Game.remove_all<HSE::PhysicsEngine>();
+	Game.reset();
+	start_game();
+}
+
+int main() {
+	HSE::init("R.P.G. Game", 1280, 720);
+	DisableCursor();
+	start_game();
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
 		Game.progress();
+		check_reset();
 	}
 
-	// auto room = Game.entity("room");
-	// room.destruct();
-	Game.remove_all<HSE::Model>();
+	Game.remove_all<HSE::Body>();
+	Game.remove_all<HSE::CharacterBody>();
+	Game.remove_all<HSE::PhysicsEngine>();
+	Game.reset();
 
 	HSE::quit();
-	UnloadTexture(uv_debug_texture);
 
 	return 0;
 }
