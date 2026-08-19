@@ -28,7 +28,11 @@ static bool AssertFailedImpl(const char *inExpression, const char *inMessage, co
 
 #endif // JPH_ENABLE_ASSERTS
 
+// PhysicsEngine::PhysicsEngine() :
+// broad_phase_layer_interface(8),
+// object_vs_broadphase_layer_filter(broad_phase_layer_interface) {
 PhysicsEngine::PhysicsEngine() {
+	std::cout << "Starting physics engine...\n";
 	// Physics system setup
 	JPH::RegisterDefaultAllocator();
 
@@ -40,12 +44,15 @@ PhysicsEngine::PhysicsEngine() {
 	JPH::RegisterTypes();
 
 	temp_allocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
-	// temp_allocator->Allocate(10 * 1024 * 1024);
+	bp_interface = new JPH::BroadPhaseLayerInterfaceMask(8);
+	bp_filter = new JPH::ObjectVsBroadPhaseLayerFilterMask(*bp_interface);
+	pair_filter = new JPH::ObjectLayerPairFilterMask;
 
 	job_system.Init(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 
 	// Create the physics system
-	physics_system.Init(max_bodies, body_mutexes, max_body_pairs, max_contact_constraints, broad_phase_layer_interface, object_vs_broadphase_layer_filter, object_vs_object_layer_filter);
+	// physics_system.Init(max_bodies, body_mutexes, max_body_pairs, max_contact_constraints, broad_phase_layer_interface, object_vs_broadphase_layer_filter, object_vs_object_layer_filter);
+	physics_system.Init(max_bodies, body_mutexes, max_body_pairs, max_contact_constraints, *bp_interface, *bp_filter, *pair_filter);
 
 	physics_system.SetBodyActivationListener(&body_activation_listener);
 	physics_system.SetContactListener(&contact_listener);
@@ -88,12 +95,19 @@ JPH::PhysicsSystem& PhysicsEngine::get_system() {
 RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray) const {
 	JPH::RRayCast r( glm_to_jolt(origin), glm_to_jolt(ray) );
 
+	auto layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+		Layers::MOVING, Layers::MOVING
+	);
+	auto bp_layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+		Layers::MOVING, Layers::MOVING
+	);
+
 	JPH::RayCastResult result;
 	bool had_hit = physics_system.GetNarrowPhaseQuery().CastRay(
 		r,
-		result,
-		JPH::SpecifiedBroadPhaseLayerFilter(BroadPhaseLayers::MOVING),
-		JPH::SpecifiedObjectLayerFilter(Layers::MOVING)
+		result
+		// JPH::SpecifiedBroadPhaseLayerFilter(BroadPhaseLayers::MOVING),
+		// JPH::SpecifiedObjectLayerFilter(layer)
 	);
 
 	RayCastHit hit;

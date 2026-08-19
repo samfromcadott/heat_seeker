@@ -22,14 +22,20 @@
 #include <Jolt/Physics/Character/CharacterBase.h>
 #include <Jolt/Physics/Character/CharacterID.h>
 #include <Jolt/Physics/Character/CharacterVirtual.h>
+#include <Jolt/Physics/Collision/BroadPhase/BroadPhaseLayerInterfaceMask.h>
+#include <Jolt/Physics/Collision/BroadPhase/ObjectVsBroadPhaseLayerFilterMask.h>
+#include <Jolt/Physics/Collision/ObjectLayerPairFilterMask.h>
 
 JPH_SUPPRESS_WARNINGS;
 
 namespace HSE {
 
 namespace Layers {
-	static constexpr JPH::ObjectLayer NON_MOVING = 0;
-	static constexpr JPH::ObjectLayer MOVING = 1;
+	// static constexpr JPH::ObjectLayer NON_MOVING = 0;
+	// static constexpr JPH::ObjectLayer MOVING = 1;
+	// static constexpr JPH::ObjectLayer NUM_LAYERS = 2;
+	static constexpr JPH::ObjectLayer NON_MOVING = 1;
+	static constexpr JPH::ObjectLayer MOVING = 2;
 	static constexpr JPH::ObjectLayer NUM_LAYERS = 2;
 };
 
@@ -39,8 +45,11 @@ public:
 };
 
 namespace BroadPhaseLayers {
-	static constexpr JPH::BroadPhaseLayer NON_MOVING(0);
-	static constexpr JPH::BroadPhaseLayer MOVING(1);
+	// static constexpr JPH::BroadPhaseLayer NON_MOVING(0);
+	// static constexpr JPH::BroadPhaseLayer MOVING(1);
+	// static constexpr JPH::uint NUM_LAYERS(2);
+	static constexpr JPH::BroadPhaseLayer NON_MOVING(1);
+	static constexpr JPH::BroadPhaseLayer MOVING(2);
 	static constexpr JPH::uint NUM_LAYERS(2);
 };
 
@@ -152,9 +161,15 @@ private:
 	JPH::PhysicsSystem physics_system;
 	JPH::TempAllocatorImpl* temp_allocator;
 	JPH::JobSystemThreadPool job_system;
-	BroadPhaseLayerInterface broad_phase_layer_interface;
-	ObjectVsBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
-	ObjectLayerPairFilter object_vs_object_layer_filter;
+	// BroadPhaseLayerInterface broad_phase_layer_interface;
+	// ObjectVsBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
+	// ObjectLayerPairFilter object_vs_object_layer_filter;
+	// JPH::BroadPhaseLayerInterfaceMask broad_phase_layer_interface;
+	// JPH::ObjectVsBroadPhaseLayerFilterMask object_vs_broadphase_layer_filter;
+	// JPH::ObjectLayerPairFilterMask object_vs_object_layer_filter;
+	JPH::BroadPhaseLayerInterfaceMask* bp_interface;
+	JPH::ObjectVsBroadPhaseLayerFilterMask* bp_filter;
+	JPH::ObjectLayerPairFilterMask* pair_filter;
 	BodyActivationListener body_activation_listener;
 	ContactListener contact_listener;
 	CharacterListener character_listener;

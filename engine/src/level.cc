@@ -96,7 +96,9 @@ void HSE::add_level_collider(flecs::entity& entity) {
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
 		JPH::EMotionType::Static,
-		Layers::NON_MOVING
+		JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+			Layers::NON_MOVING, Layers::MOVING
+		)
 	);
 
 	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );

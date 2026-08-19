@@ -28,7 +28,10 @@ CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& opt
 	settings.mUp = glm_to_jolt(options.up);
 	settings.mShape = convert_shape(options.shape);
 	settings.mInnerBodyShape = convert_shape(options.shape);
-	settings.mInnerBodyLayer = Layers::MOVING;
+	// settings.mInnerBodyLayer = Layers::MOVING;
+	settings.mInnerBodyLayer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+		Layers::MOVING, Layers::MOVING | Layers::NON_MOVING
+	);
 	settings.mSupportingVolume = { settings.mUp, -0.05 };
 
 	body = new JPH::CharacterVirtual(
@@ -55,12 +58,16 @@ void CharacterBody::update() {
 	update_settings.mWalkStairsStepUp = {0,0,0.5};
 	update_settings.mStickToFloorStepDown = {0,0,-0.5};
 
+	auto layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+		Layers::MOVING, Layers::MOVING | Layers::NON_MOVING
+	);
+
 	body->ExtendedUpdate(
 		1.0/60.0,
 		engine->physics_system.GetGravity() * gravity_scale,
 		update_settings,
-		engine->physics_system.GetDefaultBroadPhaseLayerFilter(Layers::MOVING),
-		engine->physics_system.GetDefaultLayerFilter(Layers::MOVING),
+		engine->physics_system.GetDefaultBroadPhaseLayerFilter(layer),
+		engine->physics_system.GetDefaultLayerFilter(layer),
 		{ },
 		{ },
 		*(engine->temp_allocator)

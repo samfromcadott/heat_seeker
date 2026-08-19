@@ -60,6 +60,7 @@ void HSE::init_core(flecs::world& world) {
 }
 
 void HSE::init_physics(flecs::world& world) {
+	std::cout << "Loading physics module...\n";
 	// Add physics engine
 	world.component<HSE::PhysicsEngine>().add(flecs::Singleton);
 	world.set<HSE::PhysicsEngine>( HSE::PhysicsEngine() );
