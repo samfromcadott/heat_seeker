@@ -28,11 +28,7 @@ static bool AssertFailedImpl(const char *inExpression, const char *inMessage, co
 
 #endif // JPH_ENABLE_ASSERTS
 
-// PhysicsEngine::PhysicsEngine() :
-// broad_phase_layer_interface(8),
-// object_vs_broadphase_layer_filter(broad_phase_layer_interface) {
 PhysicsEngine::PhysicsEngine() {
-	std::cout << "Starting physics engine...\n";
 	// Physics system setup
 	JPH::RegisterDefaultAllocator();
 
@@ -51,7 +47,6 @@ PhysicsEngine::PhysicsEngine() {
 	job_system.Init(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, std::thread::hardware_concurrency() - 1);
 
 	// Create the physics system
-	// physics_system.Init(max_bodies, body_mutexes, max_body_pairs, max_contact_constraints, broad_phase_layer_interface, object_vs_broadphase_layer_filter, object_vs_object_layer_filter);
 	physics_system.Init(max_bodies, body_mutexes, max_body_pairs, max_contact_constraints, *bp_interface, *bp_filter, *pair_filter);
 
 	physics_system.SetBodyActivationListener(&body_activation_listener);
@@ -66,6 +61,9 @@ PhysicsEngine::~PhysicsEngine() {
 	JPH::Factory::sInstance = nullptr;
 
 	delete temp_allocator;
+	delete bp_interface;
+	delete bp_filter;
+	delete pair_filter;
 }
 
 PhysicsEngine& PhysicsEngine::operator=(const PhysicsEngine& other) {

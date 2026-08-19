@@ -31,47 +31,15 @@ JPH_SUPPRESS_WARNINGS;
 namespace HSE {
 
 namespace Layers {
-	// static constexpr JPH::ObjectLayer NON_MOVING = 0;
-	// static constexpr JPH::ObjectLayer MOVING = 1;
-	// static constexpr JPH::ObjectLayer NUM_LAYERS = 2;
 	static constexpr JPH::ObjectLayer NON_MOVING = 1;
 	static constexpr JPH::ObjectLayer MOVING = 2;
 	static constexpr JPH::ObjectLayer NUM_LAYERS = 2;
 };
 
-class ObjectLayerPairFilter : public JPH::ObjectLayerPairFilter {
-public:
-	virtual bool ShouldCollide(JPH::ObjectLayer inObject1, JPH::ObjectLayer inObject2) const override;
-};
-
 namespace BroadPhaseLayers {
-	// static constexpr JPH::BroadPhaseLayer NON_MOVING(0);
-	// static constexpr JPH::BroadPhaseLayer MOVING(1);
-	// static constexpr JPH::uint NUM_LAYERS(2);
 	static constexpr JPH::BroadPhaseLayer NON_MOVING(1);
 	static constexpr JPH::BroadPhaseLayer MOVING(2);
 	static constexpr JPH::uint NUM_LAYERS(2);
-};
-
-class BroadPhaseLayerInterface final : public JPH::BroadPhaseLayerInterface {
-public:
-	BroadPhaseLayerInterface();
-
-	virtual JPH::uint GetNumBroadPhaseLayers() const override;
-
-	virtual JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override;
-
-#if defined(JPH_EXTERNAL_PROFILE) || defined(JPH_PROFILE_ENABLED)
-	virtual const char* GetBroadPhaseLayerName(JPH::BroadPhaseLayer inLayer) const override;
-#endif // JPH_EXTERNAL_PROFILE || JPH_PROFILE_ENABLED
-
-private:
-	JPH::BroadPhaseLayer mObjectToBroadPhase[Layers::NUM_LAYERS];
-};
-
-class ObjectVsBroadPhaseLayerFilter : public JPH::ObjectVsBroadPhaseLayerFilter {
-public:
-	virtual bool ShouldCollide(JPH::ObjectLayer inLayer1, JPH::BroadPhaseLayer inLayer2) const override;
 };
 
 class ContactListener : public JPH::ContactListener {
@@ -161,12 +129,6 @@ private:
 	JPH::PhysicsSystem physics_system;
 	JPH::TempAllocatorImpl* temp_allocator;
 	JPH::JobSystemThreadPool job_system;
-	// BroadPhaseLayerInterface broad_phase_layer_interface;
-	// ObjectVsBroadPhaseLayerFilter object_vs_broadphase_layer_filter;
-	// ObjectLayerPairFilter object_vs_object_layer_filter;
-	// JPH::BroadPhaseLayerInterfaceMask broad_phase_layer_interface;
-	// JPH::ObjectVsBroadPhaseLayerFilterMask object_vs_broadphase_layer_filter;
-	// JPH::ObjectLayerPairFilterMask object_vs_object_layer_filter;
 	JPH::BroadPhaseLayerInterfaceMask* bp_interface;
 	JPH::ObjectVsBroadPhaseLayerFilterMask* bp_filter;
 	JPH::ObjectLayerPairFilterMask* pair_filter;

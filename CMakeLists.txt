@@ -28,8 +28,6 @@ add_library(heat_seeker
 	# Physics
 	engine/src/physics/body.cc
 	engine/src/physics/engine.cc
-	engine/src/physics/filter.cc
-	engine/src/physics/interface.cc
 	engine/src/physics/listener.cc
 	engine/src/physics/systems.cc
 	engine/src/physics/character.cc
