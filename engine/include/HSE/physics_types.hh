@@ -25,6 +25,7 @@
 #include <Jolt/Physics/Collision/BroadPhase/BroadPhaseLayerInterfaceMask.h>
 #include <Jolt/Physics/Collision/BroadPhase/ObjectVsBroadPhaseLayerFilterMask.h>
 #include <Jolt/Physics/Collision/ObjectLayerPairFilterMask.h>
+#include <Jolt/Physics/Collision/CollisionCollectorImpl.h>
 
 JPH_SUPPRESS_WARNINGS;
 
@@ -33,14 +34,14 @@ namespace HSE {
 namespace Layers {
 	static constexpr JPH::ObjectLayer NON_MOVING = 1;
 	static constexpr JPH::ObjectLayer MOVING = 2;
-	static constexpr JPH::ObjectLayer NUM_LAYERS = 2;
 };
 
-namespace BroadPhaseLayers {
-	static constexpr JPH::BroadPhaseLayer NON_MOVING(1);
-	static constexpr JPH::BroadPhaseLayer MOVING(2);
-	static constexpr JPH::uint NUM_LAYERS(2);
-};
+// static constexpr JPH::BroadPhaseLayer BP_STATIC(0);
+// static constexpr JPH::BroadPhaseLayer BP_DYNAMIC(1);
+// static constexpr JPH::uint NUM_BP_LAYERS = 2;
+static constexpr JPH::BroadPhaseLayer BP_UNIFIED(0);
+static constexpr JPH::uint NUM_BP_LAYERS = 1;
+
 
 class ContactListener : public JPH::ContactListener {
 public:
@@ -118,8 +119,8 @@ struct CharacterBodyOptions {
 
 struct RayCastHit {
 	bool hit;
-	flecs::entity entity;
-	float fraction;
+	std::vector<flecs::entity> entities;
+	std::vector<vec3> positions;
 };
 
 class PhysicsEngine {

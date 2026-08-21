@@ -53,6 +53,7 @@ PhysicsEngine::PhysicsEngine() {
 	physics_system.SetContactListener(&contact_listener);
 
 	physics_system.SetGravity( JPH::Vec3Arg(0.0, 0.0, -9.8) );
+	bp_interface->ConfigureLayer(BP_UNIFIED, Layers::MOVING | Layers::NON_MOVING, 0);
 }
 
 PhysicsEngine::~PhysicsEngine() {
@@ -91,30 +92,18 @@ JPH::PhysicsSystem& PhysicsEngine::get_system() {
 }
 
 RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray) const {
-	JPH::RRayCast r( glm_to_jolt(origin), glm_to_jolt(ray) );
+	JPH::RayCast r( glm_to_jolt(origin), glm_to_jolt(ray) );
 
-	auto layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
-		Layers::MOVING, Layers::MOVING
-	);
-	auto bp_layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
-		Layers::MOVING, Layers::MOVING
-	);
-
-	JPH::RayCastResult result;
-	bool had_hit = physics_system.GetNarrowPhaseQuery().CastRay(
-		r,
-		result
-		// JPH::SpecifiedBroadPhaseLayerFilter(BroadPhaseLayers::MOVING),
-		// JPH::SpecifiedObjectLayerFilter(layer)
-	);
+	JPH::AllHitCollisionCollector<JPH::RayCastBodyCollector> collector;
+	physics_system.GetBroadPhaseQuery().CastRay(r, collector);
 
 	RayCastHit hit;
-	hit.hit = had_hit;
+	hit.hit = collector.mHits.size() > 0;
 
-	if (had_hit) {
-		hit.fraction = result.mFraction;
-		auto entity_id = physics_system.GetBodyInterface().GetUserData(result.mBodyID);
-		hit.entity = flecs::entity(world, entity_id);
+	for (auto& h : collector.mHits) {
+		hit.positions.push_back( origin + ray * h.mFraction );
+		auto entity_id = physics_system.GetBodyInterface().GetUserData(h.mBodyID);
+		hit.entities.push_back( flecs::entity(world, entity_id) );
 	}
 
 	return hit;
