@@ -7,7 +7,9 @@ namespace HSE {
 void load_level(flecs::world& world, const std::string& filename);
 flecs::entity parse_entity(flecs::world& world, const std::string& name, const nlohmann::json& json);
 void add_level_model(flecs::entity& entity, const nlohmann::json& json);
-void add_level_collider(flecs::entity& entity);
+void add_level_collider(flecs::entity& entity, const nlohmann::json& json);
+::Model read_level_model(const nlohmann::json& json);
+bool level_entity_has_tag(const nlohmann::json& json, const std::string& tag);
 Material load_level_material(const std::string& name);
 
 }

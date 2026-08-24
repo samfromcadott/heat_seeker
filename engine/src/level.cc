@@ -33,8 +33,9 @@ flecs::entity HSE::parse_entity(flecs::world& world, const std::string& name, co
 
 	// If it has a model convert and add it
 	if ( json.contains("MODEL") ) {
-		add_level_model(entity, json["MODEL"]);
-		add_level_collider(entity);
+		if ( not level_entity_has_tag(json, "NO_RENDER") )
+			add_level_model(entity, json["MODEL"]);
+		add_level_collider(entity, json["MODEL"]);
 	}
 
 	// Loop through keys
@@ -48,9 +49,32 @@ flecs::entity HSE::parse_entity(flecs::world& world, const std::string& name, co
 void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 	Asset<ModelData> data( entity.name().c_str() );
 	data.make_new();
+	data->model = read_level_model(json);
 
-	auto& model = data->model;
-	model = {0};
+	entity.add<HSE::Model>();
+	entity.get_mut<HSE::Model>().data = data;
+	std::cout << "Model \"" << entity.name().c_str() << "\" created\n";
+}
+
+void HSE::add_level_collider(flecs::entity& entity, const nlohmann::json& json) {
+	// Create the body
+	auto model = read_level_model(json);
+	JPH::BodyCreationSettings settings(
+		convert_mesh_shape(model),
+		JPH::RVec3::sZero(),
+		JPH::Quat::sIdentity(),
+		JPH::EMotionType::Static,
+		JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+			Layers::NON_MOVING, Layers::MOVING
+		)
+	);
+	UnloadModel(model);
+
+	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );
+}
+
+::Model HSE::read_level_model(const nlohmann::json& json) {
+	::Model model = {0};
 	model.transform = MatrixIdentity();
 
 	// Meshes
@@ -84,24 +108,15 @@ void HSE::add_level_model(flecs::entity& entity, const nlohmann::json& json) {
 		UploadMesh(&model.meshes[i], false);
 	}
 
-	entity.add<HSE::Model>();
-	entity.get_mut<HSE::Model>().data = data;
-	std::cout << "Model \"" << entity.name().c_str() << "\" created\n";
+	return model;
 }
 
-void HSE::add_level_collider(flecs::entity& entity) {
-	// Create the body
-	JPH::BodyCreationSettings settings(
-		convert_mesh_shape( entity.get<HSE::Model>().data->model ),
-		JPH::RVec3::sZero(),
-		JPH::Quat::sIdentity(),
-		JPH::EMotionType::Static,
-		JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
-			Layers::NON_MOVING, Layers::MOVING
-		)
-	);
+bool HSE::level_entity_has_tag(const nlohmann::json& json, const std::string& tag) {
+	if ( not json.contains("TAGS") ) return false;
+	if ( std::find(json["TAGS"].begin(), json["TAGS"].end(), tag) == json["TAGS"].end() )
+		return false;
 
-	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );
+	return true;
 }
 
 Material HSE::load_level_material(const std::string& name) {
