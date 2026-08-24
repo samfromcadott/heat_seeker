@@ -35,7 +35,10 @@ flecs::entity HSE::parse_entity(flecs::world& world, const std::string& name, co
 	if ( json.contains("MODEL") ) {
 		if ( not level_entity_has_tag(json, "NO_RENDER") )
 			add_level_model(entity, json["MODEL"]);
-		add_level_collider(entity, json["MODEL"]);
+
+		if ( not level_entity_has_tag(json, "NO_COLLIDE") ) {
+			add_level_collider(entity, json["MODEL"]);
+		}
 	}
 
 	// Loop through keys
