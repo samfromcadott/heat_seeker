@@ -3,12 +3,17 @@ import bpy
 # mesh = bpy.data.texts["mesh.py"].as_module()
 from . import mesh
 
+tag_names = ["NO_EXPORT", "NO_MODEL", "NO_RENDER", "NO_COLLIDE", "CONVEX"]
+
 def make_entities():
 	entities = {}
 	entities["ENT"] = {}
 
 	# Convert objects to engine entities
 	for object in bpy.data.objects:
+		if "NO_EXPORT" in object.keys() and object["NO_EXPORT"] == True:
+			continue
+
 		e = {}
 		e["COMP"] = {}
 
@@ -37,8 +42,15 @@ def make_entities():
 def get_props(object, entity):
 	for K in object.keys():
 		if K in '_RNA_UI': continue
+
 		if K == "INHERIT":
 			entity["INHERIT"] = object[K]
+		elif K in tag_names:
+			if object[K]: add_tag(entity, K)
 		else:
 			entity["COMP"][K] = object[K]
 		
+
+def add_tag(entity, tag):
+	if "TAGS" in entity: entity["TAGS"].append(tag)
+	else: entity["TAGS"] = [tag]
