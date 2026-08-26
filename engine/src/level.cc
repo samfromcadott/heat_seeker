@@ -37,7 +37,10 @@ flecs::entity HSE::parse_entity(flecs::world& world, const std::string& name, co
 			add_level_model(entity, json["MODEL"]);
 
 		if ( not level_entity_has_tag(json, "NO_COLLIDE") ) {
-			add_level_collider(entity, json["MODEL"]);
+			if ( level_entity_has_tag(json, "CONVEX") )
+				add_level_collider_convex(entity, json["MODEL"]);
+			else
+				add_level_collider(entity, json["MODEL"]);
 		}
 	}
 
@@ -72,6 +75,39 @@ void HSE::add_level_collider(flecs::entity& entity, const nlohmann::json& json) 
 		)
 	);
 	UnloadModel(model);
+
+	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );
+}
+
+void HSE::add_level_collider_convex(flecs::entity& entity, const nlohmann::json& json) {
+	JPH::Array<JPH::Vec3> points;
+
+	// Convert meshes
+	for (const auto& mesh : json["MESH"]) {
+		// Loop over vertices
+		const auto& bin = mesh["VERT"].get_binary();
+		for (int i = 0; i < bin.size(); i+=12) {
+			// Convert bytes to floats
+			float x,y,z;
+			memcpy( &x, &bin[i+0], sizeof(float) );
+			memcpy( &y, &bin[i+4], sizeof(float) );
+			memcpy( &z, &bin[i+8], sizeof(float) );
+
+			points.push_back( JPH::Vec3(x,y,z) );
+		}
+	}
+
+	auto* shape = new JPH::ConvexHullShapeSettings(points);
+	JPH::BodyCreationSettings settings(
+			shape,
+			JPH::RVec3::sZero(),
+			JPH::Quat::sIdentity(),
+			JPH::EMotionType::Static,
+			JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+			Layers::NON_MOVING, Layers::MOVING
+		)
+	);
+	// delete shape;
 
 	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );
 }
