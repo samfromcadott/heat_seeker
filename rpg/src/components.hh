@@ -5,6 +5,7 @@
 struct Player {}; // Tag for player entity
 struct Monster {};
 struct Missile {};
+struct Dead {};
 
 struct Target {
 	flecs::entity entity;
