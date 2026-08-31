@@ -73,6 +73,10 @@ float Body::get_gravity_scale() const {
 	return engine->physics_system.GetBodyInterface().GetGravityFactor(id);
 }
 
+void Body::set_sensor(bool value) {
+	engine->physics_system.GetBodyInterface().SetIsSensor(id, value);
+}
+
 void Body::destroy() {
 	engine->physics_system.GetBodyInterface().RemoveBody(id);
 	engine->physics_system.GetBodyInterface().DestroyBody(id);

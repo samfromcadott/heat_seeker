@@ -48,7 +48,16 @@ def get_props(object, entity):
 		elif K in tag_names:
 			if object[K]: add_tag(entity, K)
 		else:
-			entity["COMP"][K] = object[K]
+			# Split component name and members
+			C = K.split('.')
+			comp = C[0]
+			member = C[1]
+
+			# If component already in entity
+			if comp in entity["COMP"]:
+				entity["COMP"][comp][member] = object[K]
+			else:
+				entity["COMP"][comp] = {member: object[K]}
 		
 
 def add_tag(entity, tag):

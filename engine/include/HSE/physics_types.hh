@@ -190,6 +190,8 @@ public:
 	void set_gravity_scale(const float scale);
 	float get_gravity_scale() const;
 
+	void set_sensor(bool value);
+
 	void destroy();
 };
 

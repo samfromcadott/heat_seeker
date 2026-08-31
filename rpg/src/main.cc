@@ -93,6 +93,9 @@ void start_game(const std::string& map_name) {
 	Game.component<WeaponSound>()
 	.member("fire", &WeaponSound::fire);
 
+	Game.component<ChangeLevel>()
+	.member("level", &ChangeLevel::level);
+
 	// Observers
 	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
@@ -113,6 +116,14 @@ void start_game(const std::string& map_name) {
 			contact.other.get_mut<Health>().now -= entity.get<Damage>().value;
 
 		entity.destruct();
+	});
+
+	Game.observer<ContactAdded>("touch_change_level")
+	.event(flecs::OnSet)
+	.with<ChangeLevel>()
+	.each([](flecs::entity entity, ContactAdded& contact) {
+		if ( contact.other.has<Player>() )
+			start_game( "maps//" + entity.get<ChangeLevel>().level );
 	});
 
 	Game.observer<HeldWeapon>("set_held_weapon")

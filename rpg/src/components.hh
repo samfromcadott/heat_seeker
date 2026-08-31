@@ -84,3 +84,8 @@ struct LaunchMissile {
 struct WeaponSound {
 	HSE::Asset<Sound> fire;
 };
+
+// Trigger components
+struct ChangeLevel {
+	std::string level;
+};
