@@ -17,7 +17,7 @@ Texture2D HSE::uv_debug_texture;
 
 using namespace HSE;
 
-void start_game() {
+void start_game(const std::string& map_name) {
 	Game = flecs::world();
 	init_core(Game);
 	init_physics(Game);
@@ -146,7 +146,7 @@ void start_game() {
 	load_prefab_file(Game, "data/zombie.json");
 
 	// Load the first map
-	load_level(Game, "maps/test.hsm");
+	load_level(Game, map_name);
 
 	// Create REST server
 	Game.import<flecs::stats>();
@@ -180,13 +180,13 @@ void check_reset() {
 	Game.remove_all<HSE::CharacterBody>();
 	Game.remove_all<HSE::PhysicsEngine>();
 	Game.reset();
-	start_game();
+	start_game("maps/test.hsm");
 }
 
 int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
-	start_game();
+	start_game("maps/test.hsm");
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
