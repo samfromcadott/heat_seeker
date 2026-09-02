@@ -43,6 +43,5 @@ private:
 
 extern std::function<void(void)> ui_function;
 extern Shader gouraud_shader;
-extern Texture2D uv_debug_texture;
 
 }
