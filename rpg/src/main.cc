@@ -13,7 +13,6 @@ Camera3D HSE::camera = {
 	.projection = CAMERA_PERSPECTIVE,
 };
 Shader HSE::gouraud_shader;
-Texture2D HSE::uv_debug_texture;
 
 using namespace HSE;
 
@@ -153,8 +152,7 @@ void start_game(const std::string& map_name) {
 	});
 
 	// Load scripts
-	load_prefab_file(Game, "data/player.json");
-	load_prefab_file(Game, "data/zombie.json");
+	load_data_file(Game, "data/prefabs.json");
 
 	// Load the first map
 	load_level(Game, map_name);

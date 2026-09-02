@@ -4,20 +4,28 @@ using namespace std;
 using namespace flecs::meta;
 using namespace nlohmann;
 
-void HSE::load_prefab_file(flecs::world& world, const std::string& filename) {
+void HSE::load_data_file(flecs::world& world, const std::string& filename) {
 	std::cout << "Loading prefab file " << filename << '\n';
-	auto map_file = File::open(filename);
-	auto json_file = nlohmann::json::parse(map_file);
+	auto file = File::open(filename);
+	auto json_file = nlohmann::json::parse(file);
 
-	// Loop through entities in ENT
-	for ( const auto& [name, e] : json_file["ENT"].items() ) {
-		flecs::entity new_prefab = world.prefab();
-		new_prefab.set_name( name.c_str() );
+	if ( json_file.contains("REQUIRE") ) {
+		for ( const auto& f : json_file["REQUIRE"] ) {
+			load_data_file(world, f);
+		}
 	}
 
-	// Parse prefabs
-	for ( const auto& [name, e] : json_file["ENT"].items() ) {
-		parse_prefab(world, name, e);
+	if ( json_file.contains("PREFAB") ) {
+		// Loop through entities in PREFAB
+		for ( const auto& [name, e] : json_file["PREFAB"].items() ) {
+			flecs::entity new_prefab = world.prefab();
+			new_prefab.set_name( name.c_str() );
+		}
+
+		// Parse prefabs
+		for ( const auto& [name, e] : json_file["PREFAB"].items() ) {
+			parse_prefab(world, name, e);
+		}
 	}
 }
 

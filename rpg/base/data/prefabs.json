@@ -1,0 +1,6 @@
+{
+"REQUIRE": [
+	"data/player.json",
+	"data/zombie.json"
+]
+}
