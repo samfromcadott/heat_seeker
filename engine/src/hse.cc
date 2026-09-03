@@ -14,7 +14,6 @@ void HSE::quit() {
 }
 
 void HSE::pause(flecs::world& world) {
-	std::cout << "pause\n";
 	flecs::query<> q  = world.query_builder<>()
 	.with(flecs::System)
 	.without<NoPause>()
@@ -28,7 +27,6 @@ void HSE::pause(flecs::world& world) {
 }
 
 void HSE::resume(flecs::world& world) {
-	std::cout << "resume\n";
 	flecs::query<> q  = world.query_builder<>()
 	.with(flecs::System)
 	.with(flecs::Disabled)
