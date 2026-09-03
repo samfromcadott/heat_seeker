@@ -17,7 +17,7 @@ Shader HSE::gouraud_shader;
 
 using namespace HSE;
 
-bool paused = false;
+// bool paused = false;
 
 void start_game(const std::string& map_name) {
 	Game = flecs::world();
@@ -39,6 +39,21 @@ void start_game(const std::string& map_name) {
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
 	Game.system<Position&, Target&, MeleeAttack&>("melee_attack").each(melee_attack);
 	Game.system<HSE::Model&>("monster_animation").with<Monster>().each(monster_animation);
+	Game.system<>("pause").each([&](){
+		static bool paused = false;
+		if ( not IsKeyPressed(KEY_ESCAPE) ) return;
+
+		if (paused) {
+			resume(Game);
+			DisableCursor();
+		}
+		else {
+			pause(Game);
+			EnableCursor();
+		}
+
+		paused = !paused;
+	}).add<NoPause>();
 
 	// Register components
 	Game.component<Player>();
@@ -191,21 +206,6 @@ void check_reset() {
 	start_game("maps/test.hsm");
 }
 
-void check_pause() {
-	if ( not IsKeyPressed(KEY_ESCAPE) ) return;
-
-	if (paused) {
-		resume(Game);
-		DisableCursor();
-	}
-	else {
-		pause(Game);
-		EnableCursor();
-	}
-
-	paused = !paused;
-}
-
 int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
@@ -216,7 +216,6 @@ int main() {
 	while ( !WindowShouldClose() ) {
 		Game.progress();
 		check_reset();
-		check_pause();
 	}
 
 	Game.remove_all<HSE::Body>();
