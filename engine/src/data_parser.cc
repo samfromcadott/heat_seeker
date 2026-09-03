@@ -18,6 +18,10 @@ void HSE::load_data_file(flecs::world& world, const std::string& filename) {
 	if ( json_file.contains("PREFAB") ) {
 		// Loop through entities in PREFAB
 		for ( const auto& [name, e] : json_file["PREFAB"].items() ) {
+			// Skip prefab if something has this name
+			if ( world.lookup( name.c_str() ).is_valid() )
+				continue;
+
 			flecs::entity new_prefab = world.prefab();
 			new_prefab.set_name( name.c_str() );
 		}
