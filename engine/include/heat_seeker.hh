@@ -39,10 +39,15 @@ inline namespace glm { using namespace ::glm; }
 
 namespace HSE {
 
+struct NoPause {}; //< Tag for systems that don't get paused
+
 extern flecs::world Game;
 extern Camera3D camera;
 
 void init(const std::string& title, const int width, const int height);
 void quit();
+
+void pause(flecs::world& world);
+void resume(flecs::world& world);
 
 }

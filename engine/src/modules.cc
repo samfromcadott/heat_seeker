@@ -11,6 +11,10 @@ const char* gouraud_frag =
 ;
 
 void HSE::init_core(flecs::world& world) {
+	// Create REST server
+	Game.import<flecs::stats>();
+	Game.set<flecs::Rest>({});
+
 	// Register basic types
 	world.component<std::string>()
 	.opaque(flecs::String) // Opaque type that maps to string
@@ -57,6 +61,19 @@ void HSE::init_core(flecs::world& world) {
 	.opaque(flecs::String)
 	// .serialize( File::serialize< HSE::Asset<Sound> > )
 	.assign_string( File::assign_string< HSE::Asset<Sound> > );
+
+	world.component<HSE::NoPause>();
+
+	// Add NoPause to flecs systems
+	auto q = world.query_builder()
+	.with(EcsSystem)
+	.build();
+
+	ecs_defer_begin(world);
+	q.each([](flecs::entity system) {
+		system.add<HSE::NoPause>();
+	});
+	ecs_defer_end(world);
 }
 
 void HSE::init_physics(flecs::world& world) {
@@ -182,19 +199,19 @@ void HSE::init_physics(flecs::world& world) {
 
 void HSE::init_render(flecs::world& world) {
 	world.system("HSE::start_render")
-		.kind(flecs::PostUpdate).each(HSE::start_render);
+		.kind(flecs::PostUpdate).each(HSE::start_render).add<NoPause>();
 	world.system("HSE::start_3D")
-		.kind(flecs::PostUpdate).each(HSE::start_3D);
+		.kind(flecs::PostUpdate).each(HSE::start_3D).add<NoPause>();
 	world.system<HSE::Model&>("HSE::update_animation")
 		.kind(flecs::PostUpdate).each(HSE::update_animation);
 	world.system<HSE::Model&, HSE::Position&, HSE::Rotation&>("HSE::render_models")
-		.kind(flecs::PostUpdate).each(HSE::render_models);
+		.kind(flecs::PostUpdate).each(HSE::render_models).add<NoPause>();
 	world.system("HSE::end_3D")
-		.kind(flecs::PostUpdate).each(HSE::end_3D);
+		.kind(flecs::PostUpdate).each(HSE::end_3D).add<NoPause>();
 	world.system("HSE::update_ui")
-		.kind(flecs::PostUpdate).each(HSE::update_ui);
+		.kind(flecs::PostUpdate).each(HSE::update_ui).add<NoPause>();
 	world.system("HSE::end_render")
-		.kind(flecs::PostUpdate).each(HSE::end_render);
+		.kind(flecs::PostUpdate).each(HSE::end_render).add<NoPause>();
 
 	world.component<HSE::Model>();
 	world.component<ModelOptions>()

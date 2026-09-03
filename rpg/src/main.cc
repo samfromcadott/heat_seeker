@@ -1,4 +1,5 @@
 #include <heat_seeker.hh>
+#include <raygui.h>
 
 #include "components.hh"
 #include "systems.hh"
@@ -15,6 +16,8 @@ Camera3D HSE::camera = {
 Shader HSE::gouraud_shader;
 
 using namespace HSE;
+
+bool paused = false;
 
 void start_game(const std::string& map_name) {
 	Game = flecs::world();
@@ -157,10 +160,6 @@ void start_game(const std::string& map_name) {
 	// Load the first map
 	load_level(Game, map_name);
 
-	// Create REST server
-	Game.import<flecs::stats>();
-	Game.set<flecs::Rest>({});
-
 	// Setup the HUD
 	ui_function = [&]() {
 		DrawFPS(10, 10);
@@ -192,15 +191,32 @@ void check_reset() {
 	start_game("maps/test.hsm");
 }
 
+void check_pause() {
+	if ( not IsKeyPressed(KEY_ESCAPE) ) return;
+
+	if (paused) {
+		resume(Game);
+		DisableCursor();
+	}
+	else {
+		pause(Game);
+		EnableCursor();
+	}
+
+	paused = !paused;
+}
+
 int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
+	SetExitKey(KEY_NULL);
 	start_game("maps/test.hsm");
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
 		Game.progress();
 		check_reset();
+		check_pause();
 	}
 
 	Game.remove_all<HSE::Body>();
