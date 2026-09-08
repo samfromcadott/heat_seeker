@@ -113,11 +113,11 @@ void start_game(const std::string& map_name) {
 	Game.component<ChangeLevel>()
 	.member("level", &ChangeLevel::level);
 
-	Game.component<AmmoSet>()
-	.member("ammo", &AmmoSet::ammo);
+	Game.component<Ammo>()
+	.member("type", &Ammo::type)
+	.member("count", &Ammo::count);
 
 	Game.component<AmmoUse>()
-	.member("ammo", &AmmoUse::ammo)
 	.member("cost", &AmmoUse::cost);
 
 	// Observers
@@ -181,8 +181,6 @@ void start_game(const std::string& map_name) {
 
 	// Load the first map
 	load_level(Game, map_name);
-	Game.entity("player").add<AmmoSet>();
-	Game.entity("player").get_mut<AmmoSet>().ammo["pistol"] = 20;
 
 	// Setup the HUD
 	ui_function = [&]() {
@@ -198,7 +196,7 @@ void start_game(const std::string& map_name) {
 		int health = p.get<Health>().now;
 		DrawText(TextFormat("%d", health), 10, 690, 20, GREEN);
 
-		int ammo = p.get_mut<AmmoSet>().ammo["pistol"];
+		int ammo = p.get<HeldWeapon>().entity.get<Ammo>().count;
 		DrawText(TextFormat("%d", ammo), 1200, 690, 20, GREEN);
 	};
 }

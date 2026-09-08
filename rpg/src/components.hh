@@ -72,12 +72,12 @@ struct Arsenal {
 	std::vector<flecs::entity> weapons;
 };
 
-struct AmmoSet {
-	std::map<std::string, int> ammo;
+struct Ammo {
+	std::string type;
+	int count;
 };
 
 struct AmmoUse {
-	std::string ammo;
 	int cost;
 };
 
