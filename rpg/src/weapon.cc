@@ -19,6 +19,18 @@ void weapon_update(Weapon& weapon, Timer& timer) {
 }
 
 void fire_weapon(flecs::entity weapon) {
+	auto owner = weapon.parent();
+	if ( weapon.has<AmmoUse>() and owner.has<AmmoSet>() ) {
+		auto& ammo_set = owner.get_mut<AmmoSet>();
+		auto& ammo_use = weapon.get<AmmoUse>();
+
+		// Return if owner doesn't have ammo
+		if ( not ammo_set.ammo.contains(ammo_use.ammo) ) return;
+		if ( ammo_set.ammo[ammo_use.ammo] <= 0 ) return;
+
+		ammo_set.ammo[ammo_use.ammo] -= ammo_use.cost;
+	}
+
 	auto& timer = weapon.get_mut<Timer>();
 	if (!timer.active) timer.active = true;
 

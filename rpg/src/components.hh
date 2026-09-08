@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <map>
 #include <heat_seeker.hh>
 
 struct Player {}; // Tag for player entity
@@ -60,6 +62,28 @@ struct Muzzle {
 // Current weapon used by a player
 struct HeldWeapon {
 	flecs::entity entity;
+};
+
+struct EquipedWeapon {
+	int index;
+};
+
+struct Arsenal {
+	std::vector<flecs::entity> weapons;
+};
+
+struct AmmoSet {
+	std::map<std::string, int> ammo;
+};
+
+struct AmmoUse {
+	std::string ammo;
+	int cost;
+};
+
+struct GiveAmmo {
+	std::string ammo;
+	int cost;
 };
 
 // Used by monsters to attack close enemies

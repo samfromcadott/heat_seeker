@@ -56,7 +56,7 @@ private:
 	Data* data = nullptr;
 
 	void unload() {
-		--(data->uses); // Decrement usess
+		--(data->uses);
 		if (data->uses > 0) return; // Return if asset still has users
 
 		// Delete pointers

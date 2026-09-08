@@ -43,7 +43,11 @@
 			"Timer": {},
 			"Damage": { "value": 10 },
 			"Hitscan": { "range": 1000.0 },
-			"WeaponSound": { "fire": "sound/pistol.wav" }
+			"WeaponSound": { "fire": "sound/pistol.wav" },
+			"AmmoUse": {
+				"ammo": "pistol",
+				"cost": 1
+			}
 		}
 	},
 

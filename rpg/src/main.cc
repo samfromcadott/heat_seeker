@@ -113,6 +113,13 @@ void start_game(const std::string& map_name) {
 	Game.component<ChangeLevel>()
 	.member("level", &ChangeLevel::level);
 
+	Game.component<AmmoSet>()
+	.member("ammo", &AmmoSet::ammo);
+
+	Game.component<AmmoUse>()
+	.member("ammo", &AmmoUse::ammo)
+	.member("cost", &AmmoUse::cost);
+
 	// Observers
 	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
@@ -174,6 +181,8 @@ void start_game(const std::string& map_name) {
 
 	// Load the first map
 	load_level(Game, map_name);
+	Game.entity("player").add<AmmoSet>();
+	Game.entity("player").get_mut<AmmoSet>().ammo["pistol"] = 20;
 
 	// Setup the HUD
 	ui_function = [&]() {
@@ -182,15 +191,15 @@ void start_game(const std::string& map_name) {
 		auto p = Game.lookup("player");
 
 		DrawText("HEALTH", 10, 680, 10, GREEN);
-		DrawText("SPEED", 1200, 680, 10, GREEN);
+		DrawText("AMMO", 1200, 680, 10, GREEN);
 
 		if ( !p.is_valid() or !p.is_alive() ) return;
 
 		int health = p.get<Health>().now;
 		DrawText(TextFormat("%d", health), 10, 690, 20, GREEN);
 
-		float speed = length( vec3(p.get<Velocity>()) );
-		DrawText(TextFormat("%02.02f", speed), 1200, 690, 20, GREEN);
+		int ammo = p.get_mut<AmmoSet>().ammo["pistol"];
+		DrawText(TextFormat("%d", ammo), 1200, 690, 20, GREEN);
 	};
 }
 
@@ -217,11 +226,6 @@ int main() {
 		Game.progress();
 		check_reset();
 	}
-
-	Game.remove_all<HSE::Body>();
-	Game.remove_all<HSE::CharacterBody>();
-	Game.remove_all<HSE::PhysicsEngine>();
-	Game.reset();
 
 	HSE::quit();
 
