@@ -1,0 +1,64 @@
+{
+"PREFAB": {
+	"weapon_rpg": {
+		"COMP": {
+			"Weapon": {
+				"launch_time": 0.0,
+				"rate": 0.1
+			},
+			"Timer": {},
+			"LaunchMissile": {
+				"missile": "missile_rpg",
+				"speed": 20.0
+			},
+			"Ammo": {
+				"type": "rpg",
+				"count": 20
+			},
+			"AmmoUse": {"cost": 1}
+		}
+	},
+
+	"missile_rpg": {
+		"COMP": {
+			"Missile": {},
+			"Position": {},
+			"Rotation": {},
+			"Velocity": {},
+			"HSE::ModelOptions": {
+				"file": "models/ball.obj"
+			},
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "SPHERE",
+					"radius": 0.05
+				},
+				"layer": 1,
+				"mask": 3,
+				"gravity_scale": 0.0,
+				"sensor": true
+			},
+			"Damage": {
+				"value": 10
+			}
+		}
+	},
+
+	"item_rpg_ammo": {
+		"COMP": {
+			"HSE::ModelOptions": {
+				"file": "models/can.obj"
+			},
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "SPHERE",
+					"radius": 0.05
+				},
+				"layer": 1,
+				"mask": 3,
+				"sensor": true
+			}
+		}
+	}
+}
+}
