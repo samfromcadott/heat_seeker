@@ -104,7 +104,8 @@ JPH::Ref<JPH::Shape> convert_mesh_shape(const ::Model& model);
 struct BodyOptions {
 	ShapeOptions shape;
 	JPH::EMotionType motion_type = JPH::EMotionType::Dynamic;
-	JPH::ObjectLayer object_layer = 0;
+	JPH::ObjectLayer layer = 0;
+	JPH::ObjectLayer mask = 0;
 	float gravity_scale = 1.0f;
 	bool sensor = false;
 };

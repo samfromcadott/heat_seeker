@@ -23,7 +23,9 @@ Body::Body(flecs::world world, const BodyOptions& options) {
 		JPH::RVec3::sZero(),
 		JPH::Quat::sIdentity(),
 		options.motion_type,
-		options.object_layer
+		JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+			options.layer, options.mask
+		)
 	);
 
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
