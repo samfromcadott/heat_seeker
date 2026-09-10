@@ -45,7 +45,6 @@
 			"Hitscan": { "range": 1000.0 },
 			"WeaponSound": { "fire": "sound/pistol.wav" },
 			"Ammo": {
-				"type": "pistol",
 				"count": 20
 			},
 			"AmmoUse": {"cost": 1}

@@ -12,7 +12,6 @@
 				"speed": 20.0
 			},
 			"Ammo": {
-				"type": "rpg",
 				"count": 20
 			},
 			"AmmoUse": {"cost": 1}
@@ -56,7 +55,12 @@
 				},
 				"layer": 1,
 				"mask": 3,
-				"sensor": true
+				"sensor": true,
+				"motion_type": "Kinematic"
+			},
+			"GiveAmmo": {
+				"weapon": "weapon_rpg",
+				"count": 4
 			}
 		}
 	}

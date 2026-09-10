@@ -73,7 +73,6 @@ struct Arsenal {
 };
 
 struct Ammo {
-	std::string type;
 	int count;
 };
 
@@ -82,8 +81,8 @@ struct AmmoUse {
 };
 
 struct GiveAmmo {
-	std::string ammo;
-	int cost;
+	flecs::entity weapon;
+	int count;
 };
 
 // Used by monsters to attack close enemies

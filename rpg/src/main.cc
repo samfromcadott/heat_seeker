@@ -114,11 +114,14 @@ void start_game(const std::string& map_name) {
 	.member("level", &ChangeLevel::level);
 
 	Game.component<Ammo>()
-	.member("type", &Ammo::type)
 	.member("count", &Ammo::count);
 
 	Game.component<AmmoUse>()
 	.member("cost", &AmmoUse::cost);
+
+	Game.component<GiveAmmo>()
+	.member("weapon", &GiveAmmo::weapon)
+	.member("count", &GiveAmmo::count);
 
 	// Observers
 	Game.observer<Target>("set_monster_target")
@@ -139,6 +142,22 @@ void start_game(const std::string& map_name) {
 		if ( contact.other.has<Health>() and entity.has<Damage>() )
 			contact.other.get_mut<Health>().now -= entity.get<Damage>().value;
 
+		entity.destruct();
+	});
+
+	Game.observer<ContactAdded>("give_ammo_contact")
+	.event(flecs::OnSet)
+	.with<GiveAmmo>()
+	.each([](flecs::entity entity, ContactAdded& contact) {
+		if ( not contact.other.has<HeldWeapon>() ) return;
+
+		auto held_weapon = contact.other.get_mut<HeldWeapon>().entity;
+		auto give_ammo = entity.get<GiveAmmo>();
+
+		if ( not held_weapon.is_a(give_ammo.weapon) )
+			return;
+
+		held_weapon.get_mut<Ammo>().count += give_ammo.count;
 		entity.destruct();
 	});
 
