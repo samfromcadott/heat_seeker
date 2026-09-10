@@ -13,8 +13,9 @@
 				"shape": {
 					"type": "CAPSULE",
 					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"translation": {"x":0.0, "y":0.0, "z":0.875},
 					"radius": 0.25,
-					"height": 1.5
+					"height": 1.75
 				}
 			},
 			"Walk": {
@@ -26,7 +27,7 @@
 			},
 			"Jump": { "speed": 5.0 },
 			"PlayerCamera": {
-				"offset": {"x":0.0, "y":0.0, "z":0.75}
+				"offset": {"x":0.0, "y":0.0, "z":1.75}
 			},
 			"HeldWeapon": {
 				"entity": "weapon_rpg"
