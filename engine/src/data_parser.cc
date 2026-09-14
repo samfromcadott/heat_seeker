@@ -99,7 +99,7 @@ void HSE::parse_primitive(flecs::world& world, flecs::cursor& cur, const json& j
 		case F32: cur.set_float(json); break;
 		case F64: cur.set_float(json); break;
 		case Bool: cur.set_bool(json); break;
-		case Entity:
+		case flecs::meta::Entity:
 			if ( json.is_string() )
 				cur.set_entity( world.lookup( string(json).c_str() ) );
 			else if ( json.is_number_integer() )
