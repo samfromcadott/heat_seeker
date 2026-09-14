@@ -156,6 +156,7 @@ void start_game(const std::string& map_name) {
 		auto give_ammo = entity.get<GiveAmmo>();
 
 		for (auto& weapon : arsenal.weapons) {
+			if ( not weapon.is_valid() ) continue;
 			if ( not weapon.has<Ammo>() ) continue;
 			if ( not weapon.is_a(give_ammo.weapon) ) continue;
 
@@ -170,6 +171,17 @@ void start_game(const std::string& map_name) {
 	.each([](flecs::entity entity, ContactAdded& contact) {
 		if ( contact.other.has<Player>() )
 			start_game( "maps//" + entity.get<ChangeLevel>().level );
+	});
+
+	Game.observer<Arsenal>("set_arsenal")
+	.event(flecs::OnSet)
+	.each([&](flecs::entity owner, Arsenal& arsenal) {
+		for (auto& weapon : arsenal.weapons) {
+			if ( weapon.has(flecs::Prefab) )
+				weapon = Game.entity().is_a(weapon);
+
+			weapon.child_of(owner);
+		}
 	});
 
 	Game.observer<MeleeAttack>("set_melee_attack")
@@ -193,18 +205,6 @@ void start_game(const std::string& map_name) {
 
 	// Load the first map
 	load_level(Game, map_name);
-
-	// Give the player weapons to test
-	auto player = Game.lookup("player");
-	auto player_punch = Game.entity("player_punch");
-	player_punch.is_a( Game.lookup("weapon_punch") );
-	player_punch.child_of(player);
-	auto player_rpg = Game.entity("player_rpg");
-	player_rpg.is_a( Game.lookup("weapon_rpg") );
-	player_rpg.child_of(player);
-	player.add<Arsenal>();
-	player.get_mut<Arsenal>().weapons.push_back(player_punch);
-	player.get_mut<Arsenal>().weapons.push_back(player_rpg);
 
 	// Setup the HUD
 	ui_function = [&]() {

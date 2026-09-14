@@ -123,6 +123,15 @@ void HSE::parse_enum(flecs::world& world, flecs::cursor& cur, const json& json) 
 }
 
 void HSE::parse_custom(flecs::world& world, flecs::cursor& cur, const nlohmann::json& json) {
-	if ( json.is_string() )
+	if ( json.is_string() ) {
 		cur.set_string( string(json).c_str() );
+	}
+	else if ( json.is_array() ) {
+		cur.push();
+		for (int i = 0; i < json.size(); i++) {
+			parse_component_member(world, json[i], cur);
+			if (i < json.size()-1) cur.next(); // Prevent adding extra element
+		}
+		cur.pop();
+	}
 }
