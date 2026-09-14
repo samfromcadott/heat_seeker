@@ -11,5 +11,5 @@ void player_fire(Arsenal& arsenal);
 void switch_weapon(Arsenal& arsenal);
 void die_when_no_health(flecs::entity e, Health& h);
 void chase_target(HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t);
-void melee_attack(flecs::entity e, HSE::Position& p, Target& t, MeleeAttack& attack);
-void monster_animation(flecs::entity e, HSE::Model& m);
+void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, Arsenal& arsenal);
+void monster_animation(Arsenal& arsenal, HSE::Model& m);

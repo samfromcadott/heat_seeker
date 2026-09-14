@@ -81,12 +81,6 @@ struct GiveAmmo {
 	int count;
 };
 
-// Used by monsters to attack close enemies
-struct MeleeAttack {
-	flecs::entity weapon;
-	float range;
-};
-
 struct Damage {
 	int value;
 };

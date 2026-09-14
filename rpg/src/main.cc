@@ -29,15 +29,14 @@ void start_game(const std::string& map_name) {
 	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
 	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);
-	// Game.system<Player, HeldWeapon&>("player_fire").each(player_fire);
 	Game.system<Arsenal&>("player_fire").with<Player>().each(player_fire);
 	Game.system<Weapon&, Timer&>("weapon_update").each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>("launch_missile").each(launch_missile);
 	Game.system<Weapon&, Timer&, Hitscan&, Damage&>("launch_hitscan").each(launch_hitscan);
 	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
-	Game.system<Position&, Target&, MeleeAttack&>("melee_attack").each(melee_attack);
-	Game.system<HSE::Model&>("monster_animation").with<Monster>().each(monster_animation);
+	Game.system<Position&, Target&, Arsenal&>("melee_attack").each(melee_attack);
+	Game.system<Arsenal, HSE::Model&>("monster_animation").with<Monster>().each(monster_animation);
 	Game.system<Arsenal&>("switch_weapon").with<Player>().each(switch_weapon);
 	Game.system<>("pause").each([&](){
 		static bool paused = false;
@@ -104,10 +103,6 @@ void start_game(const std::string& map_name) {
 	.member("missile", &LaunchMissile::missile)
 	.member("speed", &LaunchMissile::speed);
 
-	Game.component<MeleeAttack>()
-	.member("weapon", &MeleeAttack::weapon)
-	.member("range", &MeleeAttack::range);
-
 	Game.component<WeaponSound>()
 	.member("fire", &WeaponSound::fire);
 
@@ -156,7 +151,6 @@ void start_game(const std::string& map_name) {
 		auto give_ammo = entity.get<GiveAmmo>();
 
 		for (auto& weapon : arsenal.weapons) {
-			if ( not weapon.is_valid() ) continue;
 			if ( not weapon.has<Ammo>() ) continue;
 			if ( not weapon.is_a(give_ammo.weapon) ) continue;
 
@@ -182,16 +176,6 @@ void start_game(const std::string& map_name) {
 
 			weapon.child_of(owner);
 		}
-	});
-
-	Game.observer<MeleeAttack>("set_melee_attack")
-	.event(flecs::OnSet)
-	.each([&](flecs::entity owner, MeleeAttack& ma) {
-		if ( !ma.weapon.is_valid() ) return;
-		if ( ma.weapon.has(flecs::Prefab) )
-			ma.weapon = Game.entity().is_a(ma.weapon);
-
-		ma.weapon.child_of(owner);
 	});
 
 	Game.observer<WeaponSound>("set_weapon_sound")

@@ -100,9 +100,8 @@
 				"decceleration_air": 0.0
 			},
 
-			"MeleeAttack": {
-				"weapon": "zombie_melee",
-				"range": 2.0
+			"Arsenal": {
+				"weapons": ["zombie_melee"]
 			}
 		}
 	}

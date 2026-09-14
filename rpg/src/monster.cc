@@ -18,23 +18,24 @@ void chase_target(HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
 	r = quat(vec3( 0, 0, atan2(dir.y, dir.x) ));
 }
 
-void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, MeleeAttack& attack) {
+void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, Arsenal& arsenal) {
 	// Check if the monster has a target
 	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
 
 	// Check distance to target
 	float dist = distance( vec3(p), vec3( t.entity.get<Position>() ) );
-	if (dist > attack.range) return;
+	if (dist > 2.0) return;
 
 	// Stop monster if it's moving
 	if ( monster.has<MoveDir>() )
 		monster.get_mut<MoveDir>().value = vec3(0,0,0);
 
-	fire_weapon(attack.weapon);
+	arsenal.index = 0;
+	fire_weapon( arsenal.equipped() );
 }
 
-void monster_animation(flecs::entity e, HSE::Model& m) {
-	if (e.has<MeleeAttack>() and e.get<MeleeAttack>().weapon.get<Timer>().active)
+void monster_animation(Arsenal& arsenal, HSE::Model& m) {
+	if (arsenal.equipped().get<Timer>().active)
 		m.play("Attack");
 	else
 		m.play("Walk");
