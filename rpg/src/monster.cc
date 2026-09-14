@@ -32,11 +32,10 @@ void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, Arsenal& a
 
 	arsenal.index = 0;
 	fire_weapon( arsenal.equipped() );
+	monster.get_mut<HSE::Model>().play("Attack");
 }
 
 void monster_animation(Arsenal& arsenal, HSE::Model& m) {
-	if (arsenal.equipped().get<Timer>().active)
-		m.play("Attack");
-	else
+	if (not arsenal.equipped().get<Timer>().active)
 		m.play("Walk");
 }
