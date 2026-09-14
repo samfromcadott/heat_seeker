@@ -17,8 +17,6 @@ Shader HSE::gouraud_shader;
 
 using namespace HSE;
 
-// bool paused = false;
-
 void start_game(const std::string& map_name) {
 	Game = flecs::world();
 	init_core(Game);
@@ -31,7 +29,8 @@ void start_game(const std::string& map_name) {
 	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
 	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);
-	Game.system<Player, HeldWeapon&>("player_fire").each(player_fire);
+	// Game.system<Player, HeldWeapon&>("player_fire").each(player_fire);
+	Game.system<Arsenal&>("player_fire").with<Player>().each(player_fire);
 	Game.system<Weapon&, Timer&>("weapon_update").each(weapon_update);
 	Game.system<Weapon&, Timer&, LaunchMissile&>("launch_missile").each(launch_missile);
 	Game.system<Weapon&, Timer&, Hitscan&, Damage&>("launch_hitscan").each(launch_hitscan);
@@ -39,6 +38,7 @@ void start_game(const std::string& map_name) {
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
 	Game.system<Position&, Target&, MeleeAttack&>("melee_attack").each(melee_attack);
 	Game.system<HSE::Model&>("monster_animation").with<Monster>().each(monster_animation);
+	Game.system<Arsenal&>("switch_weapon").with<Player>().each(switch_weapon);
 	Game.system<>("pause").each([&](){
 		static bool paused = false;
 		if ( not IsKeyPressed(KEY_ESCAPE) ) return;
@@ -90,8 +90,9 @@ void start_game(const std::string& map_name) {
 	.member("rate", &Weapon::rate)
 	.member("has_fired", &Weapon::has_fired);
 
-	Game.component<HeldWeapon>()
-	.member("entity", &HeldWeapon::entity);
+	Game.component<Arsenal>()
+	.member("index", &Arsenal::index)
+	.member("weapons", &Arsenal::weapons);
 
 	Game.component<Damage>()
 	.member("value", &Damage::value);
@@ -149,16 +150,18 @@ void start_game(const std::string& map_name) {
 	.event(flecs::OnSet)
 	.with<GiveAmmo>()
 	.each([](flecs::entity entity, ContactAdded& contact) {
-		if ( not contact.other.has<HeldWeapon>() ) return;
+		if ( not contact.other.has<Arsenal>() ) return;
 
-		auto held_weapon = contact.other.get_mut<HeldWeapon>().entity;
+		auto arsenal = contact.other.get_mut<Arsenal>();
 		auto give_ammo = entity.get<GiveAmmo>();
 
-		if ( not held_weapon.is_a(give_ammo.weapon) )
-			return;
+		for (auto& weapon : arsenal.weapons) {
+			if ( not weapon.has<Ammo>() ) continue;
+			if ( not weapon.is_a(give_ammo.weapon) ) continue;
 
-		held_weapon.get_mut<Ammo>().count += give_ammo.count;
-		entity.destruct();
+			weapon.get_mut<Ammo>().count += give_ammo.count;
+			entity.destruct();
+		}
 	});
 
 	Game.observer<ContactAdded>("touch_change_level")
@@ -167,16 +170,6 @@ void start_game(const std::string& map_name) {
 	.each([](flecs::entity entity, ContactAdded& contact) {
 		if ( contact.other.has<Player>() )
 			start_game( "maps//" + entity.get<ChangeLevel>().level );
-	});
-
-	Game.observer<HeldWeapon>("set_held_weapon")
-	.event(flecs::OnSet)
-	.each([&](flecs::entity owner, HeldWeapon& hw) {
-		if ( !hw.entity.is_valid() ) return;
-		if ( hw.entity.has(flecs::Prefab) )
-			hw.entity = Game.entity().is_a(hw.entity);
-
-		hw.entity.child_of(owner);
 	});
 
 	Game.observer<MeleeAttack>("set_melee_attack")
@@ -201,6 +194,18 @@ void start_game(const std::string& map_name) {
 	// Load the first map
 	load_level(Game, map_name);
 
+	// Give the player weapons to test
+	auto player = Game.lookup("player");
+	auto player_punch = Game.entity("player_punch");
+	player_punch.is_a( Game.lookup("weapon_punch") );
+	player_punch.child_of(player);
+	auto player_rpg = Game.entity("player_rpg");
+	player_rpg.is_a( Game.lookup("weapon_rpg") );
+	player_rpg.child_of(player);
+	player.add<Arsenal>();
+	player.get_mut<Arsenal>().weapons.push_back(player_punch);
+	player.get_mut<Arsenal>().weapons.push_back(player_rpg);
+
 	// Setup the HUD
 	ui_function = [&]() {
 		DrawFPS(10, 10);
@@ -215,8 +220,10 @@ void start_game(const std::string& map_name) {
 		int health = p.get<Health>().now;
 		DrawText(TextFormat("%d", health), 10, 690, 20, GREEN);
 
-		int ammo = p.get<HeldWeapon>().entity.get<Ammo>().count;
-		DrawText(TextFormat("%d", ammo), 1200, 690, 20, GREEN);
+		if ( p.get_mut<Arsenal>().equipped().has<Ammo>() ) {
+			int ammo = p.get_mut<Arsenal>().equipped().get<Ammo>().count;
+			DrawText(TextFormat("%d", ammo), 1200, 690, 20, GREEN);
+		}
 	};
 }
 

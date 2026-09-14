@@ -59,17 +59,13 @@ struct Muzzle {
 	HSE::vec3 offset;
 };
 
-// Current weapon used by a player
-struct HeldWeapon {
-	flecs::entity entity;
-};
-
-struct EquipedWeapon {
-	int index;
-};
-
 struct Arsenal {
+	int index = 0;
 	std::vector<flecs::entity> weapons;
+
+	flecs::entity& equipped() {
+		return weapons[index];
+	}
 };
 
 struct Ammo {

@@ -68,8 +68,33 @@ void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocit
 	velocity.z = jump.speed;
 }
 
-void player_fire(Player player, HeldWeapon& weapon) {
+// void player_fire(Player player, HeldWeapon& weapon) {
+void player_fire(Arsenal& arsenal) {
 	if ( not IsMouseButtonDown(0) ) return;
-	if ( weapon.entity.get<Timer>().active ) return;
-	fire_weapon(weapon.entity);
+	if ( arsenal.equipped().get<Timer>().active ) return;
+	fire_weapon( arsenal.equipped() );
+}
+
+void switch_weapon(Arsenal& arsenal) {
+	const std::vector<int> keys = {
+		KEY_ONE,
+		KEY_TWO,
+		KEY_THREE,
+		KEY_FOUR,
+		KEY_FIVE,
+		KEY_SIX,
+		KEY_SEVEN,
+		KEY_EIGHT,
+		KEY_NINE,
+		KEY_ZERO
+	};
+
+	for (int i = 0; i < keys.size(); i++) {
+		if ( i >= arsenal.weapons.size() ) break;
+		if ( not IsKeyPressed(keys[i]) ) continue;
+		if ( not arsenal.weapons[i].is_valid() ) break;
+
+		arsenal.index = i;
+		return;
+	}
 }

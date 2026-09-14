@@ -6,7 +6,9 @@ void mouse_look(PlayerCamera& player_camera, HSE::Position& position, HSE::Rotat
 void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::Rotation& rotation);
 void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk, MoveDir& dir);
 void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity, const Jump& jump);
-void player_fire(Player player, HeldWeapon& weapon);
+// void player_fire(Player player, HeldWeapon& weapon);
+void player_fire(Arsenal& arsenal);
+void switch_weapon(Arsenal& arsenal);
 void die_when_no_health(flecs::entity e, Health& h);
 void chase_target(HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t);
 void melee_attack(flecs::entity e, HSE::Position& p, Target& t, MeleeAttack& attack);

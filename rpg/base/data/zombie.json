@@ -86,8 +86,9 @@
 				"shape": {
 					"type": "CAPSULE",
 					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"translation": {"x":0.0, "y":0.0, "z":0.8},
 					"radius": 0.25,
-					"height": 1.5
+					"height": 1.6
 				}
 			},
 

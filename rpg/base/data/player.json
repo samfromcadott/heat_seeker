@@ -27,15 +27,12 @@
 			},
 			"Jump": { "speed": 5.0 },
 			"PlayerCamera": {
-				"offset": {"x":0.0, "y":0.0, "z":1.75}
-			},
-			"HeldWeapon": {
-				"entity": "weapon_rpg"
+				"offset": {"x":0.0, "y":0.0, "z":1.6}
 			}
 		}
 	},
 
-	"weapon_pistol": {
+	"weapon_punch": {
 		"COMP": {
 			"Weapon": {
 				"launch_time": 0.0,
@@ -43,12 +40,7 @@
 			},
 			"Timer": {},
 			"Damage": { "value": 10 },
-			"Hitscan": { "range": 1000.0 },
-			"WeaponSound": { "fire": "sound/pistol.wav" },
-			"Ammo": {
-				"count": 20
-			},
-			"AmmoUse": {"cost": 1}
+			"Hitscan": { "range": 1.5 }
 		}
 	}
 }

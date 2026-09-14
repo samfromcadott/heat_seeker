@@ -38,7 +38,7 @@
 				"sensor": true
 			},
 			"Damage": {
-				"value": 10
+				"value": 50
 			}
 		}
 	},
