@@ -81,6 +81,11 @@ struct GiveAmmo {
 	int count;
 };
 
+struct GiveWeapon {
+	flecs::entity weapon;
+	int slot;
+};
+
 struct Damage {
 	int value;
 };
