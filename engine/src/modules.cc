@@ -10,6 +10,39 @@ const char* gouraud_frag =
 #include "render/shaders/gouraud_frag.glsl"
 ;
 
+template <typename Elem, typename Vector = std::vector<Elem>>
+flecs::opaque<Vector, Elem> std_vector_support(flecs::world& world) {
+	return flecs::opaque<Vector, Elem>()
+	.as_type(world.vector<Elem>())
+
+	// Forward elements of std::vector value to serializer
+	.serialize([](const flecs::serializer *s, const Vector *data) {
+		for (const auto& el : *data) {
+			s->value(el);
+		}
+		return 0;
+	})
+
+	// Return vector count
+	.count([](const Vector *data) {
+		return data->size();
+	})
+
+	// Resize contents of vector
+	.resize([](Vector *data, size_t size) {
+		data->resize(size);
+	})
+
+	// Ensure element exists, return pointer
+	.ensure_element([](Vector *data, size_t elem) {
+		if (data->size() <= elem) {
+			data->resize(elem + 1);
+		}
+
+		return &data->data()[elem];
+	});
+}
+
 void HSE::init_core(flecs::world& world) {
 	// Create REST server
 	Game.import<flecs::stats>();
@@ -25,6 +58,13 @@ void HSE::init_core(flecs::world& world) {
 	.assign_string([](std::string* data, const char *value) {
 		*data = value; // Assign new value to std::string
 	});
+
+	world.component< std::vector<int> >().opaque(std_vector_support<int>);
+	world.component< std::vector<unsigned int> >().opaque(std_vector_support<unsigned int>);
+	world.component< std::vector<float> >().opaque(std_vector_support<float>);
+	world.component< std::vector<double> >().opaque(std_vector_support<double>);
+	world.component< std::vector<flecs::entity> >().opaque(std_vector_support<flecs::entity>);
+	world.component< std::vector<std::string> >().opaque(std_vector_support<std::string>);
 
 	world.component<HSE::vec2>()
 	.member("x", &HSE::vec2::x)
@@ -237,3 +277,4 @@ void HSE::init_render(flecs::world& world) {
 
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
 }
+
