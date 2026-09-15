@@ -19,6 +19,7 @@ void touch_ammo_item(flecs::entity entity, ContactAdded& contact) {
 }
 
 void touch_weapon_item(flecs::entity entity, HSE::ContactAdded& contact) {
+	if ( not has<Player>(contact.other) ) return;
 	if ( not contact.other.has<Arsenal>() ) return;
 
 	auto& arsenal = contact.other.get_mut<Arsenal>();
