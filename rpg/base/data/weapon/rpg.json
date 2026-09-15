@@ -43,6 +43,28 @@
 		}
 	},
 
+	"item_rpg": {
+		"COMP": {
+			"HSE::ModelOptions": {
+				"file": "models/can.obj"
+			},
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "SPHERE",
+					"radius": 0.05
+				},
+				"layer": 1,
+				"mask": 3,
+				"sensor": true,
+				"motion_type": "Kinematic"
+			},
+			"GiveWeapon": {
+				"weapon": "weapon_rpg",
+				"slot": 1
+			}
+		}
+	},
+
 	"item_rpg_ammo": {
 		"COMP": {
 			"HSE::ModelOptions": {

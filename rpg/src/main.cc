@@ -120,6 +120,10 @@ void start_game(const std::string& map_name) {
 	.member("weapon", &GiveAmmo::weapon)
 	.member("count", &GiveAmmo::count);
 
+	Game.component<GiveWeapon>()
+	.member("weapon", &GiveWeapon::weapon)
+	.member("slot", &GiveWeapon::slot);
+
 	// Observers
 	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
@@ -146,6 +150,11 @@ void start_game(const std::string& map_name) {
 	.event(flecs::OnSet)
 	.with<GiveAmmo>()
 	.each(touch_ammo_item);
+
+	Game.observer<ContactAdded>("touch_weapon_item")
+	.event(flecs::OnSet)
+	.with<GiveWeapon>()
+	.each(touch_weapon_item);
 
 	Game.observer<ContactAdded>("touch_change_level")
 	.event(flecs::OnSet)

@@ -17,3 +17,23 @@ void touch_ammo_item(flecs::entity entity, ContactAdded& contact) {
 		entity.destruct();
 	}
 }
+
+void touch_weapon_item(flecs::entity entity, HSE::ContactAdded& contact) {
+	if ( not contact.other.has<Arsenal>() ) return;
+
+	auto& arsenal = contact.other.get_mut<Arsenal>();
+	auto& give_weapon = entity.get<GiveWeapon>();
+	auto world = entity.world();
+
+	if ( arsenal.weapons.size() > give_weapon.slot and arsenal.weapons[give_weapon.slot].is_valid() )
+		return;
+
+	if (arsenal.weapons.size() <= give_weapon.slot)
+		arsenal.weapons.resize(give_weapon.slot+1);
+
+	arsenal.weapons[give_weapon.slot] = world.entity();
+	arsenal.weapons[give_weapon.slot].is_a(give_weapon.weapon);
+	arsenal.weapons[give_weapon.slot].child_of(contact.other);
+	arsenal.index = give_weapon.slot;
+	entity.destruct();
+}
