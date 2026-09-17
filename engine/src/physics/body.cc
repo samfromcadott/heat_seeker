@@ -57,6 +57,10 @@ vec3 Body::get_velocity() {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetLinearVelocity(id) );
 }
 
+vec3 Body::get_center() const {
+	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetCenterOfMassPosition(id) );
+}
+
 void Body::set_owner(flecs::entity owner) {
 	if ( id.IsInvalid() ) return;
 	engine->physics_system.GetBodyInterface().SetUserData( id, owner.id() );

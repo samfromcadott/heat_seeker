@@ -103,6 +103,10 @@ vec3 CharacterBody::get_velocity() const {
 	return jolt_to_glm( body->GetLinearVelocity() );
 }
 
+vec3 CharacterBody::get_center() const {
+	return jolt_to_glm( body->GetCenterOfMassPosition() );
+}
+
 void CharacterBody::set_owner(flecs::entity owner) {
 	if (!body) return;
 	body->SetUserData( owner.id() );
