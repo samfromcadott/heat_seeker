@@ -4,7 +4,7 @@
 		"COMP": {
 			"Weapon": {
 				"launch_time": 0.0,
-				"rate": 0.1
+				"rate": 0.5
 			},
 			"Timer": {},
 			"LaunchMissile": {
@@ -32,13 +32,17 @@
 					"type": "SPHERE",
 					"radius": 0.05
 				},
-				"layer": 1,
+				"layer": 2,
 				"mask": 3,
 				"gravity_scale": 0.0,
 				"sensor": true
 			},
 			"Damage": {
-				"value": 50
+				"value": 80
+			},
+			"Explode": {
+				"radius": 5.0,
+				"force": 200.0
 			}
 		}
 	},
@@ -53,7 +57,7 @@
 					"type": "SPHERE",
 					"radius": 0.05
 				},
-				"layer": 1,
+				"layer": 2,
 				"mask": 3,
 				"sensor": true,
 				"motion_type": "Kinematic"
@@ -75,7 +79,7 @@
 					"type": "SPHERE",
 					"radius": 0.05
 				},
-				"layer": 1,
+				"layer": 2,
 				"mask": 3,
 				"sensor": true,
 				"motion_type": "Kinematic"

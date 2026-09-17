@@ -99,6 +99,11 @@ struct LaunchMissile {
 	float speed;
 };
 
+struct Explode {
+	float radius;
+	float force;
+};
+
 struct WeaponSound {
 	HSE::Asset<Sound> fire;
 };

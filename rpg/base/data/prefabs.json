@@ -2,6 +2,7 @@
 "REQUIRE": [
 	"data/weapon/rpg.json",
 	"data/player.json",
-	"data/zombie.json"
+	"data/zombie.json",
+	"data/prop/can.json"
 ]
 }

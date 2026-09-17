@@ -124,6 +124,10 @@ void start_game(const std::string& map_name) {
 	.member("weapon", &GiveWeapon::weapon)
 	.member("slot", &GiveWeapon::slot);
 
+	Game.component<Explode>()
+	.member("radius", &Explode::radius)
+	.member("force", &Explode::force);
+
 	// Observers
 	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
@@ -142,6 +146,10 @@ void start_game(const std::string& map_name) {
 		// Check if the entity hit has health
 		if ( contact.other.has<Health>() and entity.has<Damage>() )
 			contact.other.get_mut<Health>().now -= entity.get<Damage>().value;
+
+		if ( has<Explode>(entity) ) {
+			explode(entity);
+		}
 
 		entity.destruct();
 	});

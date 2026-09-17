@@ -75,6 +75,10 @@ float Body::get_gravity_scale() const {
 	return engine->physics_system.GetBodyInterface().GetGravityFactor(id);
 }
 
+void Body::add_force(vec3 force) {
+	engine->physics_system.GetBodyInterface().AddForce( id, glm_to_jolt(force) );
+}
+
 void Body::set_sensor(bool value) {
 	engine->physics_system.GetBodyInterface().SetIsSensor(id, value);
 }

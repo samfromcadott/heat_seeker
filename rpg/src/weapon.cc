@@ -31,7 +31,10 @@ void fire_weapon(flecs::entity weapon) {
 	}
 
 	auto& timer = weapon.get_mut<Timer>();
-	if (!timer.active) timer.active = true;
+	if (not timer.active) {
+		timer.active = true;
+		get<Weapon>(weapon).has_fired = false;
+	}
 
 	// If the weapon has a sound play it
 	if ( weapon.has<WeaponSound>() ) {
@@ -41,6 +44,7 @@ void fire_weapon(flecs::entity weapon) {
 }
 
 void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMissile& lm) {
+	if (not timer.active) return;
 	if (weapon.has_fired) return;
 	if (timer.time < weapon.launch_time) return;
 
@@ -78,6 +82,7 @@ void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMi
 }
 
 void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan& hs, Damage& d) {
+	if (not timer.active) return;
 	if (weapon.has_fired) return;
 	if (timer.time < weapon.launch_time) return;
 
@@ -117,4 +122,41 @@ void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan&
 		e.get_mut<Health>().now -= d.value;
 		break;
 	}
+}
+
+void explode(Entity entity) {
+	// Spawn an explosion model
+
+	float force = get<Explode>(entity).force;
+	float radius = get<Explode>(entity).radius;
+	float damage = get<Damage>(entity).value;
+
+	// Do a shape cast
+	auto& engine = entity.world().get_mut<PhysicsEngine>();
+
+	ShapeOptions shape;
+	shape.type = ShapeType::SPHERE;
+	shape.radius = radius;
+
+	auto entities = engine.shape_cast(get<Position>(entity), shape);
+
+	// Apply force and damage
+	for (auto& e : entities) {
+		if (e == entity) continue; // Skip self
+
+		float dist = distance( vec3(get<Position>(entity)), vec3(get<Position>(e)) );
+		float coef = std::lerp(1.0, 0.0, dist/radius);
+		coef = std::clamp(coef, 0.0f, 1.0f);
+		vec3 dir = vec3(get<Position>(e)) - vec3(get<Position>(entity));
+
+		if ( has<Body>(e) )
+			get<Body>(e).add_force(force * dir * coef);
+		else if ( has<CharacterBody>(e) )
+			get<Velocity>(e) = vec3(get<Velocity>(e)) + force * dir * coef * 0.05f;
+
+		if ( has<Health>(e) )
+			get<Health>(e).now -= damage*coef;
+	}
+
+	entity.destruct();
 }

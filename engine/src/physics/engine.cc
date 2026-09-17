@@ -1,4 +1,5 @@
 #include <heat_seeker.hh>
+#include <Jolt/Physics/Collision/ShapeCast.h>
 
 using namespace HSE;
 
@@ -107,4 +108,27 @@ RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray) const {
 	}
 
 	return hit;
+}
+
+std::vector<Entity> PhysicsEngine::shape_cast(const vec3 origin, ShapeOptions shape_options) const {
+	std::vector<Entity> entities;
+
+	JPH::ShapeCastSettings settings;
+	JPH::Ref<JPH::Shape> shape = convert_shape(shape_options);
+	JPH::RShapeCast s {
+		shape,
+		JPH::Vec3::sOne(),
+		JPH::RMat44::sTranslation( glm_to_jolt(origin) ),
+		JPH::Vec3(0, 0, 1)
+	};
+
+	JPH::AllHitCollisionCollector<JPH::CastShapeCollector> collector;
+	physics_system.GetNarrowPhaseQuery().CastShape(s, settings, JPH::RVec3::sZero(), collector);
+
+	for (auto& h : collector.mHits) {
+		auto entity_id = physics_system.GetBodyInterface().GetUserData(h.mBodyID2);
+		entities.push_back( flecs::entity(world, entity_id) );
+	}
+
+	return entities;
 }

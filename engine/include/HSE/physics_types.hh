@@ -94,7 +94,7 @@ struct ShapeOptions {
 
 	float height = 0.0;
 	float radius = 0.0;
-	vec3 size = vec3(0.0, 0.0, 0.0);
+	vec3 size = vec3(0.0, 0.0, 0.0); //< Used by BOX type
 	std::string file = ""; //< Used by MESH type
 };
 
@@ -160,6 +160,7 @@ public:
 	JPH::PhysicsSystem& get_system();
 
 	RayCastHit ray_cast(vec3 origin, vec3 ray) const;
+	std::vector<Entity> shape_cast(const vec3 origin, ShapeOptions shape_options) const;
 
 	friend class Body;
 	friend class CharacterBody;
@@ -190,6 +191,8 @@ public:
 
 	void set_gravity_scale(const float scale);
 	float get_gravity_scale() const;
+
+	void add_force(vec3 force);
 
 	void set_sensor(bool value);
 
