@@ -35,7 +35,7 @@
 				"rate": 2.6
 			},
 
-			"Timer": {},
+			"WeaponTimer": {},
 
 			"LaunchMissile": {
 				"missile": "missile_zombie_ball",
@@ -46,7 +46,7 @@
 
 	"zombie_melee": {
 		"COMP": {
-			"Timer": {},
+			"WeaponTimer": {},
 
 			"Weapon": {
 				"rate": 2.6,

@@ -2,20 +2,30 @@
 
 #include "components.hh"
 #include "systems.hh"
+#include "weapon.hh"
 
 using namespace HSE;
 
-void weapon_update(Weapon& weapon, Timer& timer) {
+void weapon_update(flecs::entity entity, Weapon& weapon, WeaponTimer& timer) {
 	if (!timer.active) return;
 
 	timer.time += GetFrameTime();
 
-	if (timer.time < weapon.rate) return;
+	if (timer.time > weapon.launch_time and not weapon.has_fired) {
+		if ( has<LaunchMissile>(entity) )
+			launch_missile(entity);
+		if ( has<Hitscan>(entity) )
+			launch_hitscan(entity);
+
+		weapon.has_fired = true;
+	}
 
 	// Reset the weapon at the end of its cycle
-	weapon.has_fired = false;
-	timer.active = false;
-	timer.time = 0.0;
+	if (timer.time > weapon.rate) {
+		weapon.has_fired = false;
+		timer.active = false;
+		timer.time = 0.0;
+	}
 }
 
 void fire_weapon(flecs::entity weapon) {
@@ -30,7 +40,7 @@ void fire_weapon(flecs::entity weapon) {
 		ammo.count -= ammo_use.cost;
 	}
 
-	auto& timer = weapon.get_mut<Timer>();
+	auto& timer = weapon.get_mut<WeaponTimer>();
 	if (not timer.active) {
 		timer.active = true;
 		get<Weapon>(weapon).has_fired = false;
@@ -43,11 +53,7 @@ void fire_weapon(flecs::entity weapon) {
 	}
 }
 
-void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMissile& lm) {
-	if (not timer.active) return;
-	if (weapon.has_fired) return;
-	if (timer.time < weapon.launch_time) return;
-
+void launch_missile(flecs::entity entity) {
 	auto owner = entity.parent();
 
 	vec3 launch_point, vel;
@@ -60,34 +66,33 @@ void launch_missile(flecs::entity entity, Weapon& weapon, Timer& timer, LaunchMi
 
 		vec3 dir = quat(vec3(0, pitch, yaw)) * vec3(1,0,0);
 		launch_point = p + owner.get<PlayerCamera>().offset + dir;
-		vel = dir * lm.speed;
+		vel = dir * get<LaunchMissile>(entity).speed;
 	}
 	else {
 		vec3 p = vec3( owner.get<Position>() );
 		quat r = quat( owner.get<Rotation>() );
 		launch_point = p + ( r * vec3(0.251,0,0) );
 		vec3 dir = r * vec3(1,0,0);
-		vel = dir * lm.speed;
+		vel = dir * get<LaunchMissile>(entity).speed;
 	}
 
-	flecs::entity missile = Game.entity().is_a(lm.missile);
+	flecs::entity missile = Game.entity().is_a( get<LaunchMissile>(entity).missile );
 
 	missile.set<Position>( vec3(launch_point) );
 	missile.set<Velocity>( vec3(vel) );
 	// missile.set<Rotation>(rotation);
 
 	missile.set<Owner>({ entity.parent() });
-
-	weapon.has_fired = true;
 }
 
-void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan& hs, Damage& d) {
-	if (not timer.active) return;
-	if (weapon.has_fired) return;
-	if (timer.time < weapon.launch_time) return;
+void launch_hitscan(flecs::entity entity) {
+	// if (not timer.active) return;
+	// if (weapon.has_fired) return;
+	// if (timer.time < weapon.launch_time) return;
 
 	// Get the weapon's owner
 	auto owner = entity.parent();
+	auto range = get<Hitscan>(entity).range;
 
 	// Create a raycast
 	vec3 start, dir;
@@ -105,21 +110,21 @@ void launch_hitscan(flecs::entity entity, Weapon& weapon, Timer& timer, Hitscan&
 		vec3 p = vec3( owner.get<Position>() );
 		quat r = quat( owner.get<Rotation>() );
 		start = p + ( r * vec3(0.251,0,0) );
-		dir = vec3(hs.range, 0, 0);
+		dir = vec3(range, 0, 0);
 		dir = r * dir;
 	}
 
-	weapon.has_fired = true;
+	// weapon.has_fired = true;
 
 	// Check for collisions
-	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir * hs.range);
+	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir * range);
 	if (not hit.hit) return;
 
 	for (auto& e : hit.entities) {
 		if ( not e.has<Health>() ) continue;
 		if (e == owner) continue;
 
-		e.get_mut<Health>().now -= d.value;
+		e.get_mut<Health>().now -= get<Damage>(entity).value;
 		break;
 	}
 }

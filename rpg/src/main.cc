@@ -31,9 +31,7 @@ void start_game(const std::string& map_name) {
 	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);
 	Game.system<Arsenal&>("player_fire").with<Player>().each(player_fire);
-	Game.system<Weapon&, Timer&>("weapon_update").each(weapon_update);
-	Game.system<Weapon&, Timer&, LaunchMissile&>("launch_missile").each(launch_missile);
-	Game.system<Weapon&, Timer&, Hitscan&, Damage&>("launch_hitscan").each(launch_hitscan);
+	Game.system<Weapon&, WeaponTimer&>("weapon_update").each(weapon_update);
 	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
 	Game.system<Position&, Target&, Arsenal&>("melee_attack").each(melee_attack);
@@ -81,9 +79,9 @@ void start_game(const std::string& map_name) {
 	Game.component<Jump>()
 	.member("speed", &Jump::speed);
 
-	Game.component<Timer>()
-	.member("active", &Timer::active)
-	.member("time", &Timer::time);
+	Game.component<WeaponTimer>()
+	.member("active", &WeaponTimer::active)
+	.member("time", &WeaponTimer::time);
 
 	Game.component<Weapon>()
 	.member("launch_time", &Weapon::launch_time)

@@ -43,7 +43,7 @@ struct Jump {
 	float speed;
 };
 
-struct Timer {
+struct WeaponTimer {
 	bool active = false;
 	float time = 0.0; // Time since it became active
 };

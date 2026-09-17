@@ -36,6 +36,6 @@ void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, Arsenal& a
 }
 
 void monster_animation(Arsenal& arsenal, HSE::Model& m) {
-	if (not arsenal.equipped().get<Timer>().active)
+	if (not arsenal.equipped().get<WeaponTimer>().active)
 		m.play("Walk");
 }

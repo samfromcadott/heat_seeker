@@ -41,7 +41,7 @@
 				"launch_time": 0.0,
 				"rate": 0.2
 			},
-			"Timer": {},
+			"WeaponTimer": {},
 			"Damage": { "value": 10 },
 			"Hitscan": { "range": 1.5 }
 		}

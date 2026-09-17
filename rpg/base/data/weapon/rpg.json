@@ -6,7 +6,7 @@
 				"launch_time": 0.0,
 				"rate": 0.5
 			},
-			"Timer": {},
+			"WeaponTimer": {},
 			"LaunchMissile": {
 				"missile": "missile_rpg",
 				"speed": 20.0
@@ -14,7 +14,8 @@
 			"Ammo": {
 				"count": 20
 			},
-			"AmmoUse": {"cost": 1}
+			"AmmoUse": {"cost": 1},
+			"WeaponSound": {"fire": "sound/pistol.wav"}
 		}
 	},
 
