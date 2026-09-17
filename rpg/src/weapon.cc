@@ -29,7 +29,6 @@ void weapon_update(flecs::entity entity, Weapon& weapon, WeaponTimer& timer) {
 }
 
 void fire_weapon(flecs::entity weapon) {
-	// auto owner = weapon.parent();
 	if ( weapon.has<AmmoUse>() ) {
 		auto& ammo = weapon.get_mut<Ammo>();
 		auto& ammo_use = weapon.get<AmmoUse>();
@@ -86,11 +85,6 @@ void launch_missile(flecs::entity entity) {
 }
 
 void launch_hitscan(flecs::entity entity) {
-	// if (not timer.active) return;
-	// if (weapon.has_fired) return;
-	// if (timer.time < weapon.launch_time) return;
-
-	// Get the weapon's owner
 	auto owner = entity.parent();
 	auto range = get<Hitscan>(entity).range;
 
@@ -113,8 +107,6 @@ void launch_hitscan(flecs::entity entity) {
 		dir = vec3(range, 0, 0);
 		dir = r * dir;
 	}
-
-	// weapon.has_fired = true;
 
 	// Check for collisions
 	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir * range);
