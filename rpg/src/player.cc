@@ -27,6 +27,7 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 
 	camera.target = glm_to_raylib(camera_target);
 	camera.position = glm_to_raylib(camera_position);
+	camera.up = {0,0,1};
 }
 
 void dead_camera(PlayerCamera& player_camera, Position& position, Rotation& rotation) {
@@ -35,8 +36,11 @@ void dead_camera(PlayerCamera& player_camera, Position& position, Rotation& rota
 	vec3 camera_target = quat(rotation) * vec3(1,0,0);
 	camera_target += camera_position;
 
+	vec3 up = quat(rotation) * vec3(0,0,1);
+
 	camera.target = glm_to_raylib(camera_target);
 	camera.position = glm_to_raylib(camera_position);
+	camera.up = glm_to_raylib(up);
 }
 
 void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::Rotation& rotation) {
