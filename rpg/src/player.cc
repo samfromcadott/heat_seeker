@@ -29,6 +29,16 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 	camera.position = glm_to_raylib(camera_position);
 }
 
+void dead_camera(PlayerCamera& player_camera, Position& position, Rotation& rotation) {
+	auto camera_position = vec3(position) + player_camera.offset;
+
+	vec3 camera_target = quat(rotation) * vec3(1,0,0);
+	camera_target += camera_position;
+
+	camera.target = glm_to_raylib(camera_target);
+	camera.position = glm_to_raylib(camera_position);
+}
+
 void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::Rotation& rotation) {
 	vec3 input_dir = vec3(0,0,0);
 	if ( IsKeyDown(KEY_W) ) input_dir.x += 1.0;
@@ -97,4 +107,21 @@ void switch_weapon(Arsenal& arsenal) {
 		arsenal.index = i;
 		return;
 	}
+}
+
+void player_die(Entity player) {
+	auto world = player.world();
+	auto head = world.entity().is_a( world.lookup("player_head") );
+
+	vec3 p = get<Position>(player);
+	quat r = get<Rotation>(player);
+	auto camera = get<PlayerCamera>(player);
+
+	head.set<Position>( p + camera.offset );
+
+	float yaw = eulerAngles(r).z;
+	float pitch = camera.pitch;
+	head.set<Rotation>( quat(vec3(0, pitch, yaw)) );
+
+	head.set<Velocity>( get<Velocity>(player) );
 }

@@ -26,7 +26,8 @@ void start_game(const std::string& map_name) {
 	File::mount("base");
 
 	// Create systems
-	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").each(mouse_look);
+	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").with<Player>().each(mouse_look);
+	Game.system<PlayerCamera&, Position&, Rotation&>("dead_camera").without<Player>().each(dead_camera);
 	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
 	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);

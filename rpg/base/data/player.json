@@ -45,6 +45,20 @@
 			"Damage": { "value": 10 },
 			"Hitscan": { "range": 1.5 }
 		}
+	},
+
+	"player_head": {
+		"COMP": {
+			"PlayerCamera": {},
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "SPHERE",
+					"radius": 0.1
+				},
+				"layer": 2,
+				"mask": 3
+			}
+		}
 	}
 }
 }

@@ -3,8 +3,13 @@
 #include "components.hh"
 #include "systems.hh"
 #include "weapon.hh"
+#include "events.hh"
 
+using namespace HSE;
 
 void die_when_no_health(flecs::entity e, Health& h) {
-	if (h.now <= 0) e.destruct();
+	if (h.now <= 0) {
+		e.destruct();
+		if ( has<Player>(e) ) player_die(e);
+	}
 }
