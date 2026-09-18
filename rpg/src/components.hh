@@ -102,6 +102,7 @@ struct LaunchMissile {
 struct Explode {
 	float radius;
 	float force;
+	HSE::Asset<Sound> sound;
 };
 
 struct WeaponSound {

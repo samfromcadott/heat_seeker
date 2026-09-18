@@ -124,7 +124,8 @@ void start_game(const std::string& map_name) {
 
 	Game.component<Explode>()
 	.member("radius", &Explode::radius)
-	.member("force", &Explode::force);
+	.member("force", &Explode::force)
+	.member("sound", &Explode::sound);
 
 	// Observers
 	Game.observer<Target>("set_monster_target")
@@ -185,6 +186,12 @@ void start_game(const std::string& map_name) {
 	.event(flecs::OnSet)
 	.each([&](flecs::entity owner, WeaponSound& ws) {
 		ws.fire.load();
+	});
+
+	Game.observer<Explode>("set_explode")
+	.event(flecs::OnSet)
+	.each([&](flecs::entity owner, Explode& explode) {
+		explode.sound.load();
 	});
 
 	// Load scripts

@@ -15,7 +15,7 @@
 				"count": 20
 			},
 			"AmmoUse": {"cost": 1},
-			"WeaponSound": {"fire": "sound/pistol.wav"}
+			"WeaponSound": {"fire": "sound/rpg_fire.wav"}
 		}
 	},
 
@@ -43,7 +43,8 @@
 			},
 			"Explode": {
 				"radius": 5.0,
-				"force": 200.0
+				"force": 200.0,
+				"sound": "sound/rpg_impact.wav"
 			}
 		}
 	},

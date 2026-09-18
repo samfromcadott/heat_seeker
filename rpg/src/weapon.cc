@@ -123,6 +123,9 @@ void launch_hitscan(flecs::entity entity) {
 
 void explode(Entity entity) {
 	// Spawn an explosion model
+	// Play the explosion sound
+	if (get<Explode>(entity).sound)
+		PlaySound( *get<Explode>(entity).sound );
 
 	float force = get<Explode>(entity).force;
 	float radius = get<Explode>(entity).radius;
