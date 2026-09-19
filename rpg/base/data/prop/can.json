@@ -1,0 +1,21 @@
+{
+"PREFAB": {
+	"prop_can": {
+		"COMP": {
+			"HSE::ModelOptions": {
+				"file": "models/can.obj"
+			},
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "CYLINDER",
+					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"radius": 0.05,
+					"height": 0.15
+				},
+				"layer": 2,
+				"mask": 3
+			}
+		}
+	}
+}
+}
