@@ -1,5 +1,6 @@
 #include <heat_seeker.hh>
 
+Color HSE::clear_color = GRAY;
 std::function<void(void)> HSE::ui_function;
 
 // Camera3D camera = {
@@ -12,7 +13,7 @@ std::function<void(void)> HSE::ui_function;
 
 void HSE::start_render() {
 	BeginDrawing();
-	ClearBackground(GRAY);
+	ClearBackground(clear_color);
 }
 
 void HSE::start_3D() {

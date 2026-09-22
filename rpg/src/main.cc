@@ -24,6 +24,7 @@ void start_game(const std::string& map_name) {
 	init_physics(Game);
 	init_render(Game);
 	File::mount("base");
+	HSE::clear_color = SKYBLUE;
 
 	// Create systems
 	Game.system<PlayerCamera&, Position&, Rotation&>("mouse_look").with<Player>().each(mouse_look);
