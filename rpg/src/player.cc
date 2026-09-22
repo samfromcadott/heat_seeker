@@ -70,7 +70,7 @@ void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk
 		a = body.on_floor()? walk.decceleration : walk.decceleration_air;
 
 	auto wish_vel = dir.value * walk.max_speed;
-	vec3 v = mix(vec3(velocity), wish_vel, GetFrameTime() * a);
+	vec3 v = move_toward(vec3(velocity), wish_vel, GetFrameTime() * a);
 
 	velocity.x = v.x;
 	velocity.y = v.y;

@@ -20,9 +20,9 @@
 			},
 			"Walk": {
 				"max_speed": 10.0,
-				"acceleration": 3.125,
-				"decceleration": 3.125,
-				"acceleration_air": 0.5,
+				"acceleration": 25.0,
+				"decceleration": 25.0,
+				"acceleration_air": 5.0,
 				"decceleration_air": 0.0
 			},
 			"Jump": { "speed": 5.0 },
