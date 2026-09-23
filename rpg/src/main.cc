@@ -36,7 +36,7 @@ void start_game(const std::string& map_name) {
 	Game.system<Weapon&, WeaponTimer&>("weapon_update").each(weapon_update);
 	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
-	Game.system<Position&, Target&, Arsenal&>("melee_attack").each(melee_attack);
+	Game.system<Position&, Target&, Arsenal&, const ArsenalInfo&>("choose_attack").with<Monster>().each(choose_attack);
 	Game.system<Arsenal, HSE::Model&>("monster_animation").with<Monster>().each(monster_animation);
 	Game.system<Arsenal&>("switch_weapon").with<Player>().each(switch_weapon);
 	Game.system<>("pause").each([&](){
@@ -93,6 +93,11 @@ void start_game(const std::string& map_name) {
 	Game.component<Arsenal>()
 	.member("index", &Arsenal::index)
 	.member("weapons", &Arsenal::weapons);
+
+	Game.component<ArsenalInfo>()
+	.member("min", &ArsenalInfo::min)
+	.member("max", &ArsenalInfo::max)
+	.member("weight", &ArsenalInfo::weight);
 
 	Game.component<Damage>()
 	.member("value", &Damage::value);

@@ -6,8 +6,10 @@
 
 using namespace HSE;
 
-void chase_target(HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
+void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
 	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
+	if ( has<Arsenal>(monster) and get<Arsenal>(monster).equipped().get<WeaponTimer>().active )
+		return;
 
 	// Get direction to target
 	vec3 dir = vec3( t.entity.get<Position>() ) - vec3(p);
@@ -15,24 +17,37 @@ void chase_target(HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
 	md.value = dir;
 
 	// Rotate to movement direction
-	r = quat(vec3( 0, 0, atan2(dir.y, dir.x) ));
+	float yaw = atan2(dir.y, dir.x);
+	r = quat( vec3(0, 0, yaw) );
 }
 
-void melee_attack(flecs::entity monster, HSE::Position& p, Target& t, Arsenal& arsenal) {
-	// Check if the monster has a target
-	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
+void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arsenal& arsenal, const ArsenalInfo& info) {
+	if ( not target.entity.is_valid() ) return;
+	if ( arsenal.equipped().get<WeaponTimer>().active ) return;
 
-	// Check distance to target
-	float dist = distance( vec3(p), vec3( t.entity.get<Position>() ) );
-	if (dist > 2.0) return;
+	float dist = distance( vec3(p), vec3( get<Position>(target.entity) ) );
 
-	// Stop monster if it's moving
-	if ( monster.has<MoveDir>() )
-		monster.get_mut<MoveDir>().value = vec3(0,0,0);
+	// Make a random weighted choice
+	int weight_sum = 0;
+	for (auto n : info.weight) weight_sum += n;
 
-	arsenal.index = 0;
-	fire_weapon( arsenal.equipped() );
-	monster.get_mut<HSE::Model>().play("Attack");
+	int r = rand() % (weight_sum + 1);
+	for (int i = 0; i < arsenal.weapons.size(); i++) {
+		r -= info.weight[i];
+
+		if ( r > info.weight[i] ) continue;
+		if ( dist < info.min[i] ) continue;
+		if ( dist > info.max[i] ) continue;
+
+		arsenal.index = i;
+		fire_weapon( arsenal.equipped() );
+		monster.get_mut<HSE::Model>().play("Attack");
+
+		if ( has<MoveDir>(monster) )
+			get<MoveDir>(monster).value = vec3(0,0,0);
+
+		break;
+	}
 }
 
 void monster_animation(Arsenal& arsenal, HSE::Model& m) {

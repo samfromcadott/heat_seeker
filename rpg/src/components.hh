@@ -68,6 +68,13 @@ struct Arsenal {
 	}
 };
 
+// Contains info for AI to choose weapons
+struct ArsenalInfo {
+	std::vector<float> min;
+	std::vector<float> max;
+	std::vector<int> weight;
+};
+
 struct Ammo {
 	int count;
 };

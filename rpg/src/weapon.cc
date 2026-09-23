@@ -70,7 +70,7 @@ void launch_missile(flecs::entity entity) {
 	else {
 		vec3 p = vec3( owner.get<Position>() );
 		quat r = quat( owner.get<Rotation>() );
-		launch_point = p + ( r * vec3(0.251,0,0) );
+		launch_point = p + ( r * vec3(0.1,0,1.0) );
 		vec3 dir = r * vec3(1,0,0);
 		vel = dir * get<LaunchMissile>(entity).speed;
 	}
