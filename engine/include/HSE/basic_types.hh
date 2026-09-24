@@ -27,6 +27,14 @@ struct Position {
 		return vec3(x,y,z);
 	}
 
+	Position& operator= (const vec3& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+
+		return *this;
+	}
+
 	Position(const Vector3&& v) {
 		x = v.x;
 		y = v.y;
@@ -35,6 +43,14 @@ struct Position {
 
 	operator Vector3() const {
 		return Vector3{x,y,z};
+	}
+
+	Position& operator= (const Vector3& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+
+		return *this;
 	}
 };
 
@@ -65,6 +81,15 @@ struct Rotation {
 	operator quat() const {
 		return quat(w,x,y,z);
 	}
+
+	Rotation& operator= (const quat& q) {
+		w = q.w;
+		x = q.x;
+		y = q.y;
+		z = q.z;
+
+		return *this;
+	}
 };
 
 struct Velocity {
@@ -86,6 +111,14 @@ struct Velocity {
 		return vec3(x,y,z);
 	}
 
+	Velocity& operator= (const vec3& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+
+		return *this;
+	}
+
 	Velocity(const Vector3&& v) {
 		x = v.x;
 		y = v.y;
@@ -94,6 +127,14 @@ struct Velocity {
 
 	operator Vector3() const {
 		return Vector3{x,y,z};
+	}
+
+	Velocity& operator= (const Vector3& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+
+		return *this;
 	}
 };
 
