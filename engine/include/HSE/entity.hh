@@ -15,7 +15,15 @@ const T& get(const Entity& entity) {
 }
 
 template <typename T>
-T* get_if(Entity entity) {
+T* get_if(Entity& entity) {
+	if ( entity.has<T>() )
+		return &entity.get_mut<T>();
+	else
+		return nullptr;
+}
+
+template <typename T>
+const T* get_if(const Entity& entity) {
 	return entity.try_get<T>();
 }
 

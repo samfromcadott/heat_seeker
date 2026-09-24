@@ -8,8 +8,10 @@ using namespace HSE;
 
 void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
 	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
-	if ( has<Arsenal>(monster) and get<Arsenal>(monster).equipped().get<WeaponTimer>().active )
-		return;
+	if ( auto arsenal = get_if<Arsenal>(monster) ) {
+		if ( get<WeaponTimer>( arsenal->equipped() ).active )
+			return;
+	}
 
 	// Get direction to target
 	vec3 dir = vec3( t.entity.get<Position>() ) - vec3(p);
@@ -43,8 +45,8 @@ void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arse
 		fire_weapon( arsenal.equipped() );
 		monster.get_mut<HSE::Model>().play("Attack");
 
-		if ( has<MoveDir>(monster) )
-			get<MoveDir>(monster).value = vec3(0,0,0);
+		if ( auto move_dir = get_if<MoveDir>(monster) )
+			move_dir->value = vec3(0,0,0);
 
 		break;
 	}
