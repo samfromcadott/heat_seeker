@@ -5,6 +5,7 @@
 #include "systems.hh"
 #include "events.hh"
 #include "weapon.hh"
+#include "level.hh"
 
 flecs::world HSE::Game;
 Camera3D HSE::camera = {
@@ -54,6 +55,7 @@ void start_game(const std::string& map_name) {
 
 		paused = !paused;
 	}).add<NoPause>();
+	Game.system<Position&, Velocity&, DoorSliding&>("slide_door").each(slide_door);
 
 	// Register components
 	Game.component<Player>();
@@ -134,6 +136,13 @@ void start_game(const std::string& map_name) {
 	.member("force", &Explode::force)
 	.member("sound", &Explode::sound);
 
+	Game.component<DoorSliding>()
+	.member("start", &DoorSliding::start)
+	.member("direction", &DoorSliding::direction)
+	.member("distance", &DoorSliding::distance)
+	.member("speed", &DoorSliding::speed)
+	.member("state", &DoorSliding::state);
+
 	// Observers
 	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
@@ -201,6 +210,35 @@ void start_game(const std::string& map_name) {
 		explode.sound.load();
 	});
 
+	// Game.observer<Body>("set_door_sliding")
+	// .event(flecs::OnSet)
+	// .with<DoorSliding>()
+	// .each([&](Entity entity, Body& body) {
+	// 	std::cout << "Set door sliding\n";
+	// 	auto ds = get<DoorSliding>(entity);
+	// 	ds.start = get<Position>(entity);
+ //
+	// 	// Get bounds of the door
+	// 	auto [min, max] = body.get_bounds();
+ //
+	// 	// Make a child object
+	// 	auto sensor = entity.child();
+ //
+	// 	BodyOptions options;
+	// 	options.sensor = true;
+	// 	options.mask = 2;
+	// 	options.shape.type = BOX;
+	// 	options.shape.size = max - min + vec3(2,2,2);
+ //
+	// 	sensor.set<BodyOptions>(options);
+	// 	sensor.add<UseParent>();
+	// });
+
+	Game.observer<ContactAdded>("use_parent")
+	.event(flecs::OnSet)
+	.with<UseParent>()
+	.each(use_parent);
+
 	// Load scripts
 	load_data_file(Game, "data/prefabs.json");
 
@@ -226,6 +264,40 @@ void start_game(const std::string& map_name) {
 			DrawText(TextFormat("%d", ammo), 1200, 690, 20, GREEN);
 		}
 	};
+
+	// Add sensors to doors
+	flecs::query<> find_sliding_doors  = Game.query_builder<>()
+	.with<Body>()
+	.with<DoorSliding>()
+	.build();
+
+	ecs_defer_begin(Game);
+	find_sliding_doors.each([](Entity entity) {
+		std::cout << "Set door sliding\n";
+		auto& ds = get<DoorSliding>(entity);
+		ds.start= get<Position>(entity);
+		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
+		entity.add<Velocity>();
+
+		// Get bounds of the door
+		auto [min, max] = get<Body>(entity).get_bounds();
+
+		// Make a child object
+		auto sensor = entity.child();
+
+		BodyOptions options;
+		options.motion_type = JPH::EMotionType::Static;
+		options.sensor = true;
+		options.layer = 1;
+		options.mask = 2;
+		options.shape.type = BOX;
+		options.shape.size = max - min + vec3(2,2,2);
+
+		sensor.set<BodyOptions>(options);
+		sensor.add<UseParent>();
+		sensor.set<Position>( get<Position>(entity) );
+	});
+	ecs_defer_end(Game);
 }
 
 void check_reset() {
@@ -244,7 +316,7 @@ int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
 	SetExitKey(KEY_NULL);
-	start_game("maps/test.hsm");
+	start_game("maps/level01.hsm");
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {

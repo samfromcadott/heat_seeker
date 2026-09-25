@@ -120,3 +120,21 @@ struct WeaponSound {
 struct ChangeLevel {
 	std::string level;
 };
+
+// Level entities
+enum DoorState {
+	CLOSED,
+	OPENING,
+	OPEN,
+	CLOSING
+};
+
+struct UseParent {};
+
+struct DoorSliding {
+	HSE::vec3 start;
+	HSE::vec3 direction = HSE::vec3(0,0,1);
+	float distance = 2.0;
+	float speed = 4.0;
+	DoorState state = CLOSED;
+};

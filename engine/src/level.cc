@@ -108,6 +108,7 @@ void HSE::add_level_collider_convex(flecs::entity& entity, const nlohmann::json&
 		)
 	);
 	// delete shape;
+	settings.mAllowDynamicOrKinematic = true; // This is to allow model to be made moving (like doors)
 
 	entity.set<HSE::Body>( HSE::Body(entity.world(), settings) );
 }
