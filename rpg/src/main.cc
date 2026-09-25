@@ -210,30 +210,6 @@ void start_game(const std::string& map_name) {
 		explode.sound.load();
 	});
 
-	// Game.observer<Body>("set_door_sliding")
-	// .event(flecs::OnSet)
-	// .with<DoorSliding>()
-	// .each([&](Entity entity, Body& body) {
-	// 	std::cout << "Set door sliding\n";
-	// 	auto ds = get<DoorSliding>(entity);
-	// 	ds.start = get<Position>(entity);
- //
-	// 	// Get bounds of the door
-	// 	auto [min, max] = body.get_bounds();
- //
-	// 	// Make a child object
-	// 	auto sensor = entity.child();
- //
-	// 	BodyOptions options;
-	// 	options.sensor = true;
-	// 	options.mask = 2;
-	// 	options.shape.type = BOX;
-	// 	options.shape.size = max - min + vec3(2,2,2);
- //
-	// 	sensor.set<BodyOptions>(options);
-	// 	sensor.add<UseParent>();
-	// });
-
 	Game.observer<ContactAdded>("use_parent")
 	.event(flecs::OnSet)
 	.with<UseParent>()
