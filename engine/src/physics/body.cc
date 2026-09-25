@@ -87,6 +87,12 @@ void Body::set_sensor(bool value) {
 	engine->physics_system.GetBodyInterface().SetIsSensor(id, value);
 }
 
+std::tuple<vec3, vec3> Body::get_bounds() const {
+	auto shape = engine->physics_system.GetBodyInterface().GetShape(id);
+	auto box = shape->GetLocalBounds();
+	return { jolt_to_glm(box.mMin), jolt_to_glm(box.mMax) };
+}
+
 void Body::destroy() {
 	engine->physics_system.GetBodyInterface().RemoveBody(id);
 	engine->physics_system.GetBodyInterface().DestroyBody(id);

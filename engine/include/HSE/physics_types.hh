@@ -197,6 +197,9 @@ public:
 	void add_force(vec3 force);
 
 	void set_sensor(bool value);
+	bool is_sensor() const;
+
+	std::tuple<vec3, vec3> get_bounds() const;
 
 	void destroy();
 };
