@@ -249,7 +249,6 @@ void start_game(const std::string& map_name) {
 
 	ecs_defer_begin(Game);
 	find_sliding_doors.each([](Entity entity) {
-		std::cout << "Set door sliding\n";
 		auto& ds = get<DoorSliding>(entity);
 		ds.start= get<Position>(entity);
 		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
@@ -267,7 +266,7 @@ void start_game(const std::string& map_name) {
 		options.layer = 1;
 		options.mask = 2;
 		options.shape.type = BOX;
-		options.shape.size = max - min + vec3(2,2,2);
+		options.shape.size = max - min + vec3(4,4,4);
 
 		sensor.set<BodyOptions>(options);
 		sensor.add<UseParent>();
