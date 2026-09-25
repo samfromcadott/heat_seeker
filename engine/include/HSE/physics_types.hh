@@ -177,6 +177,9 @@ public:
 	Body(flecs::world world, const BodyOptions& options);
 	~Body();
 
+	void set_motion_type(JPH::EMotionType type);
+	JPH::EMotionType get_motion_type() const;
+
 	void set_position(const vec3& position);
 	vec3 get_position();
 

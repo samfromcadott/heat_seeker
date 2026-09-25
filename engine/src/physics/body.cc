@@ -33,6 +33,14 @@ Body::Body(flecs::world world, const BodyOptions& options) {
 	engine->physics_system.GetBodyInterface().SetIsSensor(id, options.sensor);
 }
 
+void Body::set_motion_type(JPH::EMotionType type) {
+	engine->physics_system.GetBodyInterface().SetMotionType(id, type, JPH::EActivation::Activate);
+}
+
+JPH::EMotionType Body::get_motion_type() const {
+	return engine->physics_system.GetBodyInterface().GetMotionType(id);
+}
+
 void Body::set_position(const vec3& position) {
 	engine->physics_system.GetBodyInterface().SetPosition(id, glm_to_jolt(position), JPH::EActivation::Activate);
 }
