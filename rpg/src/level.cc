@@ -3,6 +3,10 @@
 using namespace HSE;
 
 void use_parent(HSE::Entity entity, HSE::ContactAdded contact) {
+	// Only players and monsters can open doors
+	if ( not has<Player>(contact.other) and not has<Monster>(contact.other) )
+		return;
+
 	auto parent = entity.parent();
 
 	if ( auto ds = get_if<DoorSliding>(parent) ) {
