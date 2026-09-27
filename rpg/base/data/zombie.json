@@ -55,7 +55,7 @@
 			},
 
 			"Hitscan": {
-				"range": 1.0
+				"range": 1.5
 			},
 
 			"Damage": {
@@ -95,20 +95,20 @@
 
 			"Walk": {
 				"max_speed": 3.0,
-				"acceleration": 3.125,
-				"decceleration": 3.125,
-				"acceleration_air": 0.5,
+				"acceleration": 6.0,
+				"decceleration": 6.0,
+				"acceleration_air": 0.0,
 				"decceleration_air": 0.0
 			},
 
 			"Arsenal": {
-				"weapons": ["zombie_melee", "zombie_throw"]
+				"weapons": ["zombie_melee"]
 			},
 
 			"ArsenalInfo": {
-				"min": [0.0, 5.0],
-				"max": [2.0, 10.0],
-				"weight": [100, 100]
+				"min": [0.0],
+				"max": [2.0],
+				"weight": [100]
 			}
 		}
 	}

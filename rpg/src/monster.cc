@@ -23,6 +23,32 @@ void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, Mov
 	r = quat( vec3(0, 0, yaw) );
 }
 
+void find_target(flecs::entity monster, Target& target) {
+	// If the target is invalid
+		// Do a shape cast
+		// If an enemy is in it make them the target
+
+	auto player = Game.lookup("player");
+	if ( not player.is_valid() ) return;
+
+	// Do a hitscan to check for line of sight
+	vec3 start = vec3(get<Position>(monster)) + vec3(0,0,1);
+	vec3 end = vec3(get<Position>(player)) + vec3(0,0,1);
+
+	auto hit = Game.get<PhysicsEngine>().ray_cast(start, end - start, Layers::NON_MOVING);
+
+	// If it hits a wall them make target null
+	if (not hit.hit) {
+		target.entity = player;
+	}
+
+	else {
+		target.entity = Game.entity(0);
+		if ( auto dir = get_if<MoveDir>(monster) )
+			dir->value = vec3(0,0,0);
+	}
+}
+
 void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arsenal& arsenal, const ArsenalInfo& info) {
 	if ( not target.entity.is_valid() ) return;
 	if ( arsenal.equipped().get<WeaponTimer>().active ) return;

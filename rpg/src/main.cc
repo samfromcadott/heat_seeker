@@ -36,6 +36,7 @@ void start_game(const std::string& map_name) {
 	Game.system<Arsenal&>("player_fire").with<Player>().each(player_fire);
 	Game.system<Weapon&, WeaponTimer&>("weapon_update").each(weapon_update);
 	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
+	Game.system<Target&>("find_target").with<Monster>().each(find_target);
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
 	Game.system<Position&, Target&, Arsenal&, const ArsenalInfo&>("choose_attack").with<Monster>().each(choose_attack);
 	Game.system<Arsenal, HSE::Model&>("monster_animation").with<Monster>().each(monster_animation);
@@ -291,7 +292,7 @@ int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
 	SetExitKey(KEY_NULL);
-	start_game("maps/level01.hsm");
+	start_game("maps/test.hsm");
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {
