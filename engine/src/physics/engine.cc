@@ -35,8 +35,7 @@ public:
 	explicit MaskFilter(JPH::ObjectLayer inLayer) : mLayer(inLayer) {}
 
 	virtual bool ShouldCollide(JPH::ObjectLayer inLayer) const override {
-		return (GetGroup(mLayer) & GetMask(inLayer)) != 0
-		&& (GetGroup(inLayer) & GetMask(mLayer)) != 0;
+		return (GetGroup(inLayer) & GetMask(mLayer)) != 0;
 	}
 
 private:
@@ -126,7 +125,7 @@ RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray, JPH::ObjectLayer mask)
 
 	JPH::AllHitCollisionCollector<JPH::CastRayCollector> collector;
 	auto layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
-		mask, mask
+		0, mask
 	);
 	physics_system.GetNarrowPhaseQuery().CastRay(
 		JPH::RRayCast(r),
