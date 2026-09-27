@@ -29,6 +29,33 @@ static bool AssertFailedImpl(const char *inExpression, const char *inMessage, co
 
 #endif // JPH_ENABLE_ASSERTS
 
+/// This class filters ray casts based on a mask
+class MaskFilter : public JPH::ObjectLayerFilter {
+public:
+	explicit MaskFilter(JPH::ObjectLayer inLayer) : mLayer(inLayer) {}
+
+	virtual bool ShouldCollide(JPH::ObjectLayer inLayer) const override {
+		return (GetGroup(mLayer) & GetMask(inLayer)) != 0
+		&& (GetGroup(inLayer) & GetMask(mLayer)) != 0;
+	}
+
+private:
+	static constexpr uint32 cNumBits = JPH_OBJECT_LAYER_BITS / 2;
+	static constexpr uint32 cMask = (1 << cNumBits) - 1;
+
+	JPH::ObjectLayer mLayer;
+
+	/// Get the group bits from an ObjectLayer
+	static inline uint32 GetGroup(JPH::ObjectLayer inObjectLayer) {
+		return uint32(inObjectLayer) & cMask;
+	}
+
+	/// Get the mask bits from an ObjectLayer
+	static inline uint32 GetMask(JPH::ObjectLayer inObjectLayer) {
+		return uint32(inObjectLayer) >> cNumBits;
+	}
+};
+
 PhysicsEngine::PhysicsEngine() {
 	// Physics system setup
 	JPH::RegisterDefaultAllocator();
@@ -92,11 +119,22 @@ JPH::PhysicsSystem& PhysicsEngine::get_system() {
 	return physics_system;
 }
 
-RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray) const {
+RayCastHit PhysicsEngine::ray_cast(vec3 origin, vec3 ray, JPH::ObjectLayer mask) const {
 	JPH::RayCast r( glm_to_jolt(origin), glm_to_jolt(ray) );
 
-	JPH::AllHitCollisionCollector<JPH::RayCastBodyCollector> collector;
-	physics_system.GetBroadPhaseQuery().CastRay(r, collector);
+	JPH::RayCastSettings settings;
+
+	JPH::AllHitCollisionCollector<JPH::CastRayCollector> collector;
+	auto layer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
+		mask, mask
+	);
+	physics_system.GetNarrowPhaseQuery().CastRay(
+		JPH::RRayCast(r),
+		settings,
+		collector,
+		{},
+		MaskFilter(layer)
+	);
 
 	RayCastHit hit;
 	hit.hit = collector.mHits.size() > 0;

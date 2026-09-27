@@ -159,7 +159,7 @@ public:
 
 	JPH::PhysicsSystem& get_system();
 
-	RayCastHit ray_cast(vec3 origin, vec3 ray) const;
+	RayCastHit ray_cast(vec3 origin, vec3 ray, JPH::ObjectLayer mask) const;
 	std::vector<Entity> shape_cast(const vec3 origin, ShapeOptions shape_options) const;
 
 	friend class Body;

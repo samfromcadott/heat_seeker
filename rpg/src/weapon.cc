@@ -109,7 +109,7 @@ void launch_hitscan(flecs::entity entity) {
 	}
 
 	// Check for collisions
-	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir * range);
+	auto hit = Game.get<PhysicsEngine>().ray_cast(start, dir * range, Layers::MOVING);
 	if (not hit.hit) return;
 
 	for (auto& e : hit.entities) {
