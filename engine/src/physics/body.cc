@@ -45,7 +45,7 @@ void Body::set_position(const vec3& position) {
 	engine->physics_system.GetBodyInterface().SetPosition(id, glm_to_jolt(position), JPH::EActivation::Activate);
 }
 
-vec3 Body::get_position() {
+vec3 Body::get_position() const {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetPosition(id) );
 }
 
@@ -53,7 +53,7 @@ void Body::set_rotation(const quat& rotation) {
 	engine->physics_system.GetBodyInterface().SetRotation(id, glm_to_jolt(rotation), JPH::EActivation::Activate);
 }
 
-quat Body::get_rotation() {
+quat Body::get_rotation() const {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetRotation(id) );
 }
 
@@ -61,8 +61,16 @@ void Body::set_velocity(const vec3& velocity) {
 	engine->physics_system.GetBodyInterface().SetLinearVelocity( id, glm_to_jolt(velocity) );
 }
 
-vec3 Body::get_velocity() {
+vec3 Body::get_velocity() const {
 	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetLinearVelocity(id) );
+}
+
+void Body::set_angular_velocity(const vec3& angular_velocity) {
+	engine->physics_system.GetBodyInterface().SetAngularVelocity( id, glm_to_jolt(angular_velocity) );
+}
+
+vec3 Body::get_angular_velocity() const {
+	return jolt_to_glm( engine->physics_system.GetBodyInterface().GetAngularVelocity(id) );
 }
 
 vec3 Body::get_center() const {
@@ -74,7 +82,7 @@ void Body::set_owner(flecs::entity owner) {
 	engine->physics_system.GetBodyInterface().SetUserData( id, owner.id() );
 }
 
-flecs::entity Body::get_owner() {
+flecs::entity Body::get_owner() const {
 	auto owner = engine->physics_system.GetBodyInterface().GetUserData(id);
 	return flecs::entity(engine->world, owner);
 }

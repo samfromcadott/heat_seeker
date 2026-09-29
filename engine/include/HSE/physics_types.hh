@@ -181,18 +181,21 @@ public:
 	JPH::EMotionType get_motion_type() const;
 
 	void set_position(const vec3& position);
-	vec3 get_position();
+	vec3 get_position() const;
 
 	void set_rotation(const quat& rotation);
-	quat get_rotation();
+	quat get_rotation() const;
 
 	void set_velocity(const vec3& velocity);
-	vec3 get_velocity();
+	vec3 get_velocity() const;
+
+	void set_angular_velocity(const vec3& angular_velocity);
+	vec3 get_angular_velocity() const;
 
 	vec3 get_center() const;
 
 	void set_owner(flecs::entity owner);
-	flecs::entity get_owner();
+	flecs::entity get_owner() const;
 
 	void set_gravity_scale(const float scale);
 	float get_gravity_scale() const;
