@@ -129,6 +129,13 @@ enum DoorState {
 	CLOSING
 };
 
+enum PlatState {
+	A,
+	A_TO_B,
+	B,
+	B_TO_A
+};
+
 struct UseParent {};
 
 struct DoorSliding {
@@ -137,4 +144,32 @@ struct DoorSliding {
 	float distance = 2.0;
 	float speed = 4.0;
 	DoorState state = CLOSED;
+};
+
+struct DoorRotating {
+	float angle = 90.0;
+	HSE::vec3 axis = HSE::vec3(0,0,1);
+	float speed = 180.0; // Degrees per second
+	DoorState state = CLOSED;
+};
+
+struct Elevator {
+	HSE::vec3 start;
+	float distance = 2.0;
+	float speed = 4.0;
+	PlatState state = A;
+};
+
+struct PlatSliding {
+	HSE::vec3 start;
+	HSE::vec3 direction = HSE::vec3(0,0,1);
+	float distance = 2.0;
+	float speed = 4.0;
+	PlatState state = A;
+};
+
+struct PlatRotating {
+	HSE::vec3 axis = HSE::vec3(0,0,1);
+	float speed = 180.0;
+	bool moving = true;
 };
