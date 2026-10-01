@@ -103,9 +103,8 @@ void launch_hitscan(flecs::entity entity) {
 	else {
 		vec3 p = vec3( owner.get<Position>() );
 		quat r = quat( owner.get<Rotation>() );
-		start = p + ( r * vec3(0.251,0,0) );
-		dir = vec3(range, 0, 0);
-		dir = r * dir;
+		start = p + vec3(0,0,1);
+		dir = r * vec3(range, 0, 0);
 	}
 
 	// Check for collisions
