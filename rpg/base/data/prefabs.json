@@ -4,6 +4,7 @@
 	"data/player.json",
 	"data/zombie.json",
 	"data/chara/soldier.json",
-	"data/prop/can.json"
+	"data/prop/can.json",
+	"data/prop/crate.json"
 ]
 }
