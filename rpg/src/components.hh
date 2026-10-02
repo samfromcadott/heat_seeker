@@ -116,6 +116,10 @@ struct WeaponSound {
 	HSE::Asset<Sound> fire;
 };
 
+struct WeaponAnim {
+	std::string fire;
+};
+
 // Trigger components
 struct ChangeLevel {
 	std::string level;

@@ -14,4 +14,4 @@ void die_when_no_health(flecs::entity e, Health& h);
 void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t);
 void find_target(flecs::entity monster, Target& target);
 void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arsenal& arsenal, const ArsenalInfo& info);
-void monster_animation(Arsenal& arsenal, HSE::Model& m);
+void monster_animation(flecs::entity monster, Arsenal& arsenal, HSE::Model& m);

@@ -115,6 +115,9 @@ void start_game(const std::string& map_name) {
 	Game.component<WeaponSound>()
 	.member("fire", &WeaponSound::fire);
 
+	Game.component<WeaponAnim>()
+	.member("fire", &WeaponAnim::fire);
+
 	Game.component<ChangeLevel>()
 	.member("level", &ChangeLevel::level);
 

@@ -69,7 +69,9 @@ void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arse
 
 		arsenal.index = i;
 		fire_weapon( arsenal.equipped() );
-		monster.get_mut<HSE::Model>().play("Attack");
+
+		if ( auto anim = get_if<WeaponAnim>( arsenal.equipped() ) )
+			get<HSE::Model>(monster).play( anim->fire );
 
 		if ( auto move_dir = get_if<MoveDir>(monster) )
 			move_dir->value = vec3(0,0,0);
@@ -78,7 +80,13 @@ void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arse
 	}
 }
 
-void monster_animation(Arsenal& arsenal, HSE::Model& m) {
-	if (not arsenal.equipped().get<WeaponTimer>().active)
-		m.play("Walk");
+void monster_animation(flecs::entity monster, Arsenal& arsenal, HSE::Model& m) {
+	vec3 v = get<Velocity>(monster);
+	if (not arsenal.equipped().get<WeaponTimer>().active) {
+		if ( length(v) < 0.1 )
+			m.play("Idle");
+		else
+			m.play("Walk");
+	}
+
 }
