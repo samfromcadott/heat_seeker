@@ -43,7 +43,7 @@
 			},
 			"Explode": {
 				"radius": 5.0,
-				"force": 200.0,
+				"force": 10000.0,
 				"sound": "sound/rpg_impact.wav"
 			}
 		}

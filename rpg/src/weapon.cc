@@ -155,7 +155,7 @@ void explode(Entity entity) {
 		else if ( has<CharacterBody>(e) ) {
 			vec3 dir = get<CharacterBody>(e).get_center() - vec3(get<Position>(entity));
 			dir = normalize(dir);
-			get<Velocity>(e) = vec3(get<Velocity>(e)) + dir * force * coef * 0.05f;
+			get<Velocity>(e) = vec3(get<Velocity>(e)) + dir * force * coef * 0.001f;
 		}
 
 		if ( has<Health>(e) )

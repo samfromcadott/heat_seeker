@@ -1,7 +1,7 @@
 #include <heat_seeker.hh>
 
 JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
-	JPH::Ref<JPH::Shape> shape;
+	JPH::Shape* shape;
 
 	switch (options.type) {
 		case ShapeType::NONE:
@@ -26,8 +26,16 @@ JPH::Ref<JPH::Shape> HSE::convert_shape(const ShapeOptions& options) {
 			break;
 	}
 
-	if ( options.translation != glm::vec3(0.0, 0.0, 0.0) or options.rotation != glm::quat(1.0, 0.0, 0.0, 0.0) ) {
-		return new JPH::RotatedTranslatedShape(glm_to_jolt(options.translation), glm_to_jolt(options.rotation), shape);
+	if (options.type != ShapeType::NONE and options.type != ShapeType::MESH) {
+		static_cast<JPH::ConvexShape*>(shape)->SetDensity(options.density);
+	}
+
+	if ( options.translation != vec3(0.0, 0.0, 0.0) or options.rotation != quat(1.0, 0.0, 0.0, 0.0) ) {
+		return new JPH::RotatedTranslatedShape(
+			glm_to_jolt(options.translation),
+			glm_to_jolt(options.rotation),
+			shape
+		);
 	}
 
 	return shape;

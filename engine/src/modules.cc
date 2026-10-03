@@ -144,6 +144,7 @@ void HSE::init_physics(flecs::world& world) {
 		.member("type", &HSE::ShapeOptions::type)
 		.member("translation", &HSE::ShapeOptions::translation)
 		.member("rotation", &HSE::ShapeOptions::rotation)
+		.member("density", &HSE::ShapeOptions::density)
 		.member("height", &HSE::ShapeOptions::height)
 		.member("radius", &HSE::ShapeOptions::radius)
 		.member("size", &HSE::ShapeOptions::size)

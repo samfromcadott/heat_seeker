@@ -91,6 +91,7 @@ struct ShapeOptions {
 	ShapeType type = ShapeType::NONE;
 	vec3 translation = vec3(0,0,0);
 	quat rotation = quat(1,0,0,0);
+	float density = 1000.0;
 
 	float height = 0.0;
 	float radius = 0.0;
