@@ -30,17 +30,6 @@ struct ModelOptions {
 	std::string file;
 };
 
-class LevelModel {
-public:
-	LevelModel();
-	LevelModel(flecs::world& world, const std::string& filename);
-	~LevelModel();
-
-private:
-	::Model model;
-
-};
-
 extern std::function<void(void)> ui_function;
 extern Shader gouraud_shader;
 extern Color clear_color;
