@@ -30,6 +30,11 @@ struct ModelOptions {
 	std::string file;
 };
 
+struct Light {
+	vec4 color = {1.0,1.0,1.0,1.0};
+	float power = 1.0;
+};
+
 extern std::function<void(void)> ui_function;
 extern Shader gouraud_shader;
 extern Color clear_color;

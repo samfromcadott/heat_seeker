@@ -295,7 +295,7 @@ int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
 	SetExitKey(KEY_NULL);
-	start_game("maps/test.hsm");
+	start_game("maps/level01.hsm");
 
 	// Main game loop
 	while ( !WindowShouldClose() ) {

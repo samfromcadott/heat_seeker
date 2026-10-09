@@ -75,6 +75,12 @@ void HSE::init_core(flecs::world& world) {
 	.member("y", &HSE::vec3::y)
 	.member("z", &HSE::vec3::z);
 
+	world.component<HSE::vec4>()
+	.member("x", &HSE::vec4::x)
+	.member("y", &HSE::vec4::y)
+	.member("z", &HSE::vec4::z)
+	.member("w", &HSE::vec4::w);
+
 	world.component<HSE::quat>()
 	.member("w", &HSE::quat::w)
 	.member("x", &HSE::quat::x)
@@ -258,6 +264,9 @@ void HSE::init_render(flecs::world& world) {
 	world.component<HSE::Model>();
 	world.component<ModelOptions>()
 		.member("file", &ModelOptions::file);
+	world.component<HSE::Light>()
+	.member("color", &HSE::Light::color)
+	.member("power", &HSE::Light::power);
 
 	world.observer<HSE::ModelOptions>("model_options_set")
 	.event(flecs::OnSet)

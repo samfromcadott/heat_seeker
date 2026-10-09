@@ -35,6 +35,18 @@ def make_entities():
 		if object.type == "MESH":
 			e["MODEL"] = mesh.convert_model(object)
 
+		# Get light
+		if object.type == "LIGHT":
+			l = bpy.data.lights[object.name]
+			e["COMP"]["HSE::Light"] = {}
+			e["COMP"]["HSE::Light"]["power"] = l.energy
+			e["COMP"]["HSE::Light"]["color"] = {
+				"x": l.color[0],
+				"y": l.color[1],
+				"z": l.color[2],
+				"w": 1.0
+			}
+
 		entities["ENT"][object.name] = e
 
 	return entities
