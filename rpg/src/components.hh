@@ -48,6 +48,11 @@ struct WeaponTimer {
 	float time = 0.0; // Time since it became active
 };
 
+// Delete an entity after the timer expires
+struct DeleteTimer {
+	float time = 1.0;
+};
+
 struct Weapon {
 	float launch_time; // Time until the proectile/hitscan is fired
 	float rate; // Time until it can fire again

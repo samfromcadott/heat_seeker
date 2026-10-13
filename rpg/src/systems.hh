@@ -15,3 +15,4 @@ void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, Mov
 void find_target(flecs::entity monster, Target& target);
 void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arsenal& arsenal, const ArsenalInfo& info);
 void monster_animation(flecs::entity monster, Arsenal& arsenal, HSE::Model& m);
+void delete_timer(flecs::entity entity, DeleteTimer& timer);

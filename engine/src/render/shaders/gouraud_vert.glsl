@@ -35,7 +35,7 @@ const float shininess = 2.0;
 vec4 calc_light(Light light, vec3 pos, vec3 norm) {
 	vec3 dir = normalize(light.position - pos);
 	float dist = distance(pos, light.position);
-	float attenuation = 1.0 / (dist*dist*0.23);
+	float attenuation = 1.0 / (dist*dist*8.0);
 
 	// Diffuse
 	float NdotL = max(dot(norm, dir), 0.0);
@@ -47,7 +47,7 @@ vec4 calc_light(Light light, vec3 pos, vec3 norm) {
 }
 
 void main() {
-	vec4 ambient = vec4(0.5, 0.5, 0.5, 1.0);
+	vec4 ambient = vec4(0.3, 0.3, 0.3, 1.0);
 
 	 // Transform coords
 	fragPosition = vec3(matModel*vec4(vertexPosition, 1.0));

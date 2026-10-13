@@ -57,6 +57,7 @@ void start_game(const std::string& map_name) {
 		paused = !paused;
 	}).add<NoPause>();
 	Game.system<Position&, Velocity&, DoorSliding&>("slide_door").each(slide_door);
+	Game.system<DeleteTimer&>("delete_timer").each(delete_timer);
 
 	// Register components
 	Game.component<Player>();

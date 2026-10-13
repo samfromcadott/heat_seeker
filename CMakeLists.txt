@@ -46,6 +46,7 @@ add_executable(rpg
 	rpg/src/monster.cc
 	rpg/src/items.cc
 	rpg/src/level.cc
+	rpg/src/misc.cc
 )
 
 target_link_libraries(rpg heat_seeker)
