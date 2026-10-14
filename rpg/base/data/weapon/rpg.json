@@ -4,12 +4,12 @@
 		"COMP": {
 			"Weapon": {
 				"launch_time": 0.0,
-				"rate": 0.5
+				"rate": 0.8
 			},
 			"WeaponTimer": {},
 			"LaunchMissile": {
 				"missile": "missile_rpg",
-				"speed": 20.0
+				"speed": 32.0
 			},
 			"Ammo": {
 				"count": 20
