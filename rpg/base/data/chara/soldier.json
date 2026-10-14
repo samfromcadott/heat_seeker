@@ -1,0 +1,100 @@
+{
+"PREFAB": {
+	"chara_soldier": {
+		"COMP": {
+			"Position": {},
+			"Rotation": {},
+
+			"Monster": {},
+			"Target": {},
+			"Velocity": {},
+			"MoveDir": {},
+
+			"HSE::ModelOptions": {
+				"file": "models/soldier.glb"
+			},
+
+			"Health": {
+				"now": 50,
+				"max": 50
+			},
+
+			"HSE::CharacterBodyOptions": {
+				"shape": {
+					"type": "CAPSULE",
+					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"translation": {"x":0.0, "y":0.0, "z":1.3},
+					"radius": 0.5,
+					"height": 1.6
+				}
+			},
+
+			"Walk": {
+				"max_speed": 10.0,
+				"acceleration": 25.0,
+				"decceleration": 25.0,
+				"acceleration_air": 0.0,
+				"decceleration_air": 0.0
+			},
+
+			"Arsenal": {
+				"weapons": ["soldier_rifle"]
+			},
+
+			"ArsenalInfo": {
+				"min": [0.0],
+				"max": [20.0],
+				"weight": [100]
+			}
+		}
+	},
+
+	"soldier_rifle": {
+		"COMP": {
+			"Weapon": {
+				"launch_time": 0.0,
+				"rate": 0.3
+			},
+
+			"WeaponTimer": {},
+
+			"LaunchMissile": {
+				"missile": "soldier_bullet",
+				"speed": 30.0
+			},
+
+			"WeaponSound": { "fire": "sound/rifle_fire.wav" },
+			"WeaponAnim": { "fire": "Fire" }
+		}
+	},
+
+	"soldier_bullet": {
+		"COMP": {
+			"Missile": {},
+
+			"Position": {},
+			"Rotation": {},
+			"Velocity": {},
+
+			"HSE::ModelOptions": {
+				"file": "models/bullet.glb"
+			},
+
+			"HSE::BodyOptions": {
+				"shape": {
+					"type": "SPHERE",
+					"radius": 0.04
+				},
+				"layer": 1,
+				"mask": 3,
+				"gravity_scale": 0.5,
+				"sensor": true
+			},
+
+			"Damage": {
+				"value": 10
+			}
+		}
+	}
+}
+}
