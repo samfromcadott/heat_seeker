@@ -170,3 +170,15 @@ void explode(Entity entity) {
 
 	entity.destruct();
 }
+
+void missile_rotate(const Velocity& velocity, Rotation& rotation) {
+	vec3 v1 = vec3(1,0,0);
+	vec3 v2 = normalize( vec3(velocity) );
+
+	vec3 r = cross(v1, v2);
+
+	rotation = normalize( quat(
+		1.0f + dot(v1, v2),
+		r.x, r.y, r.z
+	) );
+}

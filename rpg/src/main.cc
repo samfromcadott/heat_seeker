@@ -58,6 +58,7 @@ void start_game(const std::string& map_name) {
 	}).add<NoPause>();
 	Game.system<Position&, Velocity&, DoorSliding&>("slide_door").each(slide_door);
 	Game.system<DeleteTimer&>("delete_timer").each(delete_timer);
+	Game.system<const Velocity&, Rotation&>("missile_rotate").with<Missile>().each(missile_rotate);
 
 	// Register components
 	Game.component<Player>();
