@@ -26,11 +26,13 @@ void start_game(const std::string& map_name) {
 	init_render(Game);
 	File::mount("base");
 
-	shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
-	shaders["unlit"] = Shader {};
-	shaders["unlit"].id = rlGetShaderIdDefault();
-	shaders["unlit"].locs = rlGetShaderLocsDefault();
-	default_shader = "gouraud";
+	if ( shaders.empty() ) {
+		shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+		shaders["unlit"] = Shader {};
+		shaders["unlit"].id = rlGetShaderIdDefault();
+		shaders["unlit"].locs = rlGetShaderLocsDefault();
+		default_shader = "gouraud";
+	}
 
 	HSE::clear_color = SKYBLUE;
 
