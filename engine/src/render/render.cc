@@ -2,6 +2,8 @@
 
 Color HSE::clear_color = GRAY;
 std::function<void(void)> HSE::ui_function;
+std::map<std::string, Shader> HSE::shaders;
+std::string HSE::default_shader;
 
 void HSE::start_render() {
 	BeginDrawing();

@@ -10,6 +10,9 @@ void HSE::init(const std::string& title, const int width, const int height) {
 void HSE::quit() {
 	Game.quit();
 	UnloadShader(gouraud_shader);
+	for (auto [name, shader] : shaders) {
+		UnloadShader(shader);
+	}
 	CloseWindow();
 }
 

@@ -161,7 +161,7 @@ bool HSE::level_entity_has_tag(const nlohmann::json& json, const std::string& ta
 
 Material HSE::load_level_material(const std::string& name) {
 	Material mat = LoadMaterialDefault();
-	mat.shader = gouraud_shader;
+	mat.shader = shaders[default_shader];
 	mat.maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture( name.c_str() );
 
 	return mat;

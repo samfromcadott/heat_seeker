@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <raylib.h>
+#include <rlgl.h>
 
 namespace HSE {
 
@@ -28,6 +29,7 @@ struct Model {
 
 struct ModelOptions {
 	std::string file;
+	std::string shader = "";
 };
 
 struct Light {
@@ -37,6 +39,8 @@ struct Light {
 
 extern std::function<void(void)> ui_function;
 extern Shader gouraud_shader;
+extern std::map<std::string, Shader> shaders;
+extern std::string default_shader;
 extern Color clear_color;
 
 }

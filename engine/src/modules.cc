@@ -262,8 +262,11 @@ void HSE::init_render(flecs::world& world) {
 		.kind(flecs::PostUpdate).each(HSE::end_render).add<NoPause>();
 
 	world.component<HSE::Model>();
+
 	world.component<ModelOptions>()
-		.member("file", &ModelOptions::file);
+	.member("file", &ModelOptions::file)
+	.member("shader", &ModelOptions::shader);
+
 	world.component<HSE::Light>()
 	.member("color", &HSE::Light::color)
 	.member("power", &HSE::Light::power);
@@ -273,16 +276,25 @@ void HSE::init_render(flecs::world& world) {
 	.each([&](flecs::entity e, HSE::ModelOptions& o) {
 		// Load a model and add it to the entity
 		e.set<HSE::Model>( HSE::Model(o.file) );
-		e.remove<HSE::ModelOptions>();
 	});
 
 	world.observer<HSE::Model>("model_set")
 	.event(flecs::OnSet)
 	.each([&](flecs::entity e, HSE::Model& m) {
 		m.data.load();
+
+		const auto options = get_if<ModelOptions>(e);
+
 		for (int i = 0; i < m.data->model.materialCount; i++) {
-			m.data->model.materials[i].shader = gouraud_shader;
+			auto& shader = m.data->model.materials[i].shader;
+
+			if (not options or options->shader == "")
+				shader = shaders[default_shader];
+			else
+				shader = shaders[options->shader];
 		}
+
+		e.remove<HSE::ModelOptions>();
 	});
 
 	gouraud_shader =  LoadShaderFromMemory(gouraud_vert, gouraud_frag);
