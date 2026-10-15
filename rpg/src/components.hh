@@ -60,7 +60,6 @@ struct Weapon {
 };
 
 struct Muzzle {
-	HSE::vec3 direction;
 	HSE::vec3 offset;
 };
 

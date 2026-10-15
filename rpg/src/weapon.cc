@@ -56,22 +56,23 @@ void launch_missile(flecs::entity entity) {
 	auto owner = entity.parent();
 
 	vec3 launch_point, vel;
-	if ( owner.has<PlayerCamera>() ) {
-		vec3 p = vec3( owner.get<Position>() );
-		quat r = quat( owner.get<Rotation>() );
 
-		float yaw = eulerAngles( quat(r) ).z;
+	// Set launch point
+	vec3 pos = vec3( owner.get<Position>() );
+	quat rot = quat( owner.get<Rotation>() );
+	vec3 offset = get<Muzzle>(owner).offset;
+	launch_point = pos + ( rot * offset );
+
+	// Set velocity
+	if ( owner.has<PlayerCamera>() ) {
+		float yaw = eulerAngles( quat(rot) ).z;
 		float pitch = owner.get<PlayerCamera>().pitch;
 
 		vec3 dir = quat(vec3(0, pitch, yaw)) * vec3(1,0,0);
-		launch_point = p + owner.get<PlayerCamera>().offset + dir;
 		vel = dir * get<LaunchMissile>(entity).speed;
 	}
 	else {
-		vec3 p = vec3( owner.get<Position>() );
-		quat r = quat( owner.get<Rotation>() );
-		launch_point = p + ( r * vec3(0.1,0,1.0) );
-		vec3 dir = r * vec3(1,0,0);
+		vec3 dir = rot * vec3(1,0,0);
 		vel = dir * get<LaunchMissile>(entity).speed;
 	}
 
@@ -79,7 +80,6 @@ void launch_missile(flecs::entity entity) {
 
 	missile.set<Position>( vec3(launch_point) );
 	missile.set<Velocity>( vec3(vel) );
-	// missile.set<Rotation>(rotation);
 
 	missile.set<Owner>({ entity.parent() });
 }

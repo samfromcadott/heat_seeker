@@ -32,6 +32,9 @@
 			"Arsenal": {
 				"weapons": ["weapon_punch", "weapon_rpg"],
 				"index": 1
+			},
+			"Muzzle": {
+				"offset": {"x":0,"y":0,"z":1.25}
 			}
 		}
 	},

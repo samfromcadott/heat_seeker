@@ -25,6 +25,13 @@ void start_game(const std::string& map_name) {
 	init_physics(Game);
 	init_render(Game);
 	File::mount("base");
+
+	shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+	shaders["unlit"] = Shader {};
+	shaders["unlit"].id = rlGetShaderIdDefault();
+	shaders["unlit"].locs = rlGetShaderLocsDefault();
+	default_shader = "gouraud";
+
 	HSE::clear_color = SKYBLUE;
 
 	// Create systems
@@ -94,6 +101,9 @@ void start_game(const std::string& map_name) {
 	.member("launch_time", &Weapon::launch_time)
 	.member("rate", &Weapon::rate)
 	.member("has_fired", &Weapon::has_fired);
+
+	Game.component<Muzzle>()
+	.member("offset", &Muzzle::offset);
 
 	Game.component<Arsenal>()
 	.member("index", &Arsenal::index)
