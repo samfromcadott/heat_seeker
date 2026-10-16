@@ -146,6 +146,10 @@ void HSE::init_physics(flecs::world& world) {
 		.constant("Dynamic", JPH::EMotionType::Dynamic)
 		.constant("Kinematic", JPH::EMotionType::Kinematic);
 
+	world.component<JPH::EMotionQuality>()
+		.constant("Discrete", JPH::EMotionQuality::Discrete)
+		.constant("LinearCast", JPH::EMotionQuality::LinearCast);
+
 	world.component<HSE::ShapeOptions>()
 		.member("type", &HSE::ShapeOptions::type)
 		.member("translation", &HSE::ShapeOptions::translation)
@@ -159,6 +163,7 @@ void HSE::init_physics(flecs::world& world) {
 	world.component<HSE::BodyOptions>()
 		.member("shape", &HSE::BodyOptions::shape)
 		.member("motion_type", &HSE::BodyOptions::motion_type)
+		.member("motion_quality", &HSE::BodyOptions::motion_quality)
 		.member("layer", &HSE::BodyOptions::layer)
 		.member("mask", &HSE::BodyOptions::mask)
 		.member("gravity_scale", &HSE::BodyOptions::gravity_scale)

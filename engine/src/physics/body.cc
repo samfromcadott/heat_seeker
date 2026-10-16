@@ -31,6 +31,7 @@ Body::Body(flecs::world world, const BodyOptions& options) {
 	id = this->engine->physics_system.GetBodyInterface().CreateAndAddBody(settings, JPH::EActivation::Activate);
 	set_gravity_scale(options.gravity_scale);
 	engine->physics_system.GetBodyInterface().SetIsSensor(id, options.sensor);
+	engine->physics_system.GetBodyInterface().SetMotionQuality(id, options.motion_quality);
 }
 
 void Body::set_motion_type(JPH::EMotionType type) {
