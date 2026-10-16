@@ -26,13 +26,17 @@ void start_game(const std::string& map_name) {
 	init_render(Game);
 	File::mount("base");
 
-	if ( shaders.empty() ) {
-		shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
-		shaders["unlit"] = Shader {};
-		shaders["unlit"].id = rlGetShaderIdDefault();
-		shaders["unlit"].locs = rlGetShaderLocsDefault();
-		default_shader = "gouraud";
-	}
+	// if ( shaders.empty() ) {
+	// 	auto gouraud_vert = LoadFileText("shaders/gouraud_vert.glsl");
+	// 	auto gouraud_frag = LoadFileText("shaders/gouraud_frag.glsl");
+	// 	std::cout << gouraud_vert << '\n';
+	// 	// shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+	// 	shaders["gouraud"] = LoadShaderFromMemory(gouraud_vert, gouraud_frag);
+	// 	shaders["unlit"] = Shader {};
+	// 	shaders["unlit"].id = rlGetShaderIdDefault();
+	// 	shaders["unlit"].locs = rlGetShaderLocsDefault();
+	// 	default_shader = "gouraud";
+	// }
 
 	HSE::clear_color = SKYBLUE;
 
@@ -242,6 +246,15 @@ void start_game(const std::string& map_name) {
 	.event(flecs::OnSet)
 	.with<UseParent>()
 	.each(use_parent);
+
+	// Load shaders
+	if ( shaders.empty() ) {
+		shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+		shaders["unlit"] = Shader {};
+		shaders["unlit"].id = rlGetShaderIdDefault();
+		shaders["unlit"].locs = rlGetShaderLocsDefault();
+		default_shader = "gouraud";
+	}
 
 	// Load scripts
 	load_data_file(Game, "data/prefabs.json");
