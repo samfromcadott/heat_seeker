@@ -42,9 +42,10 @@ unsigned char* HSE::File::read_bin_file_callback(const char *fileName, int *data
 
 char* HSE::File::read_text_file_callback(const char *filename) {
 	PHYSFS_file* file = PHYSFS_openRead(filename);
-	int size = PHYSFS_fileLength(file);
+	uint64_t size = PHYSFS_fileLength(file);
 
 	char* data = new char[size];
+	std::fill_n(data, size, 0);
 	PHYSFS_readBytes(file, data, size);
 	PHYSFS_close(file);
 
