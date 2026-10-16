@@ -103,6 +103,15 @@ void Body::set_sensor(bool value) {
 	engine->physics_system.GetBodyInterface().SetIsSensor(id, value);
 }
 
+void Body::set_shape(const ShapeOptions& shape) {
+	engine->physics_system.GetBodyInterface().SetShape(
+		id,
+		convert_shape(shape),
+		false,
+		JPH::EActivation::Activate
+	);
+}
+
 std::tuple<vec3, vec3> Body::get_bounds() const {
 	auto shape = engine->physics_system.GetBodyInterface().GetShape(id);
 	auto box = shape->GetLocalBounds();

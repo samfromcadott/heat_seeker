@@ -206,6 +206,8 @@ public:
 	void set_sensor(bool value);
 	bool is_sensor() const;
 
+	void set_shape(const ShapeOptions& shape);
+
 	std::tuple<vec3, vec3> get_bounds() const;
 
 	void destroy();
@@ -241,6 +243,8 @@ public:
 
 	void set_owner(flecs::entity owner);
 	flecs::entity get_owner() const;
+
+	void set_shape(const ShapeOptions& shape);
 
 	void destroy();
 };

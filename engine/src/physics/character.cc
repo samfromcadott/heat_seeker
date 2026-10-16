@@ -118,6 +118,20 @@ flecs::entity CharacterBody::get_owner() const {
 	return flecs::entity(engine->world, owner);
 }
 
+void CharacterBody::set_shape(const ShapeOptions& shape) {
+	body->SetShape(
+		convert_shape(shape),
+		1.5f * engine->physics_system.GetPhysicsSettings().mPenetrationSlop,
+		{ },
+		{ },
+		{ },
+		{ },
+		*(engine->temp_allocator)
+	);
+
+	body->SetInnerBodyShape( convert_shape(shape) );
+}
+
 void CharacterBody::destroy() {
 	engine->physics_system.GetBodyInterface().RemoveBody(body->GetInnerBodyID());
 	engine->physics_system.GetBodyInterface().DestroyBody(body->GetInnerBodyID());
