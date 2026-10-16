@@ -26,6 +26,23 @@
 				"decceleration_air": 0.0
 			},
 			"Jump": { "speed": 5.0 },
+			"Crouch": {
+				"crouch_shape": {
+					"type": "CAPSULE",
+					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"translation": {"x":0.0, "y":0.0, "z":0.5},
+					"radius": 0.5,
+					"height": 1.0
+				},
+				"stand_shape": {
+					"type": "CAPSULE",
+					"rotation": {"w":0.7071068, "x":0.7071068, "y":0, "z":0},
+					"translation": {"x":0.0, "y":0.0, "z":0.875},
+					"radius": 0.5,
+					"height": 1.75
+				},
+				"height_change": 0.75
+			},
 			"PlayerCamera": {
 				"offset": {"x":0.0, "y":0.0, "z":1.6}
 			},

@@ -7,6 +7,7 @@ void dead_camera(PlayerCamera& player_camera, HSE::Position& position, HSE::Rota
 void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::Rotation& rotation);
 void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk, MoveDir& dir);
 void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity, const Jump& jump);
+void player_crouch(HSE::Entity player, HSE::CharacterBody& body, Crouch& crouch);
 // void player_fire(Player player, HeldWeapon& weapon);
 void player_fire(Arsenal& arsenal);
 void switch_weapon(Arsenal& arsenal);

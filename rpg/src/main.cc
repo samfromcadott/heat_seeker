@@ -42,6 +42,7 @@ void start_game(const std::string& map_name) {
 	Game.system<Player, Velocity&, MoveDir&, Rotation&>("player_movement").each(player_movement);
 	Game.system<HSE::Velocity&, HSE::CharacterBody&, const Walk&, MoveDir&>("walking").each(walking);
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);
+	Game.system<HSE::CharacterBody&, Crouch&>("player_crouch").each(player_crouch);
 	Game.system<Arsenal&>("player_fire").with<Player>().each(player_fire);
 	Game.system<Weapon&, WeaponTimer&>("weapon_update").each(weapon_update);
 	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
@@ -94,6 +95,12 @@ void start_game(const std::string& map_name) {
 
 	Game.component<Jump>()
 	.member("speed", &Jump::speed);
+
+	Game.component<Crouch>()
+	.member("active", &Crouch::active)
+	.member("height_change", &Crouch::height_change)
+	.member("crouch_shape", &Crouch::crouch_shape)
+	.member("stand_shape", &Crouch::stand_shape);
 
 	Game.component<WeaponTimer>()
 	.member("active", &WeaponTimer::active)

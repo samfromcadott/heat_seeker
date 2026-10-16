@@ -43,6 +43,12 @@ struct Jump {
 	float speed;
 };
 
+struct Crouch {
+	bool active = false;
+	float height_change;
+	HSE::ShapeOptions crouch_shape, stand_shape;
+};
+
 struct WeaponTimer {
 	bool active = false;
 	float time = 0.0; // Time since it became active
