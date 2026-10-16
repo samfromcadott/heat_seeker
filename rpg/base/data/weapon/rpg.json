@@ -91,6 +91,18 @@
 				"count": 4
 			}
 		}
+	},
+
+	"rpg_explosion": {
+		"COMP": {
+			"Position": {},
+			"Rotation": {},
+			"HSE::ModelOptions": {
+				"file": "models/explosion.glb",
+				"shader": "unlit"
+			},
+			"DeleteTimer": {"time": 0.5}
+		}
 	}
 }
 }

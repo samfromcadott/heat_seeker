@@ -123,10 +123,8 @@ void launch_hitscan(flecs::entity entity) {
 void explode(Entity entity) {
 	// Spawn an explosion model
 	auto model = Game.entity();
-	model.set<HSE::Model>( HSE::Model("models/explosion.glb") );
+	model.is_a( Game.lookup("rpg_explosion") );
 	model.set<Position>( get<Position>(entity) );
-	model.add<Rotation>();
-	model.set<DeleteTimer>({0.5});
 
 	// Play the explosion sound
 	if (get<Explode>(entity).sound)

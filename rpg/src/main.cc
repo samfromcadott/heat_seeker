@@ -161,6 +161,9 @@ void start_game(const std::string& map_name) {
 	.member("speed", &DoorSliding::speed)
 	.member("state", &DoorSliding::state);
 
+	Game.component<DeleteTimer>()
+	.member("time", &DeleteTimer::time);
+
 	// Observers
 	Game.observer<Target>("set_monster_target")
 	.event(flecs::OnAdd)
