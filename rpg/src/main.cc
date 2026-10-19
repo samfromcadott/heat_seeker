@@ -26,18 +26,6 @@ void start_game(const std::string& map_name) {
 	init_render(Game);
 	File::mount("base");
 
-	// if ( shaders.empty() ) {
-	// 	auto gouraud_vert = LoadFileText("shaders/gouraud_vert.glsl");
-	// 	auto gouraud_frag = LoadFileText("shaders/gouraud_frag.glsl");
-	// 	std::cout << gouraud_vert << '\n';
-	// 	// shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
-	// 	shaders["gouraud"] = LoadShaderFromMemory(gouraud_vert, gouraud_frag);
-	// 	shaders["unlit"] = Shader {};
-	// 	shaders["unlit"].id = rlGetShaderIdDefault();
-	// 	shaders["unlit"].locs = rlGetShaderLocsDefault();
-	// 	default_shader = "gouraud";
-	// }
-
 	HSE::clear_color = SKYBLUE;
 
 	// Create systems
@@ -71,6 +59,7 @@ void start_game(const std::string& map_name) {
 		paused = !paused;
 	}).add<NoPause>();
 	Game.system<Position&, Velocity&, DoorSliding&>("slide_door").each(slide_door);
+	Game.system<Position&, Velocity&, Elevator&>("move_elevator").each(move_elevator);
 	Game.system<DeleteTimer&>("delete_timer").each(delete_timer);
 	Game.system<const Velocity&, Rotation&>("missile_rotate").with<Missile>().each(missile_rotate);
 
@@ -171,6 +160,12 @@ void start_game(const std::string& map_name) {
 	.member("distance", &DoorSliding::distance)
 	.member("speed", &DoorSliding::speed)
 	.member("state", &DoorSliding::state);
+
+	Game.component<Elevator>()
+	.member("start", &Elevator::start)
+	.member("distance", &Elevator::distance)
+	.member("speed", &Elevator::speed)
+	.member("state", &Elevator::state);
 
 	Game.component<DeleteTimer>()
 	.member("time", &DeleteTimer::time);
@@ -282,38 +277,7 @@ void start_game(const std::string& map_name) {
 		}
 	};
 
-	// Add sensors to doors
-	flecs::query<> find_sliding_doors  = Game.query_builder<>()
-	.with<Body>()
-	.with<DoorSliding>()
-	.build();
-
-	ecs_defer_begin(Game);
-	find_sliding_doors.each([](Entity entity) {
-		auto& ds = get<DoorSliding>(entity);
-		ds.start= get<Position>(entity);
-		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
-		entity.add<Velocity>();
-
-		// Get bounds of the door
-		auto [min, max] = get<Body>(entity).get_bounds();
-
-		// Make a child object
-		auto sensor = entity.child();
-
-		BodyOptions options;
-		options.motion_type = JPH::EMotionType::Static;
-		options.sensor = true;
-		options.layer = 1;
-		options.mask = 2;
-		options.shape.type = BOX;
-		options.shape.size = max - min + vec3(4,4,4);
-
-		sensor.set<BodyOptions>(options);
-		sensor.add<UseParent>();
-		sensor.set<Position>( get<Position>(entity) );
-	});
-	ecs_defer_end(Game);
+	add_sensors(Game);
 }
 
 void check_reset() {

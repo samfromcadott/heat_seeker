@@ -2,6 +2,73 @@
 
 using namespace HSE;
 
+void add_sensors(flecs::world world) {
+	flecs::query<> find_sliding_doors  = world.query_builder<>()
+	.with<Body>()
+	.with<DoorSliding>()
+	.build();
+
+	ecs_defer_begin(world);
+	find_sliding_doors.each([](Entity entity) {
+		auto& ds = get<DoorSliding>(entity);
+		ds.start= get<Position>(entity);
+		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
+		entity.add<Velocity>();
+
+		// Get bounds of the door
+		auto [min, max] = get<Body>(entity).get_bounds();
+
+		// Make a child object
+		auto sensor = entity.child();
+
+		BodyOptions options;
+		options.motion_type = JPH::EMotionType::Static;
+		options.sensor = true;
+		options.layer = 1;
+		options.mask = 2;
+		options.shape.type = BOX;
+		options.shape.size = max - min + vec3(4,4,4);
+
+		sensor.set<BodyOptions>(options);
+		sensor.add<UseParent>();
+		sensor.set<Position>( get<Position>(entity) );
+	});
+	ecs_defer_end(world);
+
+	flecs::query<> find_elevators  = world.query_builder<>()
+	.with<Body>()
+	.with<Elevator>()
+	.build();
+
+	ecs_defer_begin(world);
+	find_elevators.each([](Entity entity) {
+		auto& lift = get<Elevator>(entity);
+		lift.start= get<Position>(entity);
+		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
+		entity.add<Velocity>();
+
+		// Get bounds of the door
+		auto [min, max] = get<Body>(entity).get_bounds();
+
+		// Make a child object
+		auto sensor = entity.child();
+
+		BodyOptions options;
+		options.motion_type = JPH::EMotionType::Static;
+		options.sensor = true;
+		options.layer = 1;
+		options.mask = 2;
+		options.shape.type = BOX;
+		options.shape.size = max - min + vec3(0,0, lift.distance + 2.0);
+		options.shape.translation.z = options.shape.size.z / 2.0;
+
+		sensor.set<BodyOptions>(options);
+		sensor.add<UseParent>();
+		sensor.set<Position>( get<Position>(entity) );
+	});
+	ecs_defer_end(world);
+}
+
 void use_parent(HSE::Entity entity, HSE::ContactAdded contact) {
 	// Only players and monsters can open doors
 	if ( not has<Player>(contact.other) and not has<Monster>(contact.other) )
@@ -11,6 +78,11 @@ void use_parent(HSE::Entity entity, HSE::ContactAdded contact) {
 
 	if ( auto ds = get_if<DoorSliding>(parent) ) {
 		if (ds->state == CLOSED) ds->state = OPENING;
+	}
+
+	else if ( auto lift = get_if<Elevator>(parent) ) {
+		if (lift->state == A) lift->state = A_TO_B;
+		else if (lift->state == B) lift->state = B_TO_A;
 	}
 }
 
@@ -25,6 +97,24 @@ void slide_door(HSE::Entity entity, Position& position, Velocity& velocity, Door
 	// Stop if close to goal
 	if ( distance(goal, next_pos) < 0.1 ) {
 		ds.state = ds.state == OPENING? OPEN : CLOSED;
+		position = goal;
+		velocity = vec3(0,0,0);
+	}
+}
+
+void move_elevator(HSE::Entity entity, Position& position, Velocity& velocity, Elevator& lift) {
+	if (lift.state == A or lift.state == B) return;
+
+	const vec3 up(0,0,1);
+
+	velocity = lift.state == A_TO_B? lift.speed * up : lift.speed * -up;
+
+	vec3 goal = lift.state == A_TO_B? lift.start + up * lift.distance : lift.start;
+	vec3 next_pos = vec3(position) + vec3(velocity) * GetFrameTime();
+
+	// Stop if close to goal
+	if ( distance(goal, next_pos) < 0.1 ) {
+		lift.state = lift.state == A_TO_B? B : A;
 		position = goal;
 		velocity = vec3(0,0,0);
 	}

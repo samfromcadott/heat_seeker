@@ -36,8 +36,7 @@
 				"layer": 2,
 				"mask": 3,
 				"gravity_scale": 0.0,
-				"sensor": true,
-				"motion_quality": "LinearCast"
+				"sensor": true
 			},
 			"Damage": {
 				"value": 80
