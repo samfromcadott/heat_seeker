@@ -103,6 +103,10 @@ vec3 CharacterBody::get_velocity() const {
 	return jolt_to_glm( body->GetLinearVelocity() );
 }
 
+vec3 CharacterBody::get_ground_velocity() const {
+	return jolt_to_glm( body->GetGroundVelocity() );
+}
+
 vec3 CharacterBody::get_center() const {
 	return jolt_to_glm( body->GetCenterOfMassPosition() );
 }

@@ -240,6 +240,8 @@ public:
 	void set_velocity(const vec3& velocity);
 	vec3 get_velocity() const;
 
+	vec3 get_ground_velocity() const;
+
 	vec3 get_center() const;
 
 	void set_owner(flecs::entity owner);
