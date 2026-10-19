@@ -3,7 +3,7 @@
 using namespace HSE;
 
 void add_sensors(flecs::world world) {
-	flecs::query<> find_sliding_doors  = world.query_builder<>()
+	flecs::query<> find_sliding_doors = world.query_builder<>()
 	.with<Body>()
 	.with<DoorSliding>()
 	.build();
@@ -35,7 +35,7 @@ void add_sensors(flecs::world world) {
 	});
 	ecs_defer_end(world);
 
-	flecs::query<> find_elevators  = world.query_builder<>()
+	flecs::query<> find_elevators = world.query_builder<>()
 	.with<Body>()
 	.with<Elevator>()
 	.build();
@@ -65,6 +65,20 @@ void add_sensors(flecs::world world) {
 		sensor.set<BodyOptions>(options);
 		sensor.add<UseParent>();
 		sensor.set<Position>( get<Position>(entity) );
+	});
+	ecs_defer_end(world);
+
+	flecs::query<> find_rotating = world.query_builder<>()
+	.with<Body>()
+	.with<PlatRotating>()
+	.build();
+
+	std::cout << "Finding PlatRotating...\n";
+	ecs_defer_begin(world);
+	find_rotating.each([](Entity entity) {
+		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
+		entity.add<Velocity>();
+		std::cout << entity.name() << '\n';
 	});
 	ecs_defer_end(world);
 }
@@ -117,5 +131,11 @@ void move_elevator(HSE::Entity entity, Position& position, Velocity& velocity, E
 		lift.state = lift.state == A_TO_B? B : A;
 		position = goal;
 		velocity = vec3(0,0,0);
+	}
+}
+
+void rotate_platform(HSE::Entity entity, Body& body, PlatRotating& pr) {
+	if (pr.moving) {
+		body.set_angular_velocity(pr.axis * pr.speed * 0.017f);
 	}
 }

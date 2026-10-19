@@ -60,6 +60,7 @@ void start_game(const std::string& map_name) {
 	}).add<NoPause>();
 	Game.system<Position&, Velocity&, DoorSliding&>("slide_door").each(slide_door);
 	Game.system<Position&, Velocity&, Elevator&>("move_elevator").each(move_elevator);
+	Game.system<Body&, PlatRotating&>("rotate_platform").each(rotate_platform);
 	Game.system<DeleteTimer&>("delete_timer").each(delete_timer);
 	Game.system<const Velocity&, Rotation&>("missile_rotate").with<Missile>().each(missile_rotate);
 
@@ -166,6 +167,11 @@ void start_game(const std::string& map_name) {
 	.member("distance", &Elevator::distance)
 	.member("speed", &Elevator::speed)
 	.member("state", &Elevator::state);
+
+	Game.component<PlatRotating>()
+	.member("axis", &PlatRotating::axis)
+	.member("speed", &PlatRotating::speed)
+	.member("moving", &PlatRotating::moving);
 
 	Game.component<DeleteTimer>()
 	.member("time", &DeleteTimer::time);
