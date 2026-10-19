@@ -73,12 +73,10 @@ void add_sensors(flecs::world world) {
 	.with<PlatRotating>()
 	.build();
 
-	std::cout << "Finding PlatRotating...\n";
 	ecs_defer_begin(world);
 	find_rotating.each([](Entity entity) {
 		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
 		entity.add<Velocity>();
-		std::cout << entity.name() << '\n';
 	});
 	ecs_defer_end(world);
 }

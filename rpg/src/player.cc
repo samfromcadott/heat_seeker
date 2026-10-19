@@ -60,6 +60,7 @@ void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::
 }
 
 void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk, MoveDir& dir) {
+	vec3 ground_vel = body.get_ground_velocity();
 	if ( body.on_floor() ) velocity.z = 0.0;
 	else velocity = vec3(velocity) + Game.get<PhysicsEngine>().get_gravity() * GetFrameTime();
 
@@ -70,16 +71,15 @@ void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk
 		a = body.on_floor()? walk.decceleration : walk.decceleration_air;
 
 	auto wish_vel = dir.value * walk.max_speed;
-	vec3 v = move_toward(vec3(velocity), wish_vel, GetFrameTime() * a);
+	vec3 v = move_toward(vec3(velocity), wish_vel + ground_vel, GetFrameTime() * a);
 
 	velocity.x = v.x;
 	velocity.y = v.y;
 }
 
 void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity, const Jump& jump) {
-	if ( !IsKeyPressed(KEY_SPACE) or !body.on_floor() ) return;
-
-	velocity.z = jump.speed;
+	if ( IsKeyPressed(KEY_SPACE) and body.on_floor() )
+		velocity = vec3(velocity) + vec3(0,0,jump.speed) + body.get_ground_velocity();
 }
 
 void player_crouch(Entity player, HSE::CharacterBody& body, Crouch& crouch) {
@@ -108,7 +108,6 @@ void player_crouch(Entity player, HSE::CharacterBody& body, Crouch& crouch) {
 	}
 }
 
-// void player_fire(Player player, HeldWeapon& weapon) {
 void player_fire(Arsenal& arsenal) {
 	if ( not IsMouseButtonDown(0) ) return;
 	if ( arsenal.equipped().get<WeaponTimer>().active ) return;
