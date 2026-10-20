@@ -61,7 +61,8 @@ void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::
 
 void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk, MoveDir& dir) {
 	vec3 ground_vel = body.get_ground_velocity();
-	if ( body.on_floor() ) velocity.z = 0.0;
+
+	if ( body.on_floor() ) velocity.z = ground_vel.z;
 	else velocity = vec3(velocity) + Game.get<PhysicsEngine>().get_gravity() * GetFrameTime();
 
 	float a;
@@ -79,7 +80,7 @@ void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk
 
 void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocity, const Jump& jump) {
 	if ( IsKeyPressed(KEY_SPACE) and body.on_floor() )
-		velocity = vec3(velocity) + vec3(0,0,jump.speed) + body.get_ground_velocity();
+		velocity.z += jump.speed;
 }
 
 void player_crouch(Entity player, HSE::CharacterBody& body, Crouch& crouch) {
