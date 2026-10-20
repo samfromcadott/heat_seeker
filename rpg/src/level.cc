@@ -79,6 +79,20 @@ void add_sensors(flecs::world world) {
 		entity.add<Velocity>();
 	});
 	ecs_defer_end(world);
+
+	flecs::query<> find_sliding_plat = world.query_builder<>()
+	.with<Body>()
+	.with<PlatSliding>()
+	.build();
+
+	ecs_defer_begin(world);
+	find_sliding_plat.each([](Entity entity) {
+		auto& ps = get<PlatSliding>(entity);
+		ps.start = get<Position>(entity);
+		get<Body>(entity).set_motion_type(JPH::EMotionType::Kinematic);
+		entity.add<Velocity>();
+	});
+	ecs_defer_end(world);
 }
 
 void use_parent(HSE::Entity entity, HSE::ContactAdded contact) {
@@ -129,6 +143,21 @@ void move_elevator(HSE::Entity entity, Position& position, Velocity& velocity, E
 		lift.state = lift.state == A_TO_B? B : A;
 		position = goal;
 		velocity = vec3(0,0,0);
+	}
+}
+
+void slide_platform(HSE::Entity entity, Position& position, Velocity& velocity, PlatSliding& ps) {
+	if (not ps.moving) return;
+
+	velocity = ps.state == A_TO_B? ps.speed * ps.direction : ps.speed * -ps.direction;
+
+	vec3 goal = ps.state == A_TO_B? ps.start + ps.direction * ps.distance : ps.start;
+	vec3 next_pos = vec3(position) + vec3(velocity) * GetFrameTime();
+
+	// Stop if close to goal
+	if ( distance(goal, next_pos) < 0.1 ) {
+		ps.state = ps.state == A_TO_B? B_TO_A : A_TO_B;
+		velocity = -vec3(velocity);
 	}
 }
 

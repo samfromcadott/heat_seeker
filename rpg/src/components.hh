@@ -176,10 +176,11 @@ struct Elevator {
 
 struct PlatSliding {
 	HSE::vec3 start;
-	HSE::vec3 direction = HSE::vec3(0,0,1);
+	HSE::vec3 direction = HSE::vec3(0,1,0);
 	float distance = 2.0;
 	float speed = 4.0;
-	PlatState state = A;
+	PlatState state = A_TO_B;
+	bool moving = true;
 };
 
 struct PlatRotating {
