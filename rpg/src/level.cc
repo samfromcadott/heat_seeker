@@ -24,7 +24,7 @@ void add_sensors(flecs::world world) {
 		BodyOptions options;
 		options.motion_type = JPH::EMotionType::Static;
 		options.sensor = true;
-		options.layer = 1;
+		options.layer = 4;
 		options.mask = 2;
 		options.shape.type = BOX;
 		options.shape.size = max - min + vec3(4,4,4);
@@ -56,7 +56,7 @@ void add_sensors(flecs::world world) {
 		BodyOptions options;
 		options.motion_type = JPH::EMotionType::Static;
 		options.sensor = true;
-		options.layer = 1;
+		options.layer = 4;
 		options.mask = 2;
 		options.shape.type = BOX;
 		options.shape.size = max - min + vec3(0,0, lift.distance + 2.0);
