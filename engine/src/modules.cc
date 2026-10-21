@@ -171,6 +171,8 @@ void HSE::init_physics(flecs::world& world) {
 
 	world.component<HSE::CharacterBodyOptions>()
 		.member("shape", &HSE::CharacterBodyOptions::shape)
+		.member("layer", &HSE::CharacterBodyOptions::layer)
+		.member("mask", &HSE::CharacterBodyOptions::mask)
 		.member("up", &HSE::CharacterBodyOptions::up)
 		.member("max_slope", &HSE::CharacterBodyOptions::max_slope)
 		.member("mass", &HSE::CharacterBodyOptions::mass)

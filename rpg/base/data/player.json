@@ -16,7 +16,9 @@
 					"translation": {"x":0.0, "y":0.0, "z":0.875},
 					"radius": 0.5,
 					"height": 1.75
-				}
+				},
+				"layer": 2,
+				"mask": 7
 			},
 			"Walk": {
 				"max_speed": 10.0,

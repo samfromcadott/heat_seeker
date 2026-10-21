@@ -28,9 +28,8 @@ CharacterBody::CharacterBody(flecs::world world, const CharacterBodyOptions& opt
 	settings.mUp = glm_to_jolt(options.up);
 	settings.mShape = convert_shape(options.shape);
 	settings.mInnerBodyShape = convert_shape(options.shape);
-	// settings.mInnerBodyLayer = Layers::MOVING;
 	settings.mInnerBodyLayer = JPH::ObjectLayerPairFilterMask::sGetObjectLayer(
-		Layers::MOVING, Layers::MOVING | Layers::NON_MOVING
+		options.layer, options.mask
 	);
 	settings.mSupportingVolume = { settings.mUp, -0.05 };
 

@@ -114,6 +114,8 @@ struct BodyOptions {
 
 struct CharacterBodyOptions {
 	ShapeOptions shape;
+	JPH::ObjectLayer layer = 0;
+	JPH::ObjectLayer mask = 0;
 	vec3 up = vec3(0.0, 0.0, 1.0);
 	float max_slope = JPH::DegreesToRadians(50.0f);
 	float mass = 70.0f;
