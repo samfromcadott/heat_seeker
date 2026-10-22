@@ -60,18 +60,32 @@ def get_props(object, entity):
 		elif K in tag_names:
 			if object[K]: add_tag(entity, K)
 		else:
-			# Split component name and members
-			C = K.split('.')
-			comp = C[0]
-			member = C[1]
+			add_component(object, entity, K)
 
-			# If component already in entity
-			if comp in entity["COMP"]:
-				entity["COMP"][comp][member] = object[K]
-			else:
-				entity["COMP"][comp] = {member: object[K]}
-		
 
 def add_tag(entity, tag):
 	if "TAGS" in entity: entity["TAGS"].append(tag)
 	else: entity["TAGS"] = [tag]
+
+def add_component(object, entity, K):
+	# Split component name and members
+	C = K.split('.')
+	comp = C[0]
+
+	# Add component
+	if comp not in entity["COMP"]:
+		entity["COMP"][comp] = {}
+
+	# Loop through members
+	prop = entity["COMP"][comp]
+	for i in range( 1, len(C) ):
+		# If on the deepest member
+		if i == len(C)-1:
+			prop[ C[i] ] = object[K]
+			break
+
+		# Add member
+		if C[i] not in prop:
+			prop[ C[i] ] = {}
+
+		prop = prop[ C[i] ] # Go deeper
