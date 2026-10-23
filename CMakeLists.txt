@@ -41,6 +41,7 @@ target_link_libraries(heat_seeker raylib flecs_static Jolt physfs-static)
 add_executable(rpg
 	rpg/src/main.cc
 	rpg/src/player.cc
+	rpg/src/movement.cc
 	rpg/src/weapon.cc
 	rpg/src/combat.cc
 	rpg/src/monster.cc
