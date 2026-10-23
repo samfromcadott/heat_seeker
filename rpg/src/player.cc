@@ -4,6 +4,7 @@
 #include "components.hh"
 #include "systems.hh"
 #include "weapon.hh"
+#include "movement.hh"
 
 using namespace HSE;
 
@@ -64,30 +65,11 @@ void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocit
 		velocity.z += jump.speed;
 }
 
-void player_crouch(Entity player, HSE::CharacterBody& body, Crouch& crouch) {
-	if ( IsKeyPressed(KEY_LEFT_CONTROL) ) {
-		crouch.active = true;
-
-		if ( auto camera = get_if<PlayerCamera>(player) )
-			camera->offset.z -= crouch.height_change;
-
-		if ( auto muzzle = get_if<Muzzle>(player) )
-			muzzle->offset.z -= crouch.height_change;
-
-		body.set_shape(crouch.crouch_shape);
-	}
-
-	else if ( IsKeyReleased(KEY_LEFT_CONTROL) ) {
-		crouch.active = false;
-
-		if ( auto camera = get_if<PlayerCamera>(player) )
-			camera->offset.z += crouch.height_change;
-
-		if ( auto muzzle = get_if<Muzzle>(player) )
-			muzzle->offset.z += crouch.height_change;
-
-		body.set_shape(crouch.stand_shape);
-	}
+void player_crouch(Entity player, HSE::CharacterBody& body, Crouch& c) {
+	if ( IsKeyPressed(KEY_LEFT_CONTROL) )
+		crouch(player);
+	else if ( IsKeyReleased(KEY_LEFT_CONTROL) )
+		uncrouch(player);
 }
 
 void player_fire(Arsenal& arsenal) {

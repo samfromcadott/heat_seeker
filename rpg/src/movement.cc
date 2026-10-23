@@ -2,6 +2,7 @@
 
 #include "components.hh"
 #include "systems.hh"
+#include "movement.hh"
 
 using namespace HSE;
 
@@ -22,4 +23,40 @@ void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk
 
 	velocity.x = v.x;
 	velocity.y = v.y;
+}
+
+void crouch(Entity entity) {
+	if ( not has<CharacterBody>(entity) or not has<Crouch>(entity) )
+		return;
+
+	auto& body = get<CharacterBody>(entity);
+	auto& crouch = get<Crouch>(entity);
+
+	crouch.active = true;
+
+	if ( auto camera = get_if<PlayerCamera>(entity) )
+		camera->offset.z -= crouch.height_change;
+
+	if ( auto muzzle = get_if<Muzzle>(entity) )
+		muzzle->offset.z -= crouch.height_change;
+
+	body.set_shape(crouch.crouch_shape);
+}
+
+void uncrouch(Entity entity) {
+	if ( not has<CharacterBody>(entity) or not has<Crouch>(entity) )
+		return;
+
+	auto& body = get<CharacterBody>(entity);
+	auto& crouch = get<Crouch>(entity);
+
+	crouch.active = false;
+
+	if ( auto camera = get_if<PlayerCamera>(entity) )
+		camera->offset.z += crouch.height_change;
+
+	if ( auto muzzle = get_if<Muzzle>(entity) )
+		muzzle->offset.z += crouch.height_change;
+
+	body.set_shape(crouch.stand_shape);
 }
