@@ -60,7 +60,8 @@
 
 			"Damage": {
 				"value": 10
-			}
+			},
+			"WeaponAnim": { "fire": "Attack" }
 		}
 	},
 
