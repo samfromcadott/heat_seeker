@@ -61,14 +61,10 @@
 				"launch_time": 0.0,
 				"rate": 0.3
 			},
-
-			"WeaponTimer": {},
-
 			"LaunchMissile": {
 				"missile": "soldier_bullet",
 				"speed": 30.0
 			},
-
 			"WeaponSound": { "fire": "sound/rifle_fire.wav" },
 			"WeaponAnim": { "fire": "Fire" }
 		}

@@ -36,7 +36,6 @@ void start_game(const std::string& map_name) {
 	Game.system<Player, HSE::CharacterBody&, HSE::Velocity&, const Jump&>("player_jump").each(player_jump);
 	Game.system<HSE::CharacterBody&, Crouch&>("player_crouch").each(player_crouch);
 	Game.system<Arsenal&>("player_fire").with<Player>().each(player_fire);
-	Game.system<Weapon&, WeaponTimer&>("weapon_update").each(weapon_update);
 	Game.system<Health&>("die_when_no_health").each(die_when_no_health);
 	Game.system<Target&>("find_target").with<Monster>().each(find_target);
 	Game.system<Position&, Rotation&, MoveDir&, Target&>("chase_target").each(chase_target);
@@ -97,14 +96,10 @@ void start_game(const std::string& map_name) {
 	.member("crouch_shape", &Crouch::crouch_shape)
 	.member("stand_shape", &Crouch::stand_shape);
 
-	Game.component<WeaponTimer>()
-	.member("active", &WeaponTimer::active)
-	.member("time", &WeaponTimer::time);
-
 	Game.component<Weapon>()
 	.member("launch_time", &Weapon::launch_time)
 	.member("rate", &Weapon::rate)
-	.member("has_fired", &Weapon::has_fired);
+	.member("active", &Weapon::active);
 
 	Game.component<Muzzle>()
 	.member("offset", &Muzzle::offset);
@@ -293,9 +288,6 @@ void start_game(const std::string& map_name) {
 	};
 
 	add_sensors(Game);
-
-	// Test timer
-	add_timer(Game.lookup("player"), "display_position", 5.0);
 }
 
 void check_reset() {
@@ -315,10 +307,9 @@ int main() {
 	DisableCursor();
 	SetExitKey(KEY_NULL);
 
-	add_timer_callback("display_position", [](Entity e) {
-		auto p = get<Position>(e);
-		std::cout << "Your position is " << p.x << ' ' << p.y << ' ' << p.z << '\n';
-	});
+	add_timer_callback("reset_weapon", reset_weapon);
+	add_timer_callback("launch_missile", launch_missile);
+	add_timer_callback("launch_hitscan", launch_hitscan);
 
 	start_game("maps/level01.hsm");
 

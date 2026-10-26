@@ -6,29 +6,26 @@
 
 using namespace HSE;
 
-void weapon_update(flecs::entity entity, Weapon& weapon, WeaponTimer& timer) {
-	if (!timer.active) return;
-
-	timer.time += GetFrameTime();
-
-	if (timer.time > weapon.launch_time and not weapon.has_fired) {
-		if ( has<LaunchMissile>(entity) )
-			launch_missile(entity);
-		if ( has<Hitscan>(entity) )
-			launch_hitscan(entity);
-
-		weapon.has_fired = true;
-	}
-
-	// Reset the weapon at the end of its cycle
-	if (timer.time > weapon.rate) {
-		weapon.has_fired = false;
-		timer.active = false;
-		timer.time = 0.0;
-	}
-}
-
 void fire_weapon(flecs::entity weapon) {
+	auto& w = get<Weapon>(weapon);
+	if (w.active) return; // If weapon is active do nothing
+
+	start_timer(weapon, "reset_weapon", w.rate);
+	w.active = true;
+
+	// Launch immediatly is launch_time is 0
+	if (w.launch_time <= 0.0) {
+		if ( has<LaunchMissile>(weapon) ) launch_missile(weapon);
+		if ( has<Hitscan>(weapon) ) launch_hitscan(weapon);
+	}
+	else {
+		if ( has<LaunchMissile>(weapon) )
+			start_timer(weapon, "launch_missile", w.launch_time);
+		if ( has<Hitscan>(weapon) )
+			start_timer(weapon, "launch_hitscan", w.launch_time);
+	}
+
+	// Use ammo
 	if ( weapon.has<AmmoUse>() ) {
 		auto& ammo = weapon.get_mut<Ammo>();
 		auto& ammo_use = weapon.get<AmmoUse>();
@@ -39,17 +36,15 @@ void fire_weapon(flecs::entity weapon) {
 		ammo.count -= ammo_use.cost;
 	}
 
-	auto& timer = weapon.get_mut<WeaponTimer>();
-	if (not timer.active) {
-		timer.active = true;
-		get<Weapon>(weapon).has_fired = false;
-	}
-
 	// If the weapon has a sound play it
 	if ( weapon.has<WeaponSound>() ) {
 		auto& fire = weapon.get<WeaponSound>().fire;
 		PlaySound(*fire);
 	}
+}
+
+void reset_weapon(HSE::Entity weapon) {
+	get<Weapon>(weapon).active = false;
 }
 
 void launch_missile(flecs::entity entity) {

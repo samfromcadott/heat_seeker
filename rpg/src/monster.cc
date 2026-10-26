@@ -9,7 +9,7 @@ using namespace HSE;
 void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
 	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
 	if ( auto arsenal = get_if<Arsenal>(monster) ) {
-		if ( get<WeaponTimer>( arsenal->equipped() ).active )
+		if ( get<Weapon>( arsenal->equipped() ).active )
 			return;
 	}
 
@@ -51,7 +51,7 @@ void find_target(flecs::entity monster, Target& target) {
 
 void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arsenal& arsenal, const ArsenalInfo& info) {
 	if ( not target.entity.is_valid() ) return;
-	if ( arsenal.equipped().get<WeaponTimer>().active ) return;
+	if ( get<Weapon>( arsenal.equipped() ).active ) return;
 
 	float dist = distance( vec3(p), vec3( get<Position>(target.entity) ) );
 
@@ -82,7 +82,7 @@ void choose_attack(flecs::entity monster, HSE::Position& p, Target& target, Arse
 
 void monster_animation(flecs::entity monster, Arsenal& arsenal, HSE::Model& m) {
 	vec3 v = get<Velocity>(monster);
-	if (not arsenal.equipped().get<WeaponTimer>().active) {
+	if (not get<Weapon>( arsenal.equipped() ).active) {
 		if ( length(v) < 0.1 )
 			m.play("Idle");
 		else

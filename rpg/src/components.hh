@@ -49,11 +49,6 @@ struct Crouch {
 	HSE::ShapeOptions crouch_shape, stand_shape;
 };
 
-struct WeaponTimer {
-	bool active = false;
-	float time = 0.0; // Time since it became active
-};
-
 // Delete an entity after the timer expires
 struct DeleteTimer {
 	float time = 1.0;
@@ -62,7 +57,7 @@ struct DeleteTimer {
 struct Weapon {
 	float launch_time; // Time until the proectile/hitscan is fired
 	float rate; // Time until it can fire again
-	bool has_fired = true; // Has the weapon fired since the current cycle started
+	bool active = false;
 };
 
 struct Muzzle {

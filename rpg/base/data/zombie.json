@@ -35,9 +35,6 @@
 				"launch_time": 1.0,
 				"rate": 2.6
 			},
-
-			"WeaponTimer": {},
-
 			"LaunchMissile": {
 				"missile": "missile_zombie_ball",
 				"speed": 20.0
@@ -47,8 +44,6 @@
 
 	"zombie_melee": {
 		"COMP": {
-			"WeaponTimer": {},
-
 			"Weapon": {
 				"rate": 2.6,
 				"launch_time": 1.0

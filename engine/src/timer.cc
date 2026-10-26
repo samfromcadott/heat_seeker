@@ -36,7 +36,7 @@ void HSE::add_timer_callback(const std::string& name, TimerCallback fn) {
 	timer_callback_id[name] = timer_callbacks.size()-1;
 }
 
-void HSE::add_timer(Entity entity, const std::string& name, float time) {
+void HSE::start_timer(Entity entity, const std::string& name, float time) {
 	auto& timers = entity.world().get_mut<TimerList>();
 
 	int t = time*1000;

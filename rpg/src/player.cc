@@ -74,7 +74,7 @@ void player_crouch(Entity player, HSE::CharacterBody& body, Crouch& c) {
 
 void player_fire(Arsenal& arsenal) {
 	if ( not IsMouseButtonDown(0) ) return;
-	if ( arsenal.equipped().get<WeaponTimer>().active ) return;
+	if ( get<Weapon>( arsenal.equipped() ).active ) return;
 	fire_weapon( arsenal.equipped() );
 }
 
