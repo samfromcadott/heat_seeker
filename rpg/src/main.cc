@@ -293,6 +293,9 @@ void start_game(const std::string& map_name) {
 	};
 
 	add_sensors(Game);
+
+	// Test timer
+	add_timer(Game.lookup("player"), "display_position", 5.0);
 }
 
 void check_reset() {
@@ -311,6 +314,12 @@ int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
 	DisableCursor();
 	SetExitKey(KEY_NULL);
+
+	add_timer_callback("display_position", [](Entity e) {
+		auto p = get<Position>(e);
+		std::cout << "Your position is " << p.x << ' ' << p.y << ' ' << p.z << '\n';
+	});
+
 	start_game("maps/level01.hsm");
 
 	// Main game loop

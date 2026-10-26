@@ -21,6 +21,7 @@ add_library(heat_seeker
 	engine/src/file.cc
 	engine/src/data_parser.cc
 	engine/src/level.cc
+	engine/src/timer.cc
 
 	# Render
 	engine/src/render/render.cc

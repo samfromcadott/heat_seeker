@@ -120,6 +120,14 @@ void HSE::init_core(flecs::world& world) {
 		system.add<HSE::NoPause>();
 	});
 	ecs_defer_end(world);
+
+	world.component<TimerList>("HSE::TimerList");
+	world.component<Timer>();
+
+	world.add<TimerList>();
+	world.system<TimerList&>().each([&](TimerList& list){
+		update_timers(world, list);
+	});
 }
 
 void HSE::init_physics(flecs::world& world) {
