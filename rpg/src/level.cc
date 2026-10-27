@@ -126,6 +126,13 @@ void slide_door(HSE::Entity entity, Position& position, Velocity& velocity, Door
 		position = goal;
 		velocity = vec3(0,0,0);
 	}
+
+	if (ds.state == OPEN)
+		start_timer(entity, "close_door_sliding", 5.0);
+}
+
+void close_door_sliding(HSE::Entity entity) {
+	get<DoorSliding>(entity).state = CLOSING;
 }
 
 void move_elevator(HSE::Entity entity, Position& position, Velocity& velocity, Elevator& lift) {

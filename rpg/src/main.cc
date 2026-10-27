@@ -310,6 +310,8 @@ int main() {
 	add_timer_callback("reset_weapon", reset_weapon);
 	add_timer_callback("launch_missile", launch_missile);
 	add_timer_callback("launch_hitscan", launch_hitscan);
+	add_timer_callback( "delete_entity", [](Entity e) { e.destruct(); } );
+	add_timer_callback("close_door_sliding", close_door_sliding);
 
 	start_game("maps/level01.hsm");
 
