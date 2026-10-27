@@ -128,11 +128,14 @@ void slide_door(HSE::Entity entity, Position& position, Velocity& velocity, Door
 	}
 
 	if (ds.state == OPEN)
-		start_timer(entity, "close_door_sliding", 5.0);
+		start_timer(entity, "close_door", 5.0);
 }
 
-void close_door_sliding(HSE::Entity entity) {
-	get<DoorSliding>(entity).state = CLOSING;
+void close_door(HSE::Entity entity) {
+	if ( auto ds = get_if<DoorSliding>(entity) )
+		ds->state = CLOSING;
+	else if ( auto dr = get_if<DoorRotating>(entity) )
+		dr->state = CLOSING;
 }
 
 void move_elevator(HSE::Entity entity, Position& position, Velocity& velocity, Elevator& lift) {
