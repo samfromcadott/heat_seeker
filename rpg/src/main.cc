@@ -62,7 +62,7 @@ void start_game(const std::string& map_name) {
 	Game.system<Position&, Velocity&, PlatSliding&>("slide_platform").each(slide_platform);
 	Game.system<Body&, PlatRotating&>("rotate_platform").each(rotate_platform);
 	Game.system<DeleteTimer&>("delete_timer").each(delete_timer);
-	Game.system<const Velocity&, Rotation&>("missile_rotate").with<Missile>().each(missile_rotate);
+	Game.system<const Position&, const Velocity&, Rotation&>("missile_rotate").with<Missile>().each(missile_fly);
 
 	// Register components
 	Game.component<Player>();

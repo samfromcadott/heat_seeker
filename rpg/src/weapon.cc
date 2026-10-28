@@ -164,7 +164,7 @@ void explode(Entity entity) {
 	entity.destruct();
 }
 
-void missile_rotate(const Velocity& velocity, Rotation& rotation) {
+void missile_fly(Entity missile, const HSE::Position position, const Velocity& velocity, Rotation& rotation) {
 	vec3 v1 = vec3(1,0,0);
 	vec3 v2 = normalize( vec3(velocity) );
 
@@ -174,4 +174,9 @@ void missile_rotate(const Velocity& velocity, Rotation& rotation) {
 		1.0f + dot(v1, v2),
 		r.x, r.y, r.z
 	) );
+
+	// Fix for rockets going through walls
+	auto hit = Game.get<PhysicsEngine>().ray_cast(vec3(position), vec3(velocity) * GetFrameTime(), 1);
+	if ( hit.hit and has<Explode>(missile) )
+		explode(missile);
 }
