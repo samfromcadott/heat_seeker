@@ -10,21 +10,6 @@ void fire_weapon(flecs::entity weapon) {
 	auto& w = get<Weapon>(weapon);
 	if (w.active) return; // If weapon is active do nothing
 
-	start_timer(weapon, "reset_weapon", w.rate);
-	w.active = true;
-
-	// Launch immediatly is launch_time is 0
-	if (w.launch_time <= 0.0) {
-		if ( has<LaunchMissile>(weapon) ) launch_missile(weapon);
-		if ( has<Hitscan>(weapon) ) launch_hitscan(weapon);
-	}
-	else {
-		if ( has<LaunchMissile>(weapon) )
-			start_timer(weapon, "launch_missile", w.launch_time);
-		if ( has<Hitscan>(weapon) )
-			start_timer(weapon, "launch_hitscan", w.launch_time);
-	}
-
 	// Use ammo
 	if ( weapon.has<AmmoUse>() ) {
 		auto& ammo = weapon.get_mut<Ammo>();
@@ -34,6 +19,22 @@ void fire_weapon(flecs::entity weapon) {
 		if ( ammo.count <= 0 ) return;
 
 		ammo.count -= ammo_use.cost;
+	}
+
+	// Fire weapon
+	start_timer(weapon, "reset_weapon", w.rate);
+	w.active = true;
+
+	// Launch immediatly if launch_time is 0
+	if (w.launch_time <= 0.0) {
+		if ( has<LaunchMissile>(weapon) ) launch_missile(weapon);
+		if ( has<Hitscan>(weapon) ) launch_hitscan(weapon);
+	}
+	else {
+		if ( has<LaunchMissile>(weapon) )
+			start_timer(weapon, "launch_missile", w.launch_time);
+		if ( has<Hitscan>(weapon) )
+			start_timer(weapon, "launch_hitscan", w.launch_time);
 	}
 
 	// If the weapon has a sound play it
