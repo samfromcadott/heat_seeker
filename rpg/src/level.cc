@@ -103,7 +103,8 @@ void use_parent(HSE::Entity entity, HSE::ContactAdded contact) {
 	auto parent = entity.parent();
 
 	if ( auto ds = get_if<DoorSliding>(parent) ) {
-		if (ds->state == CLOSED) ds->state = OPENING;
+		if (ds->state == CLOSED or ds->state == CLOSING)
+			ds->state = OPENING;
 	}
 
 	else if ( auto lift = get_if<Elevator>(parent) ) {
