@@ -35,6 +35,7 @@ inline namespace glm { using namespace ::glm; }
 #include "HSE/physics_systems.hh"
 #include "HSE/render_types.hh"
 #include "HSE/render_systems.hh"
+#include "HSE/audio.hh"
 #include "HSE/script.hh"
 #include "HSE/data_parser.hh"
 #include "HSE/modules.hh"

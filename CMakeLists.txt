@@ -27,6 +27,9 @@ add_library(heat_seeker
 	engine/src/render/render.cc
 	engine/src/render/models.cc
 
+	# Audio
+	engine/src/audio.cc
+
 	# Physics
 	engine/src/physics/body.cc
 	engine/src/physics/engine.cc

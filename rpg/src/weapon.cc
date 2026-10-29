@@ -40,7 +40,12 @@ void fire_weapon(flecs::entity weapon) {
 	// If the weapon has a sound play it
 	if ( weapon.has<WeaponSound>() ) {
 		auto& fire = weapon.get<WeaponSound>().fire;
-		PlaySound(*fire);
+		play_sound_spatial(
+			weapon.world(),
+			*fire,
+			get<Position>( weapon.parent() ),
+			50.0
+		);
 	}
 }
 
@@ -124,7 +129,12 @@ void explode(Entity entity) {
 
 	// Play the explosion sound
 	if (get<Explode>(entity).sound)
-		PlaySound( *get<Explode>(entity).sound );
+		play_sound_spatial(
+			entity.world(),
+			*get<Explode>(entity).sound,
+			get<Position>(entity),
+			50.0
+		);
 
 	float force = get<Explode>(entity).force;
 	float radius = get<Explode>(entity).radius;
