@@ -128,6 +128,8 @@ void HSE::init_core(flecs::world& world) {
 	world.system<TimerList&>().each([&](TimerList& list){
 		update_timers(world, list);
 	});
+
+	world.system<const HSE::FollowParent&, HSE::Position&, HSE::Rotation&>("follow_parent").each(follow_parent);
 }
 
 void HSE::init_physics(flecs::world& world) {

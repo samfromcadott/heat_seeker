@@ -37,4 +37,6 @@ T& add(Entity& entity) {
 	return entity.add<T>();
 }
 
+void follow_parent(Entity e, const FollowParent& f, Position& p, Rotation& r);
+
 }

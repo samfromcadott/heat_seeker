@@ -10,6 +10,7 @@ void player_jump(Player player, HSE::CharacterBody& body, HSE::Velocity& velocit
 void player_crouch(HSE::Entity player, HSE::CharacterBody& body, Crouch& c);
 void player_fire(Arsenal& arsenal);
 void switch_weapon(Arsenal& arsenal);
+void update_view_model(HSE::Entity entity);
 void die_when_no_health(flecs::entity e, Health& h);
 void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t);
 void find_target(flecs::entity monster, Target& target);

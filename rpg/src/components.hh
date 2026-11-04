@@ -8,6 +8,7 @@ struct Player {}; // Tag for player entity
 struct Monster {};
 struct Missile {};
 struct Dead {};
+struct ViewModel {};
 
 struct Target {
 	flecs::entity entity;

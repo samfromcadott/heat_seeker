@@ -138,6 +138,11 @@ struct Velocity {
 	}
 };
 
+struct FollowParent {
+	vec3 position;
+	quat rotation;
+};
+
 inline vec3 raylib_to_glm(Vector3 v) {
 	return vec3(v.x,v.y,v.z);
 }

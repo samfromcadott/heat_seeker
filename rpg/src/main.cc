@@ -12,7 +12,7 @@ Camera3D HSE::camera = {
 	.position = Vector3 { 0.0f, 10.0f, 10.0f },
 	.target = Vector3 { 0.0f, 0.0f, 0.0f },
 	.up = Vector3 { 0.0f, 0.0f, 1.0f },
-	.fovy = 45.0f,
+	.fovy = 50.625f,
 	.projection = CAMERA_PERSPECTIVE,
 };
 Shader HSE::gouraud_shader;
@@ -63,6 +63,7 @@ void start_game(const std::string& map_name) {
 	Game.system<Body&, PlatRotating&>("rotate_platform").each(rotate_platform);
 	Game.system<DeleteTimer&>("delete_timer").each(delete_timer);
 	Game.system<const Position&, const Velocity&, Rotation&>("missile_rotate").with<Missile>().each(missile_fly);
+	Game.system<>("update_view_model").with<ViewModel>().each(update_view_model);
 
 	// Register components
 	Game.component<Player>();
@@ -288,6 +289,19 @@ void start_game(const std::string& map_name) {
 	};
 
 	add_sensors(Game);
+
+	auto view_model = Game.entity("view_model");
+	view_model.add<HSE::Model>();
+	get<HSE::Model>(view_model).data = Asset<ModelData>("models/bazooka_view.glb");
+	Asset<ModelData>("models/bazooka_view.glb").load();
+	view_model.add<Position>();
+	view_model.add<Rotation>();
+	view_model.add<ViewModel>();
+	view_model.child_of( Game.lookup("player") );
+	view_model.add<FollowParent>();
+	get<FollowParent>(view_model).position = vec3(0,0,1.6);
+	get<FollowParent>(view_model).rotation = quat(1,0,0,0);
+
 }
 
 void check_reset() {
