@@ -103,6 +103,10 @@ void HSE::init_core(flecs::world& world) {
 	.member("y", &HSE::Velocity::y)
 	.member("z", &HSE::Velocity::z);
 
+	world.component<HSE::FollowParent>("HSE::FollowParent")
+	.member("position", &HSE::FollowParent::position)
+	.member("rotation", &HSE::FollowParent::rotation);
+
 	world.component< HSE::Asset<Sound> >()
 	.opaque(flecs::String)
 	// .serialize( File::serialize< HSE::Asset<Sound> > )

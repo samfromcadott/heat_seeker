@@ -55,6 +55,23 @@
 			"Muzzle": {
 				"offset": {"x":0,"y":0,"z":1.25}
 			}
+		},
+
+		"SUB": {
+			"view_model": {
+				"COMP": {
+					"Position": {},
+					"Rotation": {},
+					"HSE::FollowParent": {
+						"position": {"x":0,"y":0,"z":1.6},
+						"rotation": {"w":1,"x":0,"y":0,"z":0}
+					},
+					"ViewModel": {},
+					"HSE::ModelOptions": {
+						"file": "models/bazooka_view.glb"
+					}
+				}
+			}
 		}
 	},
 

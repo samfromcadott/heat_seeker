@@ -48,6 +48,20 @@ flecs::entity HSE::parse_prefab(flecs::world& world, const std::string& name, co
 	}
 
 	// Add children if present
+	if ( json.contains("SUB") ) {
+		for ( const auto& [name, e] : json["SUB"].items() ) {
+			if ( world.lookup( name.c_str() ).is_valid() )
+				continue;
+
+			flecs::entity new_child = world.prefab();
+			new_child.set_name( name.c_str() );
+		}
+
+		for ( const auto& [name, e] : json["SUB"].items() ) {
+			auto child = parse_prefab(world, name, e);
+			child.child_of(new_prefab);
+		}
+	}
 
 	return new_prefab;
 }
