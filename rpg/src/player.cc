@@ -122,4 +122,5 @@ void player_die(Entity player) {
 void update_view_model(HSE::Entity entity) {
 	float pitch = get<PlayerCamera>( entity.parent() ).pitch;
 	get<FollowParent>(entity).rotation = quat( vec3(0, pitch, 0) );
+	get<FollowParent>(entity).position = get<PlayerCamera>( entity.parent() ).offset;
 }
