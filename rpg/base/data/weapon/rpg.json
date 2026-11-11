@@ -100,7 +100,11 @@
 				"file": "models/explosion.glb",
 				"shader": "unlit"
 			},
-			"DeleteTimer": {"time": 0.5}
+			"DeleteTimer": {"time": 0.5},
+			"HSE::Light": {
+				"color": {"x": 1.0, "y": 0.5, "z": 0.0, "w": 1.0},
+				"power": 100
+			}
 		}
 	}
 }
