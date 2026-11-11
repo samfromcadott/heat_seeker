@@ -296,11 +296,13 @@ void check_reset() {
 	if ( p.is_valid() and p.is_alive() ) return;
 	if ( not IsKeyPressed(KEY_E) ) return;
 
+	auto level = Game.get<Level>().filename;
+
 	Game.remove_all<HSE::Body>();
 	Game.remove_all<HSE::CharacterBody>();
 	Game.remove_all<HSE::PhysicsEngine>();
 	Game.reset();
-	start_game("maps/test.hsm");
+	start_game(level);
 }
 
 int main() {
