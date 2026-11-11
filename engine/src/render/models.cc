@@ -42,6 +42,13 @@ void HSE::update_animation(HSE::Model& m) {
 }
 
 void HSE::update_lights(Shader& shader, Position& p) {
+	// Reset lights
+	for (int l = 0; l < 16; l++) {
+		int loc_power = GetShaderLocation( shader, TextFormat("lights[%i].power", l) );
+		float power = 0;
+		SetShaderValue(shader, loc_power, &power, SHADER_UNIFORM_FLOAT);
+	}
+
 	// Query lights in the scene
 	flecs::query<Light&, Position&> q =  Game.query<Light&, Position&>();
 	int i = 0;
@@ -49,8 +56,8 @@ void HSE::update_lights(Shader& shader, Position& p) {
 	q.each([&](Light& light, Position& position) {
 		// For each light set its corresponding value in the shader
 		int loc_power = GetShaderLocation( shader, TextFormat("lights[%i].power", i) );
-		int loc_pos = GetShaderLocation( shader, TextFormat("lights[%i].position", i) );;
-		int loc_color = GetShaderLocation( shader, TextFormat("lights[%i].color", i) );;
+		int loc_pos = GetShaderLocation( shader, TextFormat("lights[%i].position", i) );
+		int loc_color = GetShaderLocation( shader, TextFormat("lights[%i].color", i) );
 
 		SetShaderValue(shader, loc_power, &light.power, SHADER_UNIFORM_FLOAT);
 		SetShaderValue(shader, loc_pos, &position, SHADER_UNIFORM_VEC3);
