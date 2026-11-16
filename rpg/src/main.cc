@@ -24,7 +24,6 @@ void start_game(const std::string& map_name) {
 	init_core(Game);
 	init_physics(Game);
 	init_render(Game);
-	File::mount("base");
 
 	HSE::clear_color = SKYBLUE;
 
@@ -253,15 +252,6 @@ void start_game(const std::string& map_name) {
 	.with<UseParent>()
 	.each(use_parent);
 
-	// Load shaders
-	if ( shaders.empty() ) {
-		shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
-		shaders["unlit"] = Shader {};
-		shaders["unlit"].id = rlGetShaderIdDefault();
-		shaders["unlit"].locs = rlGetShaderLocsDefault();
-		default_shader = "gouraud";
-	}
-
 	// Load scripts
 	load_data_file(Game, "data/prefabs.json");
 
@@ -307,8 +297,15 @@ void check_reset() {
 
 int main() {
 	HSE::init("R.P.G. Game", 1280, 720);
+	File::mount("base");
 	DisableCursor();
 	SetExitKey(KEY_NULL);
+
+	shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+	shaders["unlit"] = Shader {};
+	shaders["unlit"].id = rlGetShaderIdDefault();
+	shaders["unlit"].locs = rlGetShaderLocsDefault();
+	default_shader = "gouraud";
 
 	add_timer_callback("reset_weapon", reset_weapon);
 	add_timer_callback("launch_missile", launch_missile);
