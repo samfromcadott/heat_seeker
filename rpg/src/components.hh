@@ -63,6 +63,7 @@ struct Weapon {
 
 struct Muzzle {
 	HSE::vec3 offset;
+	float pitch = 0;
 };
 
 struct Arsenal {

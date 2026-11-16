@@ -8,7 +8,7 @@
 
 using namespace HSE;
 
-void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotation) {
+void mouse_look(Entity player, PlayerCamera& player_camera, Position& position, Rotation& rotation) {
 	// Get mouse movement
 	Vector2 delta = GetMouseDelta();
 
@@ -29,6 +29,9 @@ void mouse_look(PlayerCamera& player_camera, Position& position, Rotation& rotat
 	camera.target = glm_to_raylib(camera_target);
 	camera.position = glm_to_raylib(camera_position);
 	camera.up = {0,0,1};
+
+	// Update muzzle pitch
+	get<Muzzle>(player).pitch = player_camera.pitch;
 }
 
 void dead_camera(PlayerCamera& player_camera, Position& position, Rotation& rotation) {

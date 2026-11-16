@@ -65,17 +65,11 @@ void launch_missile(flecs::entity entity) {
 	launch_point = pos + ( rot * offset );
 
 	// Set velocity
-	if ( owner.has<PlayerCamera>() ) {
-		float yaw = eulerAngles( quat(rot) ).z;
-		float pitch = owner.get<PlayerCamera>().pitch;
+	float yaw = eulerAngles( quat(rot) ).z;
+	float pitch = get<Muzzle>(owner).pitch;
 
-		vec3 dir = quat(vec3(0, pitch, yaw)) * vec3(1,0,0);
-		vel = dir * get<LaunchMissile>(entity).speed;
-	}
-	else {
-		vec3 dir = rot * vec3(1,0,0);
-		vel = dir * get<LaunchMissile>(entity).speed;
-	}
+	vec3 dir = quat(vec3(0, pitch, yaw)) * vec3(1,0,0);
+	vel = dir * get<LaunchMissile>(entity).speed;
 
 	flecs::entity missile = Game.entity().is_a( get<LaunchMissile>(entity).missile );
 

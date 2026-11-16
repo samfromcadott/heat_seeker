@@ -2,7 +2,7 @@
 
 #include <heat_seeker.hh>
 
-void mouse_look(PlayerCamera& player_camera, HSE::Position& position, HSE::Rotation& rotation);
+void mouse_look(HSE::Entity player, PlayerCamera& player_camera, HSE::Position& position, HSE::Rotation& rotation);
 void dead_camera(PlayerCamera& player_camera, HSE::Position& position, HSE::Rotation& rotation);
 void player_movement(Player player, HSE::Velocity& velocity, MoveDir& dir, HSE::Rotation& rotation);
 void walking(HSE::Velocity& velocity, HSE::CharacterBody& body, const Walk& walk, MoveDir& dir);

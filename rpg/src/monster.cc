@@ -7,20 +7,31 @@
 using namespace HSE;
 
 void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, MoveDir& md, Target& t) {
-	if ( !t.entity.is_valid() or !t.entity.is_alive() ) return;
+	if ( not t.entity.is_valid() ) return;
+
+	// Don't chase if already attacking
 	if ( auto arsenal = get_if<Arsenal>(monster) ) {
 		if ( get<Weapon>( arsenal->equipped() ).active )
 			return;
 	}
 
+	vec3 target_pos = get<Position>(t.entity);
+	vec3 pos = p;
+
 	// Get direction to target
-	vec3 dir = vec3( t.entity.get<Position>() ) - vec3(p);
+	vec3 dir = target_pos - pos;
 	dir = normalize(dir);
 	md.value = dir;
 
 	// Rotate to movement direction
 	float yaw = atan2(dir.y, dir.x);
 	r = quat( vec3(0, 0, yaw) );
+
+	// Aim the muzzle
+	float horz_dist = distance( vec3(target_pos.x, target_pos.y, 0), vec3(pos.x, pos.y, 0) );
+	float vert_dist = abs( target_pos.z-pos.z );
+	float pitch = atan2(vert_dist, horz_dist);
+	get<Muzzle>(monster).pitch = -pitch;
 }
 
 void find_target(flecs::entity monster, Target& target) {
