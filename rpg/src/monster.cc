@@ -22,7 +22,7 @@ void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, Mov
 	vec3 dir = target_pos - pos;
 	dir = normalize(dir);
 	md.value = dir;
-
+/*
 	// Rotate to movement direction
 	float yaw = atan2(dir.y, dir.x);
 	r = quat( vec3(0, 0, yaw) );
@@ -31,7 +31,31 @@ void chase_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, Mov
 	float horz_dist = distance( vec3(target_pos.x, target_pos.y, 0), vec3(pos.x, pos.y, 0) );
 	float vert_dist = abs( target_pos.z-pos.z );
 	float pitch = atan2(vert_dist, horz_dist);
-	get<Muzzle>(monster).pitch = -pitch;
+	get<Muzzle>(monster).pitch = -pitch;*/
+}
+
+void aim_at_target(flecs::entity monster, HSE::Position& p, HSE::Rotation& r, Muzzle& muzzle, Target& t) {
+	if ( not t.entity.is_valid() ) return;
+
+	vec3 target_pos = get<Position>(t.entity);
+	vec3 pos = p;
+
+	// Get direction to target
+	vec3 dir = target_pos - pos;
+	dir = normalize(dir);
+
+	// Rotate to movement direction
+	float goal_yaw = atan2(dir.y, dir.x);
+	float yaw = eulerAngles( quat(r) ).z;
+	yaw = rotate_toward(yaw, goal_yaw, 0.1f);
+	r = quat( vec3(0, 0, yaw) );
+
+	// Aim the muzzle
+	float horz_dist = distance( vec3(target_pos.x, target_pos.y, 0), vec3(pos.x, pos.y, 0) );
+	float vert_dist = abs( target_pos.z-pos.z );
+	float goal_pitch = -atan2(vert_dist, horz_dist);
+	float& pitch = get<Muzzle>(monster).pitch;
+	pitch = move_toward(pitch, goal_pitch, 0.1f);
 }
 
 void find_target(flecs::entity monster, Target& target) {
