@@ -38,6 +38,8 @@ void HSE::render_models(HSE::Model& m, HSE::Position& p, HSE::Rotation& r) {
 }
 
 void HSE::update_animation(HSE::Model& m) {
+	if (not m.looping and m.frame >= m.data->animations[ m.animation ].frameCount-1)
+		return;
 	m.frame++;
 }
 

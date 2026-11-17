@@ -20,6 +20,7 @@ struct Model {
 	HSE::Asset<ModelData> data;
 	int animation = 0;
 	int frame = 0;
+	bool looping = true;
 
 	Model() = default;
 	Model(const std::string& filename);
