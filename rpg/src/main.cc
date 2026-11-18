@@ -302,11 +302,13 @@ int main() {
 	DisableCursor();
 	SetExitKey(KEY_NULL);
 
-	shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
-
-	// Keep reloading until it works
-	while (not shaders["gouraud"].id) {
-		shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+	// Load shaders
+	{
+		Asset<std::string> vert_src("shaders/gouraud_vert.glsl");
+		Asset<std::string> frag_src("shaders/gouraud_frag.glsl");
+		vert_src.load();
+		frag_src.load();
+		shaders["gouraud"] = LoadShaderFromMemory( (*vert_src).c_str(), (*frag_src).c_str() );
 	}
 
 	shaders["unlit"] = Shader {};
