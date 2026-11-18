@@ -303,6 +303,12 @@ int main() {
 	SetExitKey(KEY_NULL);
 
 	shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+
+	// Keep reloading until it works
+	while (not shaders["gouraud"].id) {
+		shaders["gouraud"] = LoadShader("shaders/gouraud_vert.glsl", "shaders/gouraud_frag.glsl");
+	}
+
 	shaders["unlit"] = Shader {};
 	shaders["unlit"].id = rlGetShaderIdDefault();
 	shaders["unlit"].locs = rlGetShaderLocsDefault();
