@@ -8,8 +8,9 @@
 using namespace HSE;
 
 void die_when_no_health(flecs::entity e, Health& h) {
-	if (h.now <= 0) {
-		e.destruct();
-		if ( has<Player>(e) ) player_die(e);
-	}
+	if (h.now > 0) return;
+
+	if ( has<Player>(e) ) player_die(e);
+	else if ( has<Monster>(e) ) monster_die(e);
+	else e.destruct();
 }

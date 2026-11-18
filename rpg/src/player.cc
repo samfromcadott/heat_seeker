@@ -120,6 +120,7 @@ void player_die(Entity player) {
 	head.set<Rotation>( quat(vec3(0, pitch, yaw)) );
 
 	head.set<Velocity>( get<Velocity>(player) );
+	player.destruct();
 }
 
 void update_view_model(HSE::Entity entity) {
