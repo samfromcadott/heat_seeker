@@ -113,6 +113,26 @@ void Body::set_shape(const ShapeOptions& shape) {
 	);
 }
 
+void Body::set_layer(int layer) {
+	auto l = JPH::ObjectLayerPairFilterMask::sGetObjectLayer( layer, get_mask() );
+	engine->physics_system.GetBodyInterface().SetObjectLayer(id, l);
+}
+
+void Body::set_mask(int mask) {
+	auto l = JPH::ObjectLayerPairFilterMask::sGetObjectLayer( get_layer(), mask );
+	engine->physics_system.GetBodyInterface().SetObjectLayer(id, l);
+}
+
+int Body::get_layer() const {
+	auto flags = engine->physics_system.GetBodyInterface().GetObjectLayer(id);
+	return JPH::ObjectLayerPairFilterMask::sGetGroup(flags);
+}
+
+int Body::get_mask() const {
+	auto flags = engine->physics_system.GetBodyInterface().GetObjectLayer(id);
+	return JPH::ObjectLayerPairFilterMask::sGetMask(flags);
+}
+
 std::tuple<vec3, vec3> Body::get_bounds() const {
 	auto shape = engine->physics_system.GetBodyInterface().GetShape(id);
 	auto box = shape->GetLocalBounds();

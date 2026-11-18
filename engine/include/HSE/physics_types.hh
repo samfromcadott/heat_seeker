@@ -211,6 +211,11 @@ public:
 
 	void set_shape(const ShapeOptions& shape);
 
+	void set_layer(int layer);
+	void set_mask(int mask);
+	int get_layer() const;
+	int get_mask() const;
+
 	std::tuple<vec3, vec3> get_bounds() const;
 
 	void destroy();
@@ -250,6 +255,11 @@ public:
 	flecs::entity get_owner() const;
 
 	void set_shape(const ShapeOptions& shape);
+
+	void set_layer(int layer);
+	void set_mask(int mask);
+	int get_layer() const;
+	int get_mask() const;
 
 	void destroy();
 };

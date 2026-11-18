@@ -135,6 +135,26 @@ void CharacterBody::set_shape(const ShapeOptions& shape) {
 	body->SetInnerBodyShape( convert_shape(shape) );
 }
 
+void CharacterBody::set_layer(int layer) {
+	auto l = JPH::ObjectLayerPairFilterMask::sGetObjectLayer( layer, get_mask() );
+	engine->physics_system.GetBodyInterface().SetObjectLayer(body->GetInnerBodyID(), l);
+}
+
+void CharacterBody::set_mask(int mask) {
+	auto l = JPH::ObjectLayerPairFilterMask::sGetObjectLayer( get_layer(), mask );
+	engine->physics_system.GetBodyInterface().SetObjectLayer(body->GetInnerBodyID(), l);
+}
+
+int CharacterBody::get_layer() const {
+	auto flags = engine->physics_system.GetBodyInterface().GetObjectLayer( body->GetInnerBodyID() );
+	return JPH::ObjectLayerPairFilterMask::sGetGroup(flags);
+}
+
+int CharacterBody::get_mask() const {
+	auto flags = engine->physics_system.GetBodyInterface().GetObjectLayer( body->GetInnerBodyID() );
+	return JPH::ObjectLayerPairFilterMask::sGetMask(flags);
+}
+
 void CharacterBody::destroy() {
 	engine->physics_system.GetBodyInterface().RemoveBody(body->GetInnerBodyID());
 	engine->physics_system.GetBodyInterface().DestroyBody(body->GetInnerBodyID());
