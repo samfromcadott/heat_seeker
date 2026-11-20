@@ -321,6 +321,7 @@ int main() {
 	add_timer_callback("launch_hitscan", launch_hitscan);
 	add_timer_callback( "delete_entity", [](Entity e) { e.destruct(); } );
 	add_timer_callback("close_door", close_door);
+	add_timer_callback("check_elevator", check_elevator);
 
 	start_game("maps/level01.hsm");
 

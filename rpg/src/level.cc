@@ -59,7 +59,7 @@ void add_sensors(flecs::world world) {
 		options.layer = 4;
 		options.mask = 2;
 		options.shape.type = BOX;
-		options.shape.size = max - min + vec3(0,0, lift.distance + 2.0);
+		options.shape.size = max - min + vec3(2,2, lift.distance + 2.0);
 		options.shape.translation.z = options.shape.size.z / 2.0;
 
 		sensor.set<BodyOptions>(options);
@@ -106,11 +106,8 @@ void use_parent(HSE::Entity entity, HSE::ContactAdded contact) {
 		if (ds->state == CLOSED or ds->state == CLOSING)
 			ds->state = OPENING;
 	}
-
-	else if ( auto lift = get_if<Elevator>(parent) ) {
-		if (lift->state == A) lift->state = A_TO_B;
-		else if (lift->state == B) lift->state = B_TO_A;
-	}
+	else if ( has<Elevator>(parent) )
+		start_timer(entity, "check_elevator", 1.0);
 }
 
 void slide_door(HSE::Entity entity, Position& position, Velocity& velocity, DoorSliding& ds) {
@@ -176,4 +173,11 @@ void rotate_platform(HSE::Entity entity, Body& body, PlatRotating& pr) {
 	if (pr.moving) {
 		body.set_angular_velocity(pr.axis * pr.speed * 0.017f);
 	}
+}
+
+void check_elevator(Entity entity) {
+	Entity parent = entity.parent();
+	auto& lift = get<Elevator>(parent);
+	if (lift.state == A) lift.state = A_TO_B;
+	else if (lift.state == B) lift.state = B_TO_A;
 }
